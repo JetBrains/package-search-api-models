@@ -18,6 +18,6 @@ Then add the dependency:
 
 ```kotlin
 dependencies {
-    implementation("org.jetbrains.packagesearch:api-models:[version]")
+    implementation("org.jetbrains.packagesearch:pkgs-api-models:[version]")
 }
 ```
