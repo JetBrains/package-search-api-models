@@ -8,13 +8,6 @@ API Models v1 are available in the `v1` package, but they had no well-defined sp
 
 ## Using the API models
 
-If you're developing inside Package Search's codebase, you can access `:server:api-models` directly as a project, or by
-its coordinates. The API
-models are published on the [public Package Search Maven repository](https://packages.jetbrains.team/maven/p/kpm/public)
-on Space for
-other teams to access, too.
-In order to use the models from the repo, you need to declare the repository in your `build.gradle[.kts]`:
-
 ```kotlin
 repositories {
     maven("https://packages.jetbrains.team/maven/p/kpm/public")
