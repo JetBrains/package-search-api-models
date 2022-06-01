@@ -11,7 +11,7 @@ jobs:
           distribution: temurin
           java-version: 17
       - name: Run Gradle
-        run: build
+        run: ./gradlew build
   detekt:
     name: Detekt
     runs-on: ubuntu-latest
@@ -22,7 +22,7 @@ jobs:
           distribution: temurin
           java-version: 17
       - name: Run Gradle
-        run: detekt
+        run: ./gradlew detekt
   klint:
     name: Klint
     runs-on: ubuntu-latest
@@ -33,4 +33,4 @@ jobs:
           distribution: temurin
           java-version: 17
       - name: Run Gradle
-        run: lintKotlin
+        run: ./gradlew lintKotlin
