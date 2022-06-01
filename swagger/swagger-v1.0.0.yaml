@@ -35,10 +35,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MinimalPackage'
-            application/json+com.jetbrains.packagesearch.minimal:
+            application/json+org.jetbrains.packagesearch.minimal:
               schema:
                 $ref: '#/components/schemas/MinimalPackage'
-            application/json+com.jetbrains.packagesearch.standard:
+            application/json+org.jetbrains.packagesearch.standard:
               schema:
                 $ref: '#/components/schemas/Package'
         '400':
@@ -85,12 +85,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/MinimalPackage'
-            application/json+com.jetbrains.packagesearch.minimal:
+            application/json+org.jetbrains.packagesearch.minimal:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/MinimalPackage'
-            application/json+com.jetbrains.packagesearch.standard:
+            application/json+org.jetbrains.packagesearch.standard:
               schema:
                 type: array
                 items:
@@ -142,12 +142,12 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/MinimalPackage'
-            application/json+com.jetbrains.packagesearch.minimal:
+            application/json+org.jetbrains.packagesearch.minimal:
               schema:
                 type: array
                 items:
                   $ref: '#/components/schemas/MinimalPackage'
-            application/json+com.jetbrains.packagesearch.standard:
+            application/json+org.jetbrains.packagesearch.standard:
               schema:
                 type: array
                 items:
@@ -193,10 +193,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/MinimalPackage'
-            application/json+com.jetbrains.packagesearch.minimal:
+            application/json+org.jetbrains.packagesearch.minimal:
               schema:
                 $ref: '#/components/schemas/MinimalPackage'
-            application/json+com.jetbrains.packagesearch.standard:
+            application/json+org.jetbrains.packagesearch.standard:
               schema:
                 $ref: '#/components/schemas/Package'
         '400':
@@ -246,7 +246,7 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/MinimalPackage'
-            application/json+com.jetbrains.packagesearch.minimal:
+            application/json+org.jetbrains.packagesearch.minimal:
               schema:
                 type: array
                 items:
@@ -260,7 +260,7 @@ paths:
         '415':
           description: Unsupported content type — this endpoint only supports minimal format responses.
           content:
-            application/json+com.jetbrains.packagesearch.standard:
+            application/json+org.jetbrains.packagesearch.standard:
               schema:
                 $ref: '#/components/schemas/ErrorResponse'
         '500':

@@ -101,10 +101,10 @@ openApiGenerate {
     generateModelDocumentation.set(false)
     generateModelTests.set(false)
 
-    packageName.set("com.jetbrains.packagesearch")
-    apiPackage.set("com.jetbrains.packagesearch.api")
-    invokerPackage.set("com.jetbrains.packagesearch.invoker")
-    modelPackage.set("com.jetbrains.packagesearch.model")
+    packageName.set("org.jetbrains.packagesearch")
+    apiPackage.set("org.jetbrains.packagesearch.api")
+    invokerPackage.set("org.jetbrains.packagesearch.invoker")
+    modelPackage.set("org.jetbrains.packagesearch.model")
 
     configOptions.set(
         mapOf(

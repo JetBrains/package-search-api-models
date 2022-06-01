@@ -78,10 +78,10 @@ paths:
             application/vnd.jetbrains.packagesearch.standard.v2+json:
               schema:
                 $ref: '#/components/schemas/StandardV2PackageWithRepos'
-            application/json+com.jetbrains.packagesearch.minimal:
+            application/json+org.jetbrains.packagesearch.minimal:
               schema:
                 $ref: '#/components/schemas/MinimalV1Package'
-            application/json+com.jetbrains.packagesearch.standard:
+            application/json+org.jetbrains.packagesearch.standard:
               schema:
                 $ref: '#/components/schemas/StandardV1Package'
             application/json:
@@ -204,10 +204,10 @@ paths:
             application/vnd.jetbrains.packagesearch.standard.v2+json:
               schema:
                 $ref: '#/components/schemas/StandardV2PackagesWithRepos'
-            application/json+com.jetbrains.packagesearch.minimal:
+            application/json+org.jetbrains.packagesearch.minimal:
               schema:
                 $ref: '#/components/schemas/MinimalV1Package'
-            application/json+com.jetbrains.packagesearch.standard:
+            application/json+org.jetbrains.packagesearch.standard:
               schema:
                 $ref: '#/components/schemas/StandardV1Package'
             application/json:
@@ -289,10 +289,10 @@ paths:
             application/vnd.jetbrains.packagesearch.standard.v2+json:
               schema:
                 $ref: '#/components/schemas/StandardV2PackagesWithRepos'
-            application/json+com.jetbrains.packagesearch.minimal:
+            application/json+org.jetbrains.packagesearch.minimal:
               schema:
                 $ref: '#/components/schemas/MinimalV1Package'
-            application/json+com.jetbrains.packagesearch.standard:
+            application/json+org.jetbrains.packagesearch.standard:
               schema:
                 $ref: '#/components/schemas/StandardV1Package'
             application/json:
@@ -364,10 +364,10 @@ paths:
             application/vnd.jetbrains.packagesearch.standard.v2+json:
               schema:
                 $ref: '#/components/schemas/StandardV2PackageWithRepos'
-            application/json+com.jetbrains.packagesearch.minimal:
+            application/json+org.jetbrains.packagesearch.minimal:
               schema:
                 $ref: '#/components/schemas/MinimalV1Package'
-            application/json+com.jetbrains.packagesearch.standard:
+            application/json+org.jetbrains.packagesearch.standard:
               schema:
                 $ref: '#/components/schemas/StandardV1Package'
             application/json:
@@ -448,10 +448,10 @@ paths:
             application/vnd.jetbrains.packagesearch.standard.v2+json:
               schema:
                 $ref: '#/components/schemas/StandardV2PackagesWithRepos'
-            application/json+com.jetbrains.packagesearch.minimal:
+            application/json+org.jetbrains.packagesearch.minimal:
               schema:
                 $ref: '#/components/schemas/MinimalV1Package'
-            application/json+com.jetbrains.packagesearch.standard:
+            application/json+org.jetbrains.packagesearch.standard:
               schema:
                 $ref: '#/components/schemas/StandardV1Package'
             application/json:

@@ -25,6 +25,6 @@ Then add the dependency:
 
 ```kotlin
 dependencies {
-    implementation("com.jetbrains.packagesearch:api-models:[version]")
+    implementation("org.jetbrains.packagesearch:api-models:[version]")
 }
 ```

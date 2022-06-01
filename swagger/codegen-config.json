@@ -1,7 +1,7 @@
 {
   "enumPropertyNaming": "UPPERCASE",
   "library": "multiplatform",
-  "packageName": "com.jetbrains.packagesearch",
+  "packageName": "org.jetbrains.packagesearch",
   "dateLibrary": "java8",
   "collectionsType": "list",
   "verbose": true,

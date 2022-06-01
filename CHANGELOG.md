@@ -13,7 +13,7 @@ Matches v2.3.0 API swagger ([swagger-v2.3.0.yaml](./swagger/swagger-v2.3.0.yaml)
 
 Matches v2.2.5 API swagger ([swagger-v2.2.5.yaml](./swagger/swagger-v2.2.5.yaml))
 
-* Added all the data classes under `com.jetbrains.packagesearch.api.statistics.*` for statistics
+* Added all the data classes under `org.jetbrains.packagesearch.api.statistics.*` for statistics
 
 ## Version 2.2.4 (1 Jun 2021)
 
@@ -37,7 +37,7 @@ Matches v2.2.2 API swagger ([swagger-v2.2.2.yaml](./swagger/swagger-v2.2.2.yaml)
 
 Matches v2.2.0 API swagger ([swagger-v2.2.0.yaml](./swagger/swagger-v2.2.0.yaml))
 
-* Add `com.jetbrains.packagesearch.api.v1.ApiLegacyResponse`
+* Add `org.jetbrains.packagesearch.api.v1.ApiLegacyResponse`
 
 ## Version 2.1.0 (21 Jul 2020)
 
