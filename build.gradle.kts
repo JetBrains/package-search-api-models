@@ -20,10 +20,12 @@ plugins {
     id("org.jmailen.kotlinter") version "3.10.0"
     id("org.openapi.generator") version "6.0.0"
 }
+
 group = "org.jetbrains.packagesearch"
 version = System.getenv("GITHUB_REF")?.substringAfterLast("/") ?: "2.5.0"
 
 dependencies {
+    detektPlugins("ch.qos.logback:logback-classic:1.2.11")
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.20.0")
     api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
 }
