@@ -1,0 +1,10 @@
+build.gradle
+settings.gradle
+README.md
+gradlew
+gradlew.bat
+openapitools.json
+
+docs/**
+gradle/**
+gradle/wrapper/**
