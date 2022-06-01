@@ -11,7 +11,7 @@ jobs:
           distribution: temurin
           java-version: 17
       - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
+        run: chmod +x gradlew
       - name: Run Gradle
         run: ./gradlew build
   detekt:
@@ -24,7 +24,7 @@ jobs:
           distribution: temurin
           java-version: 17
       - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
+        run: chmod +x gradlew
       - name: Run Gradle
         run: ./gradlew detekt
   klint:
@@ -37,6 +37,6 @@ jobs:
           distribution: temurin
           java-version: 17
       - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
+        run: chmod +x gradlew
       - name: Run Gradle
         run: ./gradlew lintKotlin
