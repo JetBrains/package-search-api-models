@@ -61,12 +61,12 @@ publishing {
 
             pom {
                 name.set("Package Search - API models")
-                description.set("API models for package search")
+                description.set("API models for Package Search")
                 url.set("https://package-search.jetbrains.com/")
                 scm {
-                    connection.set("scm:git:git://git.jetbrains.team/kpm/kpm.git")
-                    developerConnection.set("scm:git:ssh://git.jetbrains.team/kpm/kpm.git")
-                    url.set("https://jetbrains.team/p/kpm/code/kpm/")
+                    connection.set("scm:https://github.com/JetBrains/package-search-api-models.git")
+                    developerConnection.set("scm:https://github.com/JetBrains/package-search-api-models.git")
+                    url.set("https://github.com/JetBrains/package-search-api-models.git")
                 }
             }
         }
