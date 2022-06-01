@@ -1,6 +1,11 @@
 package com.jetbrains.packagesearch.api.statistics
 
-import com.jetbrains.packagesearch.api.statistics.entries.*
+import com.jetbrains.packagesearch.api.statistics.entries.ApiCodeHostingPlatform
+import com.jetbrains.packagesearch.api.statistics.entries.ApiGithubStats
+import com.jetbrains.packagesearch.api.statistics.entries.ApiPackageStats
+import com.jetbrains.packagesearch.api.statistics.entries.ApiPomLicenseStat
+import com.jetbrains.packagesearch.api.statistics.entries.ApiScmStats
+import com.jetbrains.packagesearch.api.statistics.entries.ApiVersionStats
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

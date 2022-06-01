@@ -13,7 +13,7 @@ jobs:
       - name: Setup Gradle
         run: chmod +x gradlew
       - name: Run Gradle
-        run: ./gradlew build
+        run: ./gradlew compileKotlin
   detekt:
     name: Detekt
     runs-on: ubuntu-latest
