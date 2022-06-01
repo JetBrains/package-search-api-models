@@ -12,10 +12,8 @@ jobs:
         with:
           distribution: temurin
           java-version: 17
-      - name: Setup Gradle
-        uses: gradle/gradle-build-action@v2
-        with:
-          argument: publish
+      - name: Run Gradle
+        run: ./gradlew publish
         env:
           MAVEN_SPACE_URL: ${{secrets.MAVEN_SPACE_URL}}
           MAVEN_SPACE_USERNAME: ${{secrets.MAVEN_SPACE_USERNAME}}
