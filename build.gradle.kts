@@ -20,8 +20,8 @@ plugins {
     id("org.jmailen.kotlinter") version "3.10.0"
     id("org.openapi.generator") version "6.0.0"
 }
-
-version = System.getenv("GITHUB_REF")?.substringAfterLast("/") ?: version
+group = "org.jetbrains.packagesearch"
+version = System.getenv("GITHUB_REF")?.substringAfterLast("/") ?: "2.5.0"
 
 dependencies {
     detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.20.0")
@@ -40,12 +40,22 @@ kotlinter {
     reporters = arrayOf("html", "checkstyle", "plain")
 }
 
+val sourcesJar by tasks.registering(Jar::class) {
+    group = "publishing"
+    from(kotlin.sourceSets.main.get().kotlin.sourceDirectories)
+    archiveClassifier.set("sources")
+    destinationDirectory.set(buildDir.resolve("artifacts"))
+}
+
 publishing {
     publications {
         create<MavenPublication>("mavenJava") {
-            version = System.getenv("MAVEN_ARTIFACT_VERSION") ?: project.version as String
-
             from(components["java"])
+            artifact(sourcesJar)
+
+            version = project.version.toString()
+            groupId = group.toString()
+            artifactId = project.name
 
             pom {
                 name.set("Package Search - API models")
@@ -62,7 +72,7 @@ publishing {
     repositories {
         maven {
             name = "Space"
-            setUrl(System.getenv("MAVEN_SPACE_URL"))
+            setUrl("https://packages.jetbrains.team/maven/p/kpm/public")
             credentials {
                 username = System.getenv("MAVEN_SPACE_USERNAME")
                 password = System.getenv("MAVEN_SPACE_PASSWORD")

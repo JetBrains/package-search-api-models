@@ -17,7 +17,7 @@ In order to use the models from the repo, you need to declare the repository in 
 
 ```kotlin
 repositories {
-    maven("https://packages.jetbrains.team/maven/packagesearch")
+    maven("https://packages.jetbrains.team/maven/p/kpm/public")
 }
 ```      
 
