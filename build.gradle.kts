@@ -30,6 +30,21 @@ dependencies {
     api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
 }
 
+kotlin {
+    target {
+        compilations.all {
+            kotlinOptions {
+                jvmTarget = "1.8"
+            }
+        }
+    }
+}
+
+java {
+    targetCompatibility = JavaVersion.VERSION_1_8
+    sourceCompatibility = JavaVersion.VERSION_1_8
+}
+
 detekt {
     toolVersion = "1.20.0"
     autoCorrect = !isCi
