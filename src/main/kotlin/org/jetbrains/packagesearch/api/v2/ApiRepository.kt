@@ -13,7 +13,8 @@ data class ApiRepository(
     @SerialName("user_facing_url") val userFacingUrl: String? = null,
     @SerialName("package_count") val packageCount: Int? = null,
     @SerialName("artifact_count") val artifactCount: Int? = null,
-    @SerialName("named_links") val namedLinks: ApiNamedLinks? = null
+    @SerialName("named_links") val namedLinks: ApiNamedLinks? = null,
+    @SerialName("last_checked") val lastChecked: Long? = null
 ) {
 
     companion object {
