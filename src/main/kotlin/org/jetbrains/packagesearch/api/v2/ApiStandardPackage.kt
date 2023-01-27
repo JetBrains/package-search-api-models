@@ -18,6 +18,7 @@ data class ApiStandardPackage(
     @SerialName("latest_version") val latestVersion: ApiStandardVersion,
     @SerialName("versions") override val versions: List<ApiStandardVersion>,
     @SerialName("dependency_rating") val dependencyRating: Double,
+    @SerialName("stackoverflow_health") val stackoverflowHealth: Double,
     @SerialName("github") val gitHub: ApiGitHub? = null,
     @SerialName("stackoverflow") val stackOverflow: ApiStackOverflow? = null
 ) : ApiPackage<ApiStandardPackage.ApiStandardVersion> {
