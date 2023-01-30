@@ -2,6 +2,13 @@
 
 ## Version 2 APIs
 
+## Version 2.4.0 (27 Jan 2023)
+
+See v2.4.0 API swagger ([swagger-v2.4.0.yaml](swagger-v2.4.0.yaml))
+
+* Added `stackoverflow_health` metric to `ApiStandardPackage`.
+* Added `sort_by` to `/package#search` endpoint. 
+
 ## Version 2.3.0 (2 Dec 2021)
 
 See v2.3.0 API swagger ([swagger-v2.3.0.yaml](swagger-v2.3.0.yaml))
