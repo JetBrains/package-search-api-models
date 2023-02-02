@@ -216,6 +216,7 @@ data class ApiStandardPackage(
         @SerialName("dependency_rating") val dependencyRating: Double = 0.0,
         @SerialName("stackoverflow_health") val stackoverflowHealth: Double = 0.0,
         @SerialName("oss_health") val ossHealth: Double = 0.0,
+        @SerialName("github_stars") val stars: Int = 0,
     )
 
     @Serializable
