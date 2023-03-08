@@ -16,8 +16,8 @@ plugins {
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.serialization") version kotlinVersion
     `maven-publish`
-    id("io.gitlab.arturbosch.detekt") version "1.20.0"
-    id("org.jmailen.kotlinter") version "3.10.0"
+    //id("io.gitlab.arturbosch.detekt") version "1.20.0"
+    //id("org.jmailen.kotlinter") version "3.10.0"
     id("org.openapi.generator") version "6.0.0"
 }
 
@@ -25,8 +25,8 @@ group = "org.jetbrains.packagesearch"
 version = System.getenv("GITHUB_REF")?.substringAfterLast("/") ?: "2.5.0"
 
 dependencies {
-    detektPlugins("ch.qos.logback:logback-classic:1.2.11")
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.20.0")
+//    detektPlugins("ch.qos.logback:logback-classic:1.2.11")
+//    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.20.0")
     api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
 }
 
@@ -45,17 +45,17 @@ java {
     sourceCompatibility = JavaVersion.VERSION_1_8
 }
 
-detekt {
-    toolVersion = "1.20.0"
-    autoCorrect = !isCi
-    source = files("src/main/java", "src/main/kotlin")
-    config = files("detekt.yml")
-    buildUponDefaultConfig = true
-}
+//detekt {
+//    toolVersion = "1.20.0"
+//    autoCorrect = !isCi
+//    source = files("src/main/java", "src/main/kotlin")
+//    config = files("detekt.yml")
+//    buildUponDefaultConfig = true
+//}
 
-kotlinter {
-    reporters = arrayOf("html", "checkstyle", "plain")
-}
+//kotlinter {
+//    reporters = arrayOf("html", "checkstyle", "plain")
+//}
 
 val sourcesJar by tasks.registering(Jar::class) {
     group = "publishing"
