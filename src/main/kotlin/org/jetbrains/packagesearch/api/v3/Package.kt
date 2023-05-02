@@ -8,7 +8,7 @@ import kotlinx.serialization.Serializable
  * When serialized in JSON they will have the field `type`.
  * Available packages types are:
  * - [GradlePackage]s - `type`: "gradle"
- * - [MavenPackage]s - `type`: "maven"
+ * - [BaseMavenPackage]s - `type`: "maven"
  *
  */
 @Serializable
@@ -20,13 +20,9 @@ sealed interface Package {
     val scmUrl: String?
     val licenses: Licenses?
     @SerialName("ranking_metric") val rankingMetric: Double?
-}
+    val versions: VersionContainer<out Version>
 
-@Serializable
-data class Vulnerability(
-    @SerialName("is_vulnerable") val isVulnerable: Boolean,
-    val issues: List<String> = emptyList()
-)
+}
 
 @Serializable
 sealed interface Version {
@@ -38,6 +34,19 @@ sealed interface Version {
 }
 
 @Serializable
+sealed interface MavenVersion : Version {
+    val dependencies: List<Dependency>
+    val artifacts: List<Artifact>
+}
+
+@Serializable
+sealed interface MavenPackage<V : MavenVersion> : Package {
+    override val versions: VersionContainer<V>
+    val groupId: String
+    val artifactId: String
+}
+
+@Serializable
 data class VersionContainer<T : Version>(
     val latest: T,
     val all: List<T>
@@ -45,29 +54,40 @@ data class VersionContainer<T : Version>(
 
 @Serializable
 @SerialName("maven")
-data class MavenPackage(
+data class BaseMavenPackage(
     override val id: String,
     override val description: String?,
     override val authors: List<Author>,
     @SerialName("repository_urls") override val scmUrl: String?,
     override val licenses: Licenses?,
     @SerialName("ranking_metric") override val rankingMetric: Double?,
-    val versions: VersionContainer<MavenVersion>,
-    val group: String,
-    val artifactId: String
-) : Package {
+    override val versions: VersionContainer<BaseMavenVersion>,
+    override val groupId: String,
+    override val artifactId: String
+) : MavenPackage<BaseMavenPackage.BaseMavenVersion> {
 
     @Serializable
     @SerialName("maven_version")
-    data class MavenVersion(
+    data class BaseMavenVersion(
         @SerialName("version_string") override val versionString: String,
         @SerialName("last_changed") override val lastChanged: Long,
         override val stable: Boolean,
         @SerialName("repository_ids") override val repositoryIds: List<String>,
-        val dependencies: List<Dependency>,
-        override val vulnerability: Vulnerability
-    ) : Version
+        override val vulnerability: Vulnerability,
+        override val dependencies: List<Dependency>,
+        override val artifacts: List<Artifact>
+    ) : MavenVersion
+
 }
+
+@Serializable
+data class Artifact(
+    val name: String,
+    val md5: String,
+    val sha1: String,
+    val sha256: String,
+    val sha512: String
+)
 
 @Serializable
 @SerialName("gradle")
@@ -78,10 +98,13 @@ data class GradlePackage(
     @SerialName("repository_urls") override val scmUrl: String?,
     override val licenses: Licenses?,
     @SerialName("ranking_metric") override val rankingMetric: Double?,
-    val versions: VersionContainer<GradleVersion>,
-    val group: String,
-    val module: String,
-) : Package {
+    override val versions: VersionContainer<GradleVersion>,
+    override val groupId: String,
+    override val artifactId: String
+) : MavenPackage<GradlePackage.GradleVersion> {
+
+    val module: String
+        get() = artifactId
 
     @Serializable
     @SerialName("gradle_version")
@@ -92,8 +115,10 @@ data class GradlePackage(
         @SerialName("repository_ids") override val repositoryIds: List<String>,
         val variants: List<Variant>,
         override val vulnerability: Vulnerability,
-        val parentComponent: String? = null
-    ) : Version
+        val parentComponent: String? = null,
+        override val dependencies: List<Dependency>,
+        override val artifacts: List<Artifact>
+    ) : MavenVersion
 
     @Serializable
     data class GradleDependency(

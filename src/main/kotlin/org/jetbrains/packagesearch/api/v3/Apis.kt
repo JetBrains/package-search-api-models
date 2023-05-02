@@ -4,7 +4,12 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Dependency(val groupId: String, val artifactId: String, val version: String, val scope: String)
+data class Dependency(
+    val groupId: String,
+    val artifactId: String,
+    val version: String,
+    val scope: String? = null
+)
 
 @Serializable
 data class Author(
@@ -28,3 +33,10 @@ data class LinkedFile(
     @SerialName("spdx_id") val spdxId: String? = null,
     val key: String? = null
 )
+
+@Serializable
+data class Vulnerability(
+    @SerialName("is_vulnerable") val isVulnerable: Boolean,
+    val issues: List<String> = emptyList()
+)
+
