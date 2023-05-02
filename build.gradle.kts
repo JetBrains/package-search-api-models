@@ -12,7 +12,7 @@ buildscript {
 }
 
 plugins {
-    val kotlinVersion = "1.7.10"
+    val kotlinVersion = "1.8.20"
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.serialization") version kotlinVersion
     `maven-publish`
@@ -27,7 +27,7 @@ version = System.getenv("GITHUB_REF")?.substringAfterLast("/") ?: "2.5.0"
 dependencies {
 //    detektPlugins("ch.qos.logback:logback-classic:1.2.11")
 //    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.20.0")
-    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
+    api("org.jetbrains.kotlinx:kotlinx-serialization-core:1.5.0")
 }
 
 kotlin {
