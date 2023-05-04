@@ -6,29 +6,30 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SearchParameters(
     val onlyStable: Boolean = true,
-    val packagesType: List<PackagesType>
+    val packagesType: List<PackagesType>,
+    val searchQuery: String
 )
 
 @Serializable
 sealed interface PackagesType
 
 @Serializable
-@SerialName("maven-packages")
+@SerialName("maven")
 object MavenPackages : PackagesType
 
 @Serializable
-@SerialName("npm-packages")
+@SerialName("npm")
 object NpmPackages : PackagesType
 
 @Serializable
-@SerialName("gradle-packages")
+@SerialName("gradle")
 data class GradlePackages(
     val variants: List<Map<String, String>>,
     val isRootPublication: Boolean = true
 ) : PackagesType
 
 @Serializable
-@SerialName("cocoapods-packages")
+@SerialName("cocoapods")
 data class CocoapodsPackages(
     val platformMinType: Map<Platform, String>
 ) : PackagesType {

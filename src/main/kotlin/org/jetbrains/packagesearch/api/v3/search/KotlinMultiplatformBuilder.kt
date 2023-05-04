@@ -1,44 +1,49 @@
 package org.jetbrains.packagesearch.api.v3.search
 
+import kotlinx.serialization.encodeToString
+import kotlinx.serialization.json.Json
+
+@SearchParametersBuilderDsl
 class KotlinMultiplatformBuilder internal constructor(private val delegate: GradlePackagesBuilder) {
-    fun kotlinJvm() {
+
+    fun jvm() {
         delegate.variant {
-            kotlinJvm()
+            jvm()
             libraryCategory()
             javaApi()
             libraryElements("jar")
         }
         delegate.variant {
-            kotlinJvm()
+            jvm()
             libraryCategory()
             javaRuntime()
             libraryElements("jar")
         }
     }
 
-    fun kotlinJsLegacy() {
+    fun jsLegacy() {
         delegate.variant {
             libraryCategory()
             usage("kotlin-api")
-            kotlinJs(true)
+            js(true)
         }
     }
-    fun kotlinJsIr() {
+    fun jsIr() {
         delegate.variant {
             libraryCategory()
             usage("kotlin-api")
-            kotlinJs(false)
+            js(false)
         }
     }
 
-    fun kotlinJs(withLegacy: Boolean = true) {
-        kotlinJsIr()
-        if (withLegacy) kotlinJsLegacy()
+    fun js(withLegacy: Boolean = true) {
+        jsIr()
+        if (withLegacy) jsLegacy()
     }
 
-    fun kotlinNative(platform: String) {
+    fun native(platform: String) {
         delegate.variant {
-            kotlinNative(platform)
+            native(platform)
             libraryCategory()
             usage("kotlin-api")
         }
@@ -47,4 +52,34 @@ class KotlinMultiplatformBuilder internal constructor(private val delegate: Grad
 
 fun GradlePackagesBuilder.kotlinMultiplatform(builder: KotlinMultiplatformBuilder.() -> Unit) {
     KotlinMultiplatformBuilder(this).apply(builder)
+}
+
+fun main() {
+    val params = buildSearchParameters {
+        onlyStable = true
+        searchQuery = "ktor"
+
+        gradlePackages {
+            kotlinMultiplatform {
+                jvm()
+                js()
+                native("ios_x64")
+                native("linux_arm64")
+                native("mingw_x64")
+                native("macos_arm64")
+                native("watchos_arm32")
+                native("tvos_arm64")
+            }
+        }
+        cocoapodsPackages {
+            platform(CocoapodsPackages.Platform.IOS, "14.0")
+        }
+        mavenPackages()
+        npmPackages()
+    }
+    val json = Json {
+        prettyPrint = true
+        encodeDefaults = true
+    }
+    println(json.encodeToString(params))
 }

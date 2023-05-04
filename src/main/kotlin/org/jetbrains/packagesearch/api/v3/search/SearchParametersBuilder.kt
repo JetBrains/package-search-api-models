@@ -1,55 +1,74 @@
 package org.jetbrains.packagesearch.api.v3.search
 
+import kotlin.reflect.KClass
+
 @DslMarker
 annotation class SearchParametersBuilderDsl
 
 @SearchParametersBuilderDsl
-class SearchParametersBuilder {
-    var onlyStable: Boolean = true
-    private val packagesType: MutableList<PackagesType> = mutableListOf()
+class SearchParametersBuilder internal constructor() {
 
-    fun packagesType(packagesType: PackagesType) {
-        this.packagesType.add(packagesType)
-    }
+    var onlyStable: Boolean = true
+    var searchQuery: String? = null
+
+    private val packagesType: MutableMap<KClass<out PackagesType>, PackagesType> = mutableMapOf()
 
     fun mavenPackages() {
-        packagesType.add(MavenPackages)
+        packagesType[MavenPackages::class] = MavenPackages
     }
 
     fun npmPackages() {
-        packagesType.add(NpmPackages)
+        packagesType[NpmPackages::class] = NpmPackages
+    }
+
+    fun gradlePackages(gradlePackages: GradlePackages) {
+        val previous = packagesType[GradlePackages::class] as? GradlePackages
+        packagesType[GradlePackages::class] =
+            previous?.copy(variants = previous.variants + gradlePackages.variants)
+                ?: gradlePackages
     }
 
     fun gradlePackages(variants: List<Map<String, String>>, isRootPublication: Boolean = true) {
-        packagesType.add(GradlePackages(variants, isRootPublication))
+        gradlePackages(buildGradlePackages {
+            variants(variants)
+            this.isRootPublication = isRootPublication
+        })
     }
 
 
     fun gradlePackages(block: GradlePackagesBuilder.() -> Unit) {
-        packagesType.add(GradlePackagesBuilder().apply(block).build())
+        gradlePackages(buildGradlePackages(block))
     }
 
-    fun cocoapodsPackages(platformMinTypeMap: Map<CocoapodsPackages.Platform, String>) {
-        packagesType.add(CocoapodsPackages(platformMinTypeMap))
+    fun cocoapodsPackages(cocoapodsPackages: CocoapodsPackages) {
+        val previous = packagesType[CocoapodsPackages::class] as? CocoapodsPackages
+        packagesType[CocoapodsPackages::class] =
+            previous?.copy(platformMinType = previous.platformMinType + cocoapodsPackages.platformMinType)
+                ?: cocoapodsPackages
+    }
+
+    fun cocoapodsPackages(platformMinType: Map<CocoapodsPackages.Platform, String>) {
+        cocoapodsPackages(buildCocoapodsPackages {
+            platformMinType.forEach { platform(it.key, it.value) }
+        })
     }
 
 
     fun cocoapodsPackages(block: CocoapodsPackagesBuilder.() -> Unit) {
-        packagesType.add(CocoapodsPackagesBuilder().apply(block).build())
+        cocoapodsPackages(buildCocoapodsPackages(block))
     }
 
-    fun build() = SearchParameters(onlyStable, packagesType)
-}
-
-@SearchParametersBuilderDsl
-class CocoapodsPackagesBuilder {
-    private val platformMinTypeMap: MutableMap<CocoapodsPackages.Platform, String> = mutableMapOf()
-
-    fun platform(platform: CocoapodsPackages.Platform, minType: String) {
-        platformMinTypeMap[platform] = minType
+    internal fun build(): SearchParameters {
+        val query = searchQuery
+        val errorText = "Search query is null or blank."
+        requireNotNull(query) { errorText }
+        require(query.isNotBlank()) { errorText }
+        return SearchParameters(
+            onlyStable = onlyStable,
+            packagesType = packagesType.values.toList(),
+            searchQuery = query
+        )
     }
-
-    fun build() = CocoapodsPackages(platformMinTypeMap)
 }
 
 fun buildSearchParameters(block: SearchParametersBuilder.() -> Unit) =

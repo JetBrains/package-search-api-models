@@ -27,7 +27,8 @@ version = System.getenv("GITHUB_REF")?.substringAfterLast("/") ?: "2.5.0"
 dependencies {
 //    detektPlugins("ch.qos.logback:logback-classic:1.2.11")
 //    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.20.0")
-    api("org.jetbrains.kotlinx:kotlinx-serialization-core:1.5.0")
+    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 }
 
 kotlin {

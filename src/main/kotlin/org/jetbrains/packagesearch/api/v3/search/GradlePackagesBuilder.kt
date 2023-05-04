@@ -1,9 +1,13 @@
 package org.jetbrains.packagesearch.api.v3.search
 
 @SearchParametersBuilderDsl
-class GradlePackagesBuilder {
+class GradlePackagesBuilder internal constructor() {
     private val variants: MutableList<Map<String, String>> = mutableListOf()
     var isRootPublication: Boolean = true
+
+    fun variants(variants: List<Map<String, String>>) {
+        this.variants.addAll(variants)
+    }
 
     fun variant(attributes: Map<String, String>) {
         variants.add(attributes)
@@ -24,19 +28,22 @@ class GradlePackagesBuilder {
         variants.add(VariantBuilder().apply(block).build())
     }
 
-    fun build() = GradlePackages(variants, isRootPublication)
+    internal fun build() = GradlePackages(variants, isRootPublication)
 }
+
+fun buildGradlePackages(block: GradlePackagesBuilder.() -> Unit) =
+    GradlePackagesBuilder().apply(block).build()
 
 fun GradlePackagesBuilder.VariantBuilder.kotlinPlatformType(platformType: String) =
     attribute("org.jetbrains.kotlin.platform.type", platformType)
 
-fun GradlePackagesBuilder.VariantBuilder.kotlinNative(platform: String) {
+fun GradlePackagesBuilder.VariantBuilder.native(platform: String) {
     kotlinPlatformType("native")
     attribute("org.jetbrains.kotlin.native.target", platform)
 }
 
-fun GradlePackagesBuilder.VariantBuilder.kotlinJvm() = kotlinPlatformType("jvm")
-fun GradlePackagesBuilder.VariantBuilder.kotlinJs(legacyCompiler: Boolean = false) {
+fun GradlePackagesBuilder.VariantBuilder.jvm() = kotlinPlatformType("jvm")
+fun GradlePackagesBuilder.VariantBuilder.js(legacyCompiler: Boolean = false) {
     kotlinPlatformType("js")
     val compilerAttribute = if (legacyCompiler) "legacy" else "ir"
     attribute("org.jetbrains.kotlin.js.compiler", compilerAttribute)

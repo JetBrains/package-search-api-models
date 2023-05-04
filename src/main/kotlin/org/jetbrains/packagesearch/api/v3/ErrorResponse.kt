@@ -5,13 +5,13 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ErrorResponse(
-    @SerialName("error") val error: Error
+    val error: Error
 ) {
 
     @Serializable
     data class Error(
-        @SerialName("message") val message: String,
-        @SerialName("stack_trace") val stackTrace: List<String> = emptyList()
+        val message: String,
+        val stackTrace: List<String> = emptyList()
     )
 
     companion object {
