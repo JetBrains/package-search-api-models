@@ -28,22 +28,23 @@ dependencies {
 //    detektPlugins("ch.qos.logback:logback-classic:1.2.11")
 //    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.20.0")
     api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.0")
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+    api("org.jetbrains.packagesearch:package-search-version-utils")
+    api("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
 }
 
 kotlin {
     target {
         compilations.all {
             kotlinOptions {
-                jvmTarget = "1.8"
+                jvmTarget = "11"
             }
         }
     }
 }
 
 java {
-    targetCompatibility = JavaVersion.VERSION_1_8
-    sourceCompatibility = JavaVersion.VERSION_1_8
+    targetCompatibility = JavaVersion.VERSION_11
+    sourceCompatibility = JavaVersion.VERSION_11
 }
 
 //detekt {

@@ -16,7 +16,7 @@ data class ApiMavenRepository(
     override val id: String,
     override val lastChecked: Long?,
     val url: String,
-    val alternateUrls: List<String>? = null,
+    val alternateUrls: List<String>,
     val friendlyName: String,
     val userFacingUrl: String? = null,
     val packageCount: Int? = null,

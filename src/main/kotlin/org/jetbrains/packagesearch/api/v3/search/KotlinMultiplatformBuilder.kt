@@ -53,33 +53,3 @@ class KotlinMultiplatformBuilder internal constructor(private val delegate: Grad
 fun GradlePackagesBuilder.kotlinMultiplatform(builder: KotlinMultiplatformBuilder.() -> Unit) {
     KotlinMultiplatformBuilder(this).apply(builder)
 }
-
-fun main() {
-    val params = buildSearchParameters {
-        onlyStable = true
-        searchQuery = "ktor"
-
-        gradlePackages {
-            kotlinMultiplatform {
-                jvm()
-                js()
-                native("ios_x64")
-                native("linux_arm64")
-                native("mingw_x64")
-                native("macos_arm64")
-                native("watchos_arm32")
-                native("tvos_arm64")
-            }
-        }
-        cocoapodsPackages {
-            platform(CocoapodsPackages.Platform.IOS, "14.0")
-        }
-        mavenPackages()
-        npmPackages()
-    }
-    val json = Json {
-        prettyPrint = true
-        encodeDefaults = true
-    }
-    println(json.encodeToString(params))
-}

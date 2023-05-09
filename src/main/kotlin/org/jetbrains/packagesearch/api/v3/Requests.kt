@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class MavenHashLookupResponse(
-    val packageInfo: ApiMavenPackage<ApiMavenVersion>,
+    val packageInfo: ApiMavenPackage,
     val version: String,
     val artifact: ApiArtifact
 )

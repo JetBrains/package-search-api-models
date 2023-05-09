@@ -1,6 +1,5 @@
 package org.jetbrains.packagesearch.api.v3
 
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable

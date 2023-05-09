@@ -3,6 +3,8 @@ package org.jetbrains.packagesearch.api.v3
 import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.jetbrains.packagesearch.packageversionutils.normalization.NormalizedVersion
+import java.security.MessageDigest
 
 /**
  * The base interface for all packages stored in Package Search.
@@ -16,28 +18,32 @@ import kotlinx.serialization.Serializable
 sealed interface ApiPackage {
 
     val id: String
+    val idHash: String
+    val name: String?
     val description: String?
     val authors: List<Author>
     val scmUrl: String?
     val licenses: Licenses?
     val rankingMetric: Double?
-    val versions: ApiVersionContainer<out ApiVersion>
+    val versions: ApiVersionContainer<out ApiPackageVersion>
 
+    companion object {
+        fun hashPackageId(id: String) =
+            MessageDigest.getInstance("SHA-256")
+                .digest(id.toByteArray())
+                .joinToString("") { "%02x".format(it) }
+
+    }
 }
 
 @Serializable
-sealed interface ApiVersion {
+sealed interface ApiPackageVersion {
     val versionName: String
     val releasedAt: Instant
-    val stable: Boolean
+    val normalized: NormalizedVersion
+    val isStable: Boolean
     val repositoryIds: List<String>
     val vulnerability: Vulnerability
-}
-
-@Serializable
-sealed interface ApiMavenVersion : ApiVersion {
-    val dependencies: List<Dependency>
-    val artifacts: List<ApiArtifact>
 }
 
 @Serializable
@@ -48,7 +54,13 @@ sealed interface ApiMavenPackage : ApiPackage {
 }
 
 @Serializable
-data class ApiVersionContainer<T : ApiVersion>(
+sealed interface ApiMavenVersion : ApiPackageVersion {
+    val dependencies: List<Dependency>
+    val artifacts: List<ApiArtifact>
+}
+
+@Serializable
+data class ApiVersionContainer<T : ApiPackageVersion>(
     val latest: T,
     val all: List<T>
 )
@@ -57,6 +69,8 @@ data class ApiVersionContainer<T : ApiVersion>(
 @SerialName("maven")
 data class ApiBaseMavenPackage(
     override val id: String,
+    override val idHash: String,
+    override val name: String?,
     override val description: String?,
     override val authors: List<Author>,
     override val scmUrl: String?,
@@ -72,7 +86,8 @@ data class ApiBaseMavenPackage(
     data class BaseMavenVersion(
         override val versionName: String,
         override val releasedAt: Instant,
-        override val stable: Boolean,
+        override val normalized: NormalizedVersion = NormalizedVersion.from(versionName, releasedAt),
+        override val isStable: Boolean,
         override val repositoryIds: List<String>,
         override val vulnerability: Vulnerability,
         override val dependencies: List<Dependency>,
@@ -94,6 +109,8 @@ data class ApiArtifact(
 @SerialName("gradle")
 data class ApiGradlePackage(
     override val id: String,
+    override val idHash: String,
+    override val name: String?,
     override val description: String?,
     override val authors: List<Author>,
     override val scmUrl: String?,
@@ -112,7 +129,8 @@ data class ApiGradlePackage(
     data class GradleVersion(
         override val versionName: String,
         override val releasedAt: Instant,
-        override val stable: Boolean,
+        override val normalized: NormalizedVersion = NormalizedVersion.from(versionName, releasedAt),
+        override val isStable: Boolean,
         override val repositoryIds: List<String>,
         val variants: List<ApiVariant>,
         override val vulnerability: Vulnerability,

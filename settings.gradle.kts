@@ -1,6 +1,6 @@
 @file:Suppress("UnstableApiUsage")
 
-rootProject.name = "pkgs-api-models"
+rootProject.name = "package-search-api-models"
 
 dependencyResolutionManagement {
     repositories {
