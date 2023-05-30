@@ -25,14 +25,14 @@ class KotlinMultiplatformBuilder internal constructor(private val delegate: Grad
         delegate.variant {
             libraryCategory()
             usage("kotlin-api")
-            js(true)
+            jsLegacy()
         }
     }
     fun jsIr() {
         delegate.variant {
             libraryCategory()
             usage("kotlin-api")
-            js(false)
+            jsIr()
         }
     }
 

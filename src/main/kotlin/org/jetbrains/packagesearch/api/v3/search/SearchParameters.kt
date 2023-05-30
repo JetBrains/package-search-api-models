@@ -5,7 +5,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class SearchParameters(
-    val onlyStable: Boolean = true,
     val packagesType: List<PackagesType>,
     val searchQuery: String
 )
@@ -24,9 +23,17 @@ object NpmPackages : PackagesType
 @Serializable
 @SerialName("gradle")
 data class GradlePackages(
-    val variants: List<Map<String, String>>,
-    val isRootPublication: Boolean = true
-) : PackagesType
+    val variants: List<Variant>,
+    val mustBeRootPublication: Boolean = true
+) : PackagesType {
+
+    @Serializable
+    data class Variant(
+        val attributes: Map<String, String>,
+        val withFiles: Boolean
+    )
+
+}
 
 @Serializable
 @SerialName("cocoapods")

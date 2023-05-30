@@ -1,34 +1,35 @@
 package org.jetbrains.packagesearch.api.v3.search
 
+import org.jetbrains.packagesearch.api.v3.search.GradlePackages.Variant
+
 @SearchParametersBuilderDsl
 class GradlePackagesBuilder internal constructor() {
-    private val variants: MutableList<Map<String, String>> = mutableListOf()
-    var isRootPublication: Boolean = true
+    private val variants: MutableList<Variant> = mutableListOf()
+    var mustBeRootPublication: Boolean = true
 
-    fun variants(variants: List<Map<String, String>>) {
+    fun variants(variants: List<Variant>) {
         this.variants.addAll(variants)
     }
 
-    fun variant(attributes: Map<String, String>) {
-        variants.add(attributes)
-    }
-
     @SearchParametersBuilderDsl
-    class VariantBuilder {
+    class VariantBuilder internal constructor() {
         private val attributes: MutableMap<String, String> = mutableMapOf()
+        var mustHaveFilesAttribute: Boolean = false
 
         fun attribute(key: String, value: String) {
             attributes[key] = value
         }
 
-        fun build() = attributes.toMap()
+        fun build() = Variant(attributes.toMap(), mustHaveFilesAttribute)
     }
+
+    fun buildVariant(block: VariantBuilder.() -> Unit) = VariantBuilder().apply(block).build()
 
     fun variant(block: VariantBuilder.() -> Unit) {
-        variants.add(VariantBuilder().apply(block).build())
+        variants.add(buildVariant(block))
     }
 
-    internal fun build() = GradlePackages(variants, isRootPublication)
+    internal fun build() = GradlePackages(variants.toList(), mustBeRootPublication)
 }
 
 fun buildGradlePackages(block: GradlePackagesBuilder.() -> Unit) =
@@ -43,11 +44,14 @@ fun GradlePackagesBuilder.VariantBuilder.native(platform: String) {
 }
 
 fun GradlePackagesBuilder.VariantBuilder.jvm() = kotlinPlatformType("jvm")
-fun GradlePackagesBuilder.VariantBuilder.js(legacyCompiler: Boolean = false) {
+fun GradlePackagesBuilder.VariantBuilder.js(legacyCompiler: Boolean) {
     kotlinPlatformType("js")
     val compilerAttribute = if (legacyCompiler) "legacy" else "ir"
     attribute("org.jetbrains.kotlin.js.compiler", compilerAttribute)
 }
+
+fun GradlePackagesBuilder.VariantBuilder.jsLegacy() = js(legacyCompiler = true)
+fun GradlePackagesBuilder.VariantBuilder.jsIr() = js(legacyCompiler = false)
 
 fun GradlePackagesBuilder.VariantBuilder.category(category: String) =
     attribute("org.gradle.category", category)
@@ -66,3 +70,4 @@ fun GradlePackagesBuilder.VariantBuilder.kotlinMetadata() {
     usage("kotlin-metadata")
     kotlinPlatformType("common")
 }
+
