@@ -10,5 +10,5 @@ value class GetPackageInfoRequest(
 
 @JvmInline
 value class GetScmByUrlRequest(
-    val url: String
+    val urls: List<String>
 )

@@ -1,6 +1,5 @@
 package org.jetbrains.packagesearch.api.v3
 
-import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.jetbrains.packagesearch.packageversionutils.normalization.NormalizedVersion
@@ -25,7 +24,7 @@ sealed interface ApiPackage {
     val scmUrl: String?
     val licenses: Licenses?
     val rankingMetric: Double?
-    val versions: ApiVersionContainer<out ApiPackageVersion>
+    val versions: List<ApiPackageVersion>
 
     companion object {
         fun hashPackageId(id: String) =
@@ -38,17 +37,14 @@ sealed interface ApiPackage {
 
 @Serializable
 sealed interface ApiPackageVersion {
-    val versionName: String
-    val releasedAt: Instant
     val normalized: NormalizedVersion
-    val isStable: Boolean
     val repositoryIds: List<String>
     val vulnerability: Vulnerability
 }
 
 @Serializable
 sealed interface ApiMavenPackage : ApiPackage {
-    override val versions: ApiVersionContainer<out ApiMavenVersion>
+    override val versions: List<ApiMavenVersion>
     val groupId: String
     val artifactId: String
 }
@@ -58,12 +54,6 @@ sealed interface ApiMavenVersion : ApiPackageVersion {
     val dependencies: List<Dependency>
     val artifacts: List<ApiArtifact>
 }
-
-@Serializable
-data class ApiVersionContainer<T : ApiPackageVersion>(
-    val latest: T,
-    val all: List<T>
-)
 
 @Serializable
 @SerialName("maven")
@@ -76,7 +66,7 @@ data class ApiBaseMavenPackage(
     override val scmUrl: String?,
     override val licenses: Licenses?,
     override val rankingMetric: Double?,
-    override val versions: ApiVersionContainer<BaseMavenVersion>,
+    override val versions: List<BaseMavenVersion>,
     override val groupId: String,
     override val artifactId: String
 ) : ApiMavenPackage {
@@ -84,10 +74,7 @@ data class ApiBaseMavenPackage(
     @Serializable
     @SerialName("maven_version")
     data class BaseMavenVersion(
-        override val versionName: String,
-        override val releasedAt: Instant,
-        override val normalized: NormalizedVersion = NormalizedVersion.from(versionName, releasedAt),
-        override val isStable: Boolean,
+        override val normalized: NormalizedVersion,
         override val repositoryIds: List<String>,
         override val vulnerability: Vulnerability,
         override val dependencies: List<Dependency>,
@@ -116,7 +103,7 @@ data class ApiGradlePackage(
     override val scmUrl: String?,
     override val licenses: Licenses?,
     override val rankingMetric: Double?,
-    override val versions: ApiVersionContainer<GradleVersion>,
+    override val versions: List<GradleVersion>,
     override val groupId: String,
     override val artifactId: String
 ) : ApiMavenPackage {
@@ -127,10 +114,7 @@ data class ApiGradlePackage(
     @Serializable
     @SerialName("gradle_version")
     data class GradleVersion(
-        override val versionName: String,
-        override val releasedAt: Instant,
-        override val normalized: NormalizedVersion = NormalizedVersion.from(versionName, releasedAt),
-        override val isStable: Boolean,
+        override val normalized: NormalizedVersion,
         override val repositoryIds: List<String>,
         val variants: List<ApiVariant>,
         override val vulnerability: Vulnerability,
@@ -169,11 +153,13 @@ data class ApiGradlePackage(
 
             @Serializable
             data class AvailableAt(
+                override val name: String,
+                override val attributes: Map<String, String>,
                 val url: String,
                 val group: String,
                 val module: String,
                 val version: String
-            )
+            ) : ApiVariant
         }
 
         @Serializable
