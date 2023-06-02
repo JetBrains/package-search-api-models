@@ -148,18 +148,16 @@ data class ApiGradlePackage(
         data class WithAvailableAt(
             override val name: String,
             override val attributes: Map<String, String>,
-            val availableAt: AvailableAt,
+            @SerialName("available-at") val availableAt: AvailableAt,
         ) : ApiVariant {
 
             @Serializable
             data class AvailableAt(
-                override val name: String,
-                override val attributes: Map<String, String>,
                 val url: String,
                 val group: String,
                 val module: String,
                 val version: String
-            ) : ApiVariant
+            )
         }
 
         @Serializable

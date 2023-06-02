@@ -1,5 +1,6 @@
 package org.jetbrains.packagesearch.api.v3
 
+import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -7,14 +8,14 @@ import kotlinx.serialization.Serializable
 sealed interface ApiRepository {
 
     val id: String
-    val lastChecked: Long?
+    val lastChecked: Instant?
 }
 
 @Serializable
 @SerialName("maven")
 data class ApiMavenRepository(
     override val id: String,
-    override val lastChecked: Long?,
+    override val lastChecked: Instant?,
     val url: String,
     val alternateUrls: List<String>,
     val friendlyName: String,
@@ -29,7 +30,7 @@ data class ApiMavenRepository(
 object ApiCocoapodsRepository : ApiRepository {
 
     override val id = "cocoapods"
-    override val lastChecked: Long? = null
+    override val lastChecked: Instant? = null
 }
 
 @Serializable
@@ -37,5 +38,5 @@ object ApiCocoapodsRepository : ApiRepository {
 object ApiNpmRepository : ApiRepository {
 
     override val id = "npm"
-    override val lastChecked: Long? = null
+    override val lastChecked: Instant? = null
 }

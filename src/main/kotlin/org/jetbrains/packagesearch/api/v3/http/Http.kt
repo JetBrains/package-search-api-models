@@ -2,13 +2,12 @@ package org.jetbrains.packagesearch.api.v3.http
 
 import kotlinx.serialization.Serializable
 
-@JvmInline
 @Serializable
-value class GetPackageInfoRequest(
+data class GetPackageInfoRequest(
     val ids: Set<String>
 )
 
-@JvmInline
-value class GetScmByUrlRequest(
+@Serializable
+data class GetScmByUrlRequest(
     val urls: List<String>
 )
