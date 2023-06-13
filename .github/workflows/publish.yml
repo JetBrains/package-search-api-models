@@ -2,6 +2,8 @@ name: Publish artifacts in Space
 on:
   release:
     types: [ published ]
+  push:
+    branches: [ main, lamberto.basti/v3 ]
 jobs:
   publish:
     name: Publish
@@ -17,6 +19,5 @@ jobs:
       - name: Run Gradle
         run: ./gradlew publish
         env:
-          MAVEN_SPACE_URL: ${{secrets.MAVEN_SPACE_URL}}
           MAVEN_SPACE_USERNAME: ${{secrets.MAVEN_SPACE_USERNAME}}
           MAVEN_SPACE_PASSWORD: ${{secrets.MAVEN_SPACE_PASSWORD}}
