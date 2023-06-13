@@ -10,7 +10,8 @@ plugins {
 }
 
 group = "org.jetbrains.packagesearch"
-version = "2.5.0"
+version = "3.0.0"
+
 val GITHUB_REF: String? = System.getenv("GITHUB_REF")
 version = when {
     GITHUB_REF == null -> version

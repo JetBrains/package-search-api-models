@@ -1,9 +1,6 @@
 build:
   maxIssues: 0
   excludeCorrectable: false
-  exclude-rules:
-    - pattern: "org.jetbrains.packagesearch.packageversionutils.normalization.VersionComparatorUtil.VersionTokenType\\.[A-Z_]+"
-      rules: [ "enum-entry-name-case" ]
   weights:
   # complexity: 2
   # LongParameterList: 1
