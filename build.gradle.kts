@@ -1,18 +1,23 @@
+@file:Suppress("UNUSED_VARIABLE")
+
 plugins {
-    alias(packageSearchCatalog.plugins.kotlin.multiplatform)
-    alias(packageSearchCatalog.plugins.kotlin.plugin.serialization)
-    alias(packageSearchCatalog.plugins.detekt)
-    alias(packageSearchCatalog.plugins.kotlinter)
-    alias(packageSearchCatalog.plugins.packagesearch.build.config)
+    val kotlinVersion = "1.8.21"
+    kotlin("multiplatform") version kotlinVersion
+    kotlin("plugin.serialization") version kotlinVersion
+    id("org.jmailen.kotlinter") version "3.12.0"
+    id("io.gitlab.arturbosch.detekt") version "1.23.0"
     `maven-publish`
 }
 
 group = "org.jetbrains.packagesearch"
-version = System.getenv("GITHUB_REF")?.substringAfterLast("/") ?: "2.5.0"
-
-dependencies {
-    detektPlugins(packageSearchCatalog.logback.classic)
-    detektPlugins(packageSearchCatalog.detekt.formatting)
+version = "2.5.0"
+val GITHUB_REF: String? = System.getenv("GITHUB_REF")
+version = when {
+    GITHUB_REF == null -> version
+    GITHUB_REF.startsWith("refs/tags/") -> GITHUB_REF.substringAfter("refs/tags/")
+    GITHUB_REF.startsWith("refs/heads/main") || GITHUB_REF.startsWith("refs/heads/dev") ->
+        "$version-SNAPSHOT"
+    else -> version
 }
 
 kotlin {
@@ -28,31 +33,94 @@ kotlin {
     tvos()
 
     sourceSets {
+        val ktorVersion = "2.3.1"
         commonMain {
             dependencies {
-                implementation(packageSearchCatalog.kotlinx.serialization.json)
-                implementation(packageSearchCatalog.kotlinx.datetime)
-                api(packageSearchCatalog.packagesearch.version.utils)
+                implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+                implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+                implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
             }
         }
+        val jsMain by getting {
+            dependencies {
+                implementation("io.ktor:ktor-client-js:$ktorVersion")
+                implementation(npm("date-fns", "2.30.0"))
+            }
+        }
+        val jvmMain by getting {
+            dependencies {
+                implementation("io.ktor:ktor-client-cio:$ktorVersion")
+            }
+        }
+        val jvmTest by getting {
+            dependencies {
+                val junitVersion = "5.9.3"
+                implementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+                implementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
+
+                implementation("com.willowtreeapps.assertk:assertk:0.26.1")
+                runtimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
+            }
+        }
+        val appleMain by creating {
+            dependsOn(commonMain.get())
+            dependencies {
+                implementation("io.ktor:ktor-client-cio:$ktorVersion")
+            }
+        }
+        val watchosMain by getting {
+            dependsOn(appleMain)
+        }
+        val iosMain by getting {
+            dependsOn(appleMain)
+        }
+        val macosMain by creating {
+            dependsOn(appleMain)
+        }
+        val macosArm64Main by getting {
+            dependsOn(macosMain)
+        }
+        val macosX64Main by getting {
+            dependsOn(macosMain)
+        }
+        val tvosMain by getting {
+            dependsOn(appleMain)
+        }
     }
+}
+
+dependencies {
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.0")
+    detektPlugins("ch.qos.logback:logback-classic:1.4.7")
+}
+
+val isCi
+    get() = System.getenv("CI") != null || System.getenv("CONTINUOUS_INTEGRATION") != null
+
+detekt {
+    toolVersion = "1.23.0"
+    autoCorrect = !isCi
+    config.from("detekt.yml")
+    buildUponDefaultConfig = true
+}
+
+kotlinter {
+    reporters = arrayOf("html", "checkstyle", "plain")
 }
 
 publishing {
     publications {
         withType<MavenPublication> {
-            version = project.version.toString()
-            groupId = group.toString()
-            artifactId = project.name
-
             pom {
-                name.set("Package Search - API models")
-                description.set("API models for Package Search")
+                name.set("Package Search - Version Utils")
+                description.set("Utility to compare versions in Package Search")
                 url.set("https://package-search.jetbrains.com/")
                 scm {
-                    connection.set("scm:https://github.com/JetBrains/package-search-api-models.git")
-                    developerConnection.set("scm:https://github.com/JetBrains/package-search-api-models.git")
-                    url.set("https://github.com/JetBrains/package-search-api-models.git")
+                    connection.set("scm:https://github.com/JetBrains/package-search-version-utils.git")
+                    developerConnection.set("scm:https://github.com/JetBrains/package-search-version-utils.git")
+                    url.set("https://github.com/JetBrains/package-search-version-utils")
                 }
             }
         }
@@ -69,5 +137,8 @@ publishing {
     }
 }
 
-val isCi
-    get() = System.getenv("CI") != null || System.getenv("CONTINUOUS_INTEGRATION") != null
+tasks {
+    withType<Test> {
+        useJUnitPlatform()
+    }
+}
