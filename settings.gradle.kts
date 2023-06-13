@@ -1,6 +1,6 @@
 @file:Suppress("UnstableApiUsage")
 
-rootProject.name = "package-search-api-models"
+rootProject.name = "packagesearch-api-models"
 
 dependencyResolutionManagement {
     repositories {
@@ -8,8 +8,8 @@ dependencyResolutionManagement {
     }
     versionCatalogs {
         create("packageSearchCatalog") {
-            val catalogFile = file("../gradle/packagesearch.versions.toml")
-            if (catalogFile.isFile) from(files(catalogFile))
+            if (file("../packagesearch-version-catalog/packagesearch.versions.toml").exists())
+                from(files("../packagesearch-version-catalog/packagesearch.versions.toml"))
             else from("org.jetbrains.packagesearch:packagesearch-version-catalog:1.0.0")
         }
     }
