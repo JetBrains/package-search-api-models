@@ -9,8 +9,11 @@ class WeakValueMap<K, V : Any> : MutableIterable<MutableMap.MutableEntry<K, V>> 
         while (iterator.hasNext()) {
             val (key, reference) = iterator.next()
             val value: V? = reference.get()
-            if (value != null) yield(transform(key, value))
-            else iterator.remove()
+            if (value != null) {
+                yield(transform(key, value))
+            } else {
+                iterator.remove()
+            }
         }
     }
 
@@ -77,7 +80,6 @@ class WeakValueMap<K, V : Any> : MutableIterable<MutableMap.MutableEntry<K, V>> 
                 innerMap.remove(lasKey)
             }
         }
-
 }
 
 fun <K, V : Any> WeakValueMap<K, V>.getOrPut(key: K, value: () -> V): V =

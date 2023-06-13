@@ -22,7 +22,7 @@ data class ApiMavenRepository(
     val userFacingUrl: String? = null,
     val packageCount: Int? = null,
     val artifactCount: Int? = null,
-    val namedLinks: String? = null,
+    val namedLinks: String? = null
 ) : ApiRepository
 
 @Serializable

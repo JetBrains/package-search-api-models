@@ -17,10 +17,12 @@ class PackagesTypeBuilder {
     }
 
     fun gradlePackages(variants: List<GradlePackages.Variant>, isRootPublication: Boolean = true) {
-        gradlePackages(buildGradlePackages {
-            variants(variants)
-            this.mustBeRootPublication = isRootPublication
-        })
+        gradlePackages(
+            buildGradlePackages {
+                variants(variants)
+                this.mustBeRootPublication = isRootPublication
+            }
+        )
     }
 
     fun gradlePackages(block: GradlePackagesBuilder.() -> Unit) {
@@ -32,9 +34,11 @@ class PackagesTypeBuilder {
     }
 
     fun cocoapodsPackages(platformMinType: Map<CocoapodsPackages.Platform, String>) {
-        cocoapodsPackages(buildCocoapodsPackages {
-            platformMinType.forEach { platform(it.key, it.value) }
-        })
+        cocoapodsPackages(
+            buildCocoapodsPackages {
+                platformMinType.forEach { platform(it.key, it.value) }
+            }
+        )
     }
 
     fun cocoapodsPackages(block: CocoapodsPackagesBuilder.() -> Unit) {

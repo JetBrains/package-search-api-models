@@ -16,19 +16,19 @@ actual fun DateTimeFormatter(pattern: String) =
     DateTimeFormatter(DateFnsFormat(pattern))
 
 actual class DateTimeFormatter internal constructor(private val format: DateFnsFormat) {
-        actual fun parse(dateTimeString: String): LocalDateTime {
-            val date = DateFns.parse(dateTimeString, format.format, Date())
-            return LocalDateTime(
-                year = date.getFullYear(),
-                monthNumber = date.getMonth(),
-                dayOfMonth = date.getDate(),
-                hour = date.getHours(),
-                minute = date.getMinutes(),
-                second = date.getSeconds(),
-                nanosecond = date.getMilliseconds()
-            )
-        }
-
-        actual fun parseOrNull(dateTimeString: String) =
-            runCatching { parse(dateTimeString) }.getOrNull()
+    actual fun parse(dateTimeString: String): LocalDateTime {
+        val date = DateFns.parse(dateTimeString, format.format, Date())
+        return LocalDateTime(
+            year = date.getFullYear(),
+            monthNumber = date.getMonth(),
+            dayOfMonth = date.getDate(),
+            hour = date.getHours(),
+            minute = date.getMinutes(),
+            second = date.getSeconds(),
+            nanosecond = date.getMilliseconds()
+        )
     }
+
+    actual fun parseOrNull(dateTimeString: String) =
+        runCatching { parse(dateTimeString) }.getOrNull()
+}

@@ -231,17 +231,21 @@ internal class PackageVersionStabilityEvaluationTest {
 
 fun Assert<String>.isConsideredStable() {
     given { versionName ->
-        if (!PackageVersionUtils.evaluateStability(versionName)) fail(
-            "The version '$versionName' should have been considered stable, but wasn't"
-        )
+        if (!PackageVersionUtils.evaluateStability(versionName)) {
+            fail(
+                "The version '$versionName' should have been considered stable, but wasn't"
+            )
+        }
     }
 }
 
 fun Assert<String>.isNotConsideredStable() {
     given { versionName ->
-        if (PackageVersionUtils.evaluateStability(versionName)) fail(
-            "The version '$versionName' should have been considered unstable, but wasn't"
-        )
+        if (PackageVersionUtils.evaluateStability(versionName)) {
+            fail(
+                "The version '$versionName' should have been considered unstable, but wasn't"
+            )
+        }
     }
 }
 

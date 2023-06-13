@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ApiVersionStats(
     @SerialName("is_kotlin_multiplatform") val isKotlinMultiplatform: Int,
-    @SerialName("has_classifier") val hasClassifier: Int,
+    @SerialName("has_classifier") val hasClassifier: Int
 )

@@ -30,7 +30,7 @@ sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
         private fun normalizePackageVersion(
             versionName: String,
             isStable: Boolean,
-            garbage: () -> Garbage,
+            garbage: () -> Garbage
         ): NormalizedVersion {
             if (looksLikeGitCommitOrOtherHash(versionName) || isOneBigHexadecimalBlob(versionName)) {
                 return garbage()
@@ -80,7 +80,7 @@ sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
         override val releasedAt: Instant?,
         val semanticPart: String,
         override val stabilityMarker: String?,
-        override val nonSemanticSuffix: String?,
+        override val nonSemanticSuffix: String?
     ) : NormalizedVersion, DecoratedVersion {
 
         val semanticPartWithStabilityMarker
@@ -139,7 +139,7 @@ sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
         override val releasedAt: Instant?,
         val timestampPrefix: String,
         override val stabilityMarker: String?,
-        override val nonSemanticSuffix: String?,
+        override val nonSemanticSuffix: String?
     ) : NormalizedVersion, DecoratedVersion {
 
         private val timestampPrefixWithStabilityMarker
@@ -171,7 +171,7 @@ sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
     data class Garbage(
         override val versionName: String,
         override val isStable: Boolean,
-        override val releasedAt: Instant?,
+        override val releasedAt: Instant?
     ) : NormalizedVersion {
 
         override fun compareTo(other: NormalizedVersion): Int =
@@ -213,5 +213,3 @@ sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
         val nonSemanticSuffix: String?
     }
 }
-
-

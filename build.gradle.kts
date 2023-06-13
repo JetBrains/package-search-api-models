@@ -29,29 +29,31 @@ kotlin {
     ios()
     macosArm64()
     macosX64()
-    watchos()
+    watchosArm64()
+    watchosX64()
     tvos()
 
     sourceSets {
         val ktorVersion = "2.3.1"
         commonMain {
             dependencies {
-                implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-                implementation("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-                implementation("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
-                implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
-                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+                api("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+                api("io.ktor:ktor-client-content-negotiation:$ktorVersion")
+                api("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+                api("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+                api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
+                api("com.soywiz.korlibs.krypto:krypto:4.0.5")
             }
         }
         val jsMain by getting {
             dependencies {
-                implementation("io.ktor:ktor-client-js:$ktorVersion")
-                implementation(npm("date-fns", "2.30.0"))
+                api("io.ktor:ktor-client-js:$ktorVersion")
+                api(npm("date-fns", "2.30.0"))
             }
         }
         val jvmMain by getting {
             dependencies {
-                implementation("io.ktor:ktor-client-cio:$ktorVersion")
+                api("io.ktor:ktor-client-cio:$ktorVersion")
             }
         }
         val jvmTest by getting {
@@ -67,10 +69,13 @@ kotlin {
         val appleMain by creating {
             dependsOn(commonMain.get())
             dependencies {
-                implementation("io.ktor:ktor-client-cio:$ktorVersion")
+                api("io.ktor:ktor-client-cio:$ktorVersion")
             }
         }
-        val watchosMain by getting {
+        val watchosX64Main by getting {
+            dependsOn(appleMain)
+        }
+        val watchosArm64Main by getting {
             dependsOn(appleMain)
         }
         val iosMain by getting {

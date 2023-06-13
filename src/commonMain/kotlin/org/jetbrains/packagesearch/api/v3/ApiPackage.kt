@@ -1,9 +1,10 @@
 package org.jetbrains.packagesearch.api.v3
 
+import io.ktor.utils.io.core.toByteArray
+import korlibs.crypto.SHA256
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.jetbrains.packagesearch.packageversionutils.normalization.NormalizedVersion
-import java.security.MessageDigest
 
 /**
  * The base interface for all packages stored in Package Search.
@@ -28,10 +29,10 @@ sealed interface ApiPackage {
 
     companion object {
         fun hashPackageId(id: String) =
-            MessageDigest.getInstance("SHA-256")
-                .digest(id.toByteArray())
-                .joinToString("") { "%02x".format(it) }
-
+            SHA256.create()
+                .update(id.toByteArray())
+                .digest()
+                .hex
     }
 }
 
@@ -80,7 +81,6 @@ data class ApiBaseMavenPackage(
         override val dependencies: List<Dependency>,
         override val artifacts: List<ApiArtifact>
     ) : ApiMavenVersion
-
 }
 
 @Serializable
@@ -148,7 +148,7 @@ data class ApiGradlePackage(
         data class WithAvailableAt(
             override val name: String,
             override val attributes: Map<String, String>,
-            @SerialName("available-at") val availableAt: AvailableAt,
+            @SerialName("available-at") val availableAt: AvailableAt
         ) : ApiVariant {
 
             @Serializable

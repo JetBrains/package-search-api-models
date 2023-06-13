@@ -18,5 +18,4 @@ actual class DateTimeFormatter internal constructor(val delegate: JavaDateTimeFo
 
     actual fun parseOrNull(dateTimeString: String) =
         runCatching { parse(dateTimeString) }.getOrNull()
-
 }

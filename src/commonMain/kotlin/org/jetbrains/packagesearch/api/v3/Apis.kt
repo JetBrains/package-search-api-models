@@ -42,4 +42,3 @@ data class Vulnerability(
         val NOT_VULNERABLE = Vulnerability(false)
     }
 }
-

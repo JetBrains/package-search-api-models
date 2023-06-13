@@ -20,7 +20,7 @@ object VersionComparatorUtil {
     fun compare(
         v1: String,
         v2: String,
-        tokenPriorityProvider: (String) -> Int = DEFAULT_TOKEN_PRIORITY_PROVIDER,
+        tokenPriorityProvider: (String) -> Int = DEFAULT_TOKEN_PRIORITY_PROVIDER
     ): Int = v1.splitVersionString()
         .zip(v2.splitVersionString())
         .map { (e1, e2) ->
@@ -28,8 +28,8 @@ object VersionComparatorUtil {
             val res = tokenPriorityProvider(e1) - tokenPriorityProvider(e2)
             when {
                 res.sign != 0 -> res
-                t1 == VersionTokenType._WORD -> e1.compareTo(e2)
-                t1 == VersionTokenType._DIGITS -> compareNumbers(e1, e2)
+                t1 == VersionTokenType.WORD -> e1.compareTo(e2)
+                t1 == VersionTokenType.DIGITS -> compareNumbers(e1, e2)
                 else -> 0
             }
         }
@@ -61,7 +61,7 @@ object VersionComparatorUtil {
         BETTA(40),
         B(40),
         RC(50),
-        _WS(60),
+        WS(60),
         SP(70),
         REL(80),
         RELEASE(80),
@@ -69,29 +69,26 @@ object VersionComparatorUtil {
         FINAL(80),
         CANDIDATE(80),
         STABLE(80),
-        _WORD(90),
-        _DIGITS(100),
+        WORD(90),
+        DIGITS(100),
         BUNDLED(666),
         SNAPSHOTS(10);
 
         companion object {
             fun lookup(str: String): VersionTokenType {
                 val trimmedStr = str.trim()
-                if (trimmedStr.isEmpty()) return _WS
+                if (trimmedStr.isEmpty()) return WS
                 for (token in values()) {
                     if (token.name[0] != '_' && token.name.equals(trimmedStr, ignoreCase = true)) {
                         return token
                     }
                 }
                 return when {
-                    ZERO_PATTERN.matches(trimmedStr) -> _WS
-                    DIGITS_PATTERN.matches(trimmedStr) -> _DIGITS
-                    else -> _WORD
+                    ZERO_PATTERN.matches(trimmedStr) -> WS
+                    DIGITS_PATTERN.matches(trimmedStr) -> DIGITS
+                    else -> WORD
                 }
             }
         }
     }
 }
-
-
-

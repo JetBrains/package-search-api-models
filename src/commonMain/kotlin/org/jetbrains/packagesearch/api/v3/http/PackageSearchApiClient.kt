@@ -1,11 +1,15 @@
 package org.jetbrains.packagesearch.api.v3.http
 
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.request.*
-import io.ktor.http.*
-import io.ktor.serialization.kotlinx.json.*
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.get
+import io.ktor.client.request.header
+import io.ktor.client.request.setBody
+import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
+import io.ktor.http.Url
+import io.ktor.serialization.kotlinx.json.json
 import org.jetbrains.packagesearch.api.v3.ApiPackage
 import org.jetbrains.packagesearch.api.v3.ApiRepository
 import org.jetbrains.packagesearch.api.v3.MavenHashLookupRequest
@@ -49,6 +53,4 @@ class PackageSearchApiClient(val endpoints: PackageSearchEndpoints) {
 
     suspend fun getScmByUrl(request: GetScmByUrlRequest): String? =
         defaultRequest(endpoints.getScmsByUrl, request)
-
 }
-

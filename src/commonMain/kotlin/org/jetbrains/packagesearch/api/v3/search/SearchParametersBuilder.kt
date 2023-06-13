@@ -27,4 +27,3 @@ class SearchParametersBuilder internal constructor() {
 
 fun buildSearchParameters(block: SearchParametersBuilder.() -> Unit) =
     SearchParametersBuilder().apply(block).build()
-

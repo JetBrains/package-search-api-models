@@ -1,6 +1,9 @@
 package org.jetbrains.packagesearch.packageversionutils.normalization
 
-import kotlinx.datetime.*
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDateTime
 
 object VeryLenientDateTimeExtractor {
 
@@ -72,7 +75,7 @@ object VeryLenientDateTimeExtractor {
         .firstOrNull()
 }
 
-expect fun DateTimeFormatter(pattern: String) : DateTimeFormatter
+expect fun DateTimeFormatter(pattern: String): DateTimeFormatter
 
 expect class DateTimeFormatter {
     fun parse(dateTimeString: String): LocalDateTime

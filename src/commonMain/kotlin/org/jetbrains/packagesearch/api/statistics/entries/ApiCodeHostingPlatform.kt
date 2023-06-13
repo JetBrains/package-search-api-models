@@ -9,5 +9,5 @@ data class ApiCodeHostingPlatform(
     @SerialName("gitlab") val gitlab: Int,
     @SerialName("bitbucket") val bitbucket: Int,
     @SerialName("space") val space: Int,
-    @SerialName("others") val others: Int,
+    @SerialName("others") val others: Int
 )

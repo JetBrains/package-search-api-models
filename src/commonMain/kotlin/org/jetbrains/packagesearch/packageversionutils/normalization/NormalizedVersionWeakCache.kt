@@ -17,8 +17,11 @@ object NormalizedVersionWeakCache : KSerializer<NormalizedVersion> {
 
     override fun deserialize(decoder: Decoder): NormalizedVersion {
         val deserialized = NormalizedVersion.serializer().deserialize(decoder)
-        return if (deserialized is NormalizedVersion.Missing) deserialized
-        else weakCache.getOrPut(deserialized.key) { deserialized }
+        return if (deserialized is NormalizedVersion.Missing) {
+            deserialized
+        } else {
+            weakCache.getOrPut(deserialized.key) { deserialized }
+        }
     }
 
     override fun serialize(encoder: Encoder, value: NormalizedVersion) {
@@ -26,7 +29,6 @@ object NormalizedVersionWeakCache : KSerializer<NormalizedVersion> {
     }
 
     fun getOrPut(versionName: String, releasedAt: Instant?, compute: () -> NormalizedVersion): NormalizedVersion {
-        return  weakCache.getOrPut(Key(versionName, releasedAt)) { compute() }
+        return weakCache.getOrPut(Key(versionName, releasedAt)) { compute() }
     }
 }
-

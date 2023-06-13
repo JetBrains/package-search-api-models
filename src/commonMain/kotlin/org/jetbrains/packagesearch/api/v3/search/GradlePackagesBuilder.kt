@@ -70,4 +70,3 @@ fun GradlePackagesBuilder.VariantBuilder.kotlinMetadata() {
     usage("kotlin-metadata")
     kotlinPlatformType("common")
 }
-

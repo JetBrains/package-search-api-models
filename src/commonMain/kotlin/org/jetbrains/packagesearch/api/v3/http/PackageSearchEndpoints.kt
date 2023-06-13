@@ -1,6 +1,6 @@
 package org.jetbrains.packagesearch.api.v3.http
 
-import io.ktor.http.*
+import io.ktor.http.Url
 
 interface PackageSearchEndpoints {
     val knownRepositories: Url

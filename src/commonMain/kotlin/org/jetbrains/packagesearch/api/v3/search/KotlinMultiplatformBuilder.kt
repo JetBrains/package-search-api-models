@@ -1,8 +1,5 @@
 package org.jetbrains.packagesearch.api.v3.search
 
-import kotlinx.serialization.encodeToString
-import kotlinx.serialization.json.Json
-
 @SearchParametersBuilderDsl
 class KotlinMultiplatformBuilder internal constructor(private val delegate: GradlePackagesBuilder) {
 

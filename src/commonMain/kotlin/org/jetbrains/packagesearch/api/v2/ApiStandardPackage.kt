@@ -17,7 +17,9 @@ data class ApiStandardPackage(
     @SerialName("authors") val authors: List<ApiAuthor>? = null,
     @SerialName("latest_version") val latestVersion: ApiStandardVersion,
     @SerialName("versions") override val versions: List<ApiStandardVersion>,
-    @Deprecated("use metrics") @SerialName("dependency_rating") val dependencyRating: Double? = null,
+    @Deprecated("use metrics")
+    @SerialName("dependency_rating")
+    val dependencyRating: Double? = null,
     @SerialName("metrics") val metrics: ApiMetrics? = null,
     @SerialName("github") val gitHub: ApiGitHub? = null,
     @SerialName("stackoverflow") val stackOverflow: ApiStackOverflow? = null
@@ -216,7 +218,7 @@ data class ApiStandardPackage(
         @SerialName("dependency_rating") val dependencyRating: Double = 0.0,
         @SerialName("stackoverflow_health") val stackoverflowHealth: Double = 0.0,
         @SerialName("oss_health") val ossHealth: Double = 0.0,
-        @SerialName("github_stars") val stars: Int = 0,
+        @SerialName("github_stars") val stars: Int = 0
     )
 
     @Serializable

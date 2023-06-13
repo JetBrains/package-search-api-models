@@ -8,9 +8,12 @@ sealed interface Scm {
 
     val scmUrl: String
     val description: String?
-    @SerialName("oss_health_index") val ossHealthIndex: Double?
-    @SerialName("readme_url") val readmeUrl: String?
 
+    @SerialName("oss_health_index")
+    val ossHealthIndex: Double?
+
+    @SerialName("readme_url")
+    val readmeUrl: String?
 }
 
 @Serializable

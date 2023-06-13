@@ -46,9 +46,11 @@ private val HEX_STRING_LETTER_CHARS = 'a'..'f'
  * token priority provider, so sorting may be funky when they appear.
  */
 private val STABILITY_MARKER_REGEX =
-    ("^((?:[._\\-+]" +
+    (
+        "^((?:[._\\-+]" +
             "(?:snapshots?|preview|milestone|candidate|release|develop|stable|build|alpha|betta|final|snap|beta|dev|pre|eap|rel|sp|rc|m|r|b|a|p)" +
-            "(?:[._\\-]?\\d{1,5})?){1,2})(?:\\b|_)")
+            "(?:[._\\-]?\\d{1,5})?){1,2})(?:\\b|_)"
+        )
         .toRegex(option = RegexOption.IGNORE_CASE)
 
 /**
@@ -62,7 +64,6 @@ private val STABILITY_MARKER_REGEX =
  * Group 0 matches the whole string, group 1 is the semver minus any suffixes.
  */
 private val SEMVER_REGEX = "^((?:\\d{1,5}\\.){0,4}\\d{1,5}(?!\\.?\\d)).*\$".toRegex(option = RegexOption.IGNORE_CASE)
-
 
 fun looksLikeGitCommitOrOtherHash(versionName: String): Boolean {
     val hexLookingPrefix = versionName.takeWhile { it.isDigit() || HEX_STRING_LETTER_CHARS.contains(it) }
