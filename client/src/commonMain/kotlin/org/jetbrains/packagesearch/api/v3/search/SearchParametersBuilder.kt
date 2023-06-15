@@ -20,7 +20,7 @@ class SearchParametersBuilder internal constructor() {
         require(query.isNotBlank()) { errorText }
         return SearchParameters(
             packagesType = packagesType,
-            searchQuery = query
+            searchQuery = query,
         )
     }
 }

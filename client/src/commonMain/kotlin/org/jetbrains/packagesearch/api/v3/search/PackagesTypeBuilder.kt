@@ -21,7 +21,7 @@ class PackagesTypeBuilder {
             buildGradlePackages {
                 variants(variants)
                 this.mustBeRootPublication = isRootPublication
-            }
+            },
         )
     }
 
@@ -37,7 +37,7 @@ class PackagesTypeBuilder {
         cocoapodsPackages(
             buildCocoapodsPackages {
                 platformMinType.forEach { platform(it.key, it.value) }
-            }
+            },
         )
     }
 
