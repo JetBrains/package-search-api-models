@@ -1,5 +1,5 @@
 plugins {
-    id("build-config")
+    `build-config`
 }
 
 kotlin {
