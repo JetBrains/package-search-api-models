@@ -1,27 +1,15 @@
 @file:Suppress("UNUSED_VARIABLE")
 
+import org.jetbrains.kotlin.gradle.plugin.KotlinDependencyHandler
+
 plugins {
     kotlin("multiplatform")
     kotlin("plugin.serialization")
     id("org.jmailen.kotlinter")
     id("io.gitlab.arturbosch.detekt")
     `maven-publish`
+    id("version-config")
 }
-
-group = "org.jetbrains.packagesearch"
-version = "3.0.0"
-
-val GITHUB_REF: String? = System.getenv("GITHUB_REF")
-val devBranches = listOf("v3", "dev")
-version = when {
-    GITHUB_REF == null -> version
-    GITHUB_REF.startsWith("refs/tags/") -> GITHUB_REF.substringAfter("refs/tags/")
-    GITHUB_REF.startsWith("refs/heads") && devBranches.any { it in GITHUB_REF } ->
-        "$version-SNAPSHOT"
-    else -> version
-}
-
-GITHUB_REF?.let { logger.lifecycle("GITHUB_REF: $it") }
 
 kotlin {
     jvm()
@@ -37,43 +25,9 @@ kotlin {
     tvos()
 
     sourceSets {
-        val ktorVersion = "2.3.1"
-        commonMain {
-            dependencies {
-                api("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-                api("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-                api("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
-                api("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
-                api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.5.1")
-                api("com.soywiz.korlibs.krypto:krypto:4.0.5")
-            }
-        }
-        val jsMain by getting {
-            dependencies {
-                api("io.ktor:ktor-client-js:$ktorVersion")
-                api(npm("date-fns", "2.30.0"))
-            }
-        }
-        val jvmMain by getting {
-            dependencies {
-                api("io.ktor:ktor-client-cio:$ktorVersion")
-            }
-        }
-        val jvmTest by getting {
-            dependencies {
-                val junitVersion = "5.9.3"
-                implementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
-                implementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
-
-                implementation("com.willowtreeapps.assertk:assertk:0.26.1")
-                runtimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
-            }
-        }
+        val commonMain by getting
         val appleMain by creating {
-            dependsOn(commonMain.get())
-            dependencies {
-                api("io.ktor:ktor-client-cio:$ktorVersion")
-            }
+            dependsOn(commonMain)
         }
         val watchosX64Main by getting {
             dependsOn(appleMain)
@@ -150,3 +104,9 @@ tasks {
         useJUnitPlatform()
     }
 }
+
+fun KotlinDependencyHandler.npm(dependencyProvider: Provider<MinimalExternalModuleDependency>): Dependency =
+    npm(
+        name = dependencyProvider.get().name,
+        version = dependencyProvider.get().version ?: error("Version is required for ${dependencyProvider.get().name}")
+    )

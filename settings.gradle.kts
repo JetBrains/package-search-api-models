@@ -7,14 +7,19 @@ plugins {
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 rootProject.name = "packagesearch-api-models"
-
 dependencyResolutionManagement {
     repositories {
         mavenCentral()
     }
+    versionCatalogs {
+        create("packageSearchApiModelsVersions") {
+            from(files("packagesearch-api-models.toml"))
+        }
+    }
 }
 
-include(":client")
+
+include(":client", ":build-systems", ":version-catalog")
 
 val isCi
     get() = System.getenv("CI") == "true"

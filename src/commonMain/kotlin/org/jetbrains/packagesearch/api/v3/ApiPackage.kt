@@ -1,6 +1,5 @@
 package org.jetbrains.packagesearch.api.v3
 
-import io.ktor.utils.io.core.toByteArray
 import korlibs.crypto.SHA256
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
@@ -30,7 +29,7 @@ sealed interface ApiPackage {
     companion object {
         fun hashPackageId(id: String) =
             SHA256.create()
-                .update(id.toByteArray())
+                .update(id.encodeToByteArray())
                 .digest()
                 .hex
     }

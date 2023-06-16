@@ -5,35 +5,33 @@ plugins {
 publishing {
     publications {
         withType<MavenPublication> {
-            artifactId = "packagesearch-api-client"
+            artifactId = "packagesearch-api-client" + artifactId.removePrefix(project.name)
         }
     }
 }
 
 kotlin {
     sourceSets {
-        val ktorVersion = "2.3.1"
         commonMain {
             dependencies {
                 api(projects.packagesearchApiModels)
-                api("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-                api("io.ktor:ktor-client-content-negotiation:$ktorVersion")
-                api("io.ktor:ktor-serialization-kotlinx-json:$ktorVersion")
+                api(packageSearchApiModelsVersions.ktor.client.content.negotiation)
+                api(packageSearchApiModelsVersions.ktor.serialization.kotlinx.json)
             }
         }
         jsMain {
             dependencies {
-                api("io.ktor:ktor-client-js:$ktorVersion")
+                api(packageSearchApiModelsVersions.ktor.client.js)
             }
         }
         jvmMain {
             dependencies {
-                api("io.ktor:ktor-client-cio:$ktorVersion")
+                api(packageSearchApiModelsVersions.ktor.client.cio)
             }
         }
         appleMain {
             dependencies {
-                api("io.ktor:ktor-client-cio:$ktorVersion")
+                api(packageSearchApiModelsVersions.ktor.client.cio)
             }
         }
     }
