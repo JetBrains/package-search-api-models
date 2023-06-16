@@ -7,5 +7,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ApiPackageResponse<T : ApiPackage<V>, V : ApiVersion>(
     @SerialName("package") val `package`: T?,
-    @SerialName("repositories") val repositories: List<ApiRepository>
+    @SerialName("repositories") val repositories: List<ApiRepository>,
 )

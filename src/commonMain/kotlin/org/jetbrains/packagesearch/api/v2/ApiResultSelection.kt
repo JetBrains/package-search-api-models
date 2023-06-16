@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 data class ApiResultSelection(
     val requestId: String,
     val token: String,
-    val resultId: String
+    val resultId: String,
 )

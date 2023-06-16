@@ -25,7 +25,7 @@ actual class DateTimeFormatter internal constructor(private val format: DateFnsF
             hour = date.getHours(),
             minute = date.getMinutes(),
             second = date.getSeconds(),
-            nanosecond = date.getMilliseconds()
+            nanosecond = date.getMilliseconds(),
         )
     }
 

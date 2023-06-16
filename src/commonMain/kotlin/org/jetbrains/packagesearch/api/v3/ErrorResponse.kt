@@ -4,13 +4,13 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ErrorResponse(
-    val error: Error
+    val error: Error,
 ) {
 
     @Serializable
     data class Error(
         val message: String,
-        val stackTrace: List<String> = emptyList()
+        val stackTrace: List<String> = emptyList(),
     )
 
     companion object {

@@ -20,5 +20,5 @@ data class ApiStatisticsEntry(
     @SerialName("packaging_stats") val packagingStats: Map<String, Int>,
     @SerialName("github_stats") val githubStats: ApiGithubStats,
     @SerialName("package_stats") val packageStats: ApiPackageStats,
-    @SerialName("versions_stats") val versionsStats: ApiVersionStats
+    @SerialName("versions_stats") val versionsStats: ApiVersionStats,
 )

@@ -6,5 +6,5 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class ApiStatisticsResponse(
     @SerialName("global") val global: ApiStatisticsEntry,
-    @SerialName("repositories") val repositories: Map<String, ApiStatisticsEntry>
+    @SerialName("repositories") val repositories: Map<String, ApiStatisticsEntry>,
 )

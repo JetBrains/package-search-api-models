@@ -79,7 +79,7 @@ sealed class VersionTokenMatcher {
                 regex("\\br?dev(elop(ment)?)?\\b".toRegex(RegexOption.IGNORE_CASE)),
                 regex("\\beap?\\b".toRegex(RegexOption.IGNORE_CASE)),
                 regex("pre(view)?\\b".toRegex(RegexOption.IGNORE_CASE)),
-                regex("\\bsnap(s?shot)?\\b".toRegex(RegexOption.IGNORE_CASE))
+                regex("\\bsnap(s?shot)?\\b".toRegex(RegexOption.IGNORE_CASE)),
             )
     }
 }

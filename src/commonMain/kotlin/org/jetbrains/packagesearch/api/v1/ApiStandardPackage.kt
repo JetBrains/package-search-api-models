@@ -13,12 +13,12 @@ data class ApiStandardPackage(
     @SerialName("url") val url: String? = null,
     @SerialName("latestVersion") val latestVersion: ApiStandardVersion,
     @SerialName("versions") override val versions: List<ApiStandardVersion>,
-    @SerialName("dependencyRating") val dependencyRating: Double
+    @SerialName("dependencyRating") val dependencyRating: Double,
 ) : ApiPackage<ApiStandardPackage.ApiStandardVersion> {
 
     @Serializable
     data class ApiStandardVersion(
         @SerialName("version") val version: String,
-        @SerialName("stable") val stable: Boolean
+        @SerialName("stable") val stable: Boolean,
     )
 }

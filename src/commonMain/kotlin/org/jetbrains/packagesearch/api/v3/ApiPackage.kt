@@ -68,7 +68,7 @@ data class ApiBaseMavenPackage(
     override val rankingMetric: Double?,
     override val versions: List<BaseMavenVersion>,
     override val groupId: String,
-    override val artifactId: String
+    override val artifactId: String,
 ) : ApiMavenPackage {
 
     @Serializable
@@ -78,7 +78,7 @@ data class ApiBaseMavenPackage(
         override val repositoryIds: List<String>,
         override val vulnerability: Vulnerability,
         override val dependencies: List<Dependency>,
-        override val artifacts: List<ApiArtifact>
+        override val artifacts: List<ApiArtifact>,
     ) : ApiMavenVersion
 }
 
@@ -88,7 +88,7 @@ data class ApiArtifact(
     val md5: String,
     val sha1: String,
     val sha256: String,
-    val sha512: String
+    val sha512: String,
 )
 
 @Serializable
@@ -104,7 +104,7 @@ data class ApiGradlePackage(
     override val rankingMetric: Double?,
     override val versions: List<GradleVersion>,
     override val groupId: String,
-    override val artifactId: String
+    override val artifactId: String,
 ) : ApiMavenPackage {
 
     val module: String
@@ -119,14 +119,14 @@ data class ApiGradlePackage(
         override val vulnerability: Vulnerability,
         val parentComponent: String? = null,
         override val dependencies: List<Dependency>,
-        override val artifacts: List<ApiArtifact>
+        override val artifacts: List<ApiArtifact>,
     ) : ApiMavenVersion
 
     @Serializable
     data class ApiGradleDependency(
         val group: String,
         val module: String,
-        val version: String
+        val version: String,
     )
 
     @Serializable(with = GradleVariantSerializer::class)
@@ -140,14 +140,14 @@ data class ApiGradlePackage(
             override val name: String,
             override val attributes: Map<String, String>,
             val dependencies: List<ApiGradleDependency>,
-            val files: List<File>
+            val files: List<File>,
         ) : ApiVariant
 
         @Serializable
         data class WithAvailableAt(
             override val name: String,
             override val attributes: Map<String, String>,
-            @SerialName("available-at") val availableAt: AvailableAt
+            @SerialName("available-at") val availableAt: AvailableAt,
         ) : ApiVariant {
 
             @Serializable
@@ -155,7 +155,7 @@ data class ApiGradlePackage(
                 val url: String,
                 val group: String,
                 val module: String,
-                val version: String
+                val version: String,
             )
         }
 
@@ -167,7 +167,7 @@ data class ApiGradlePackage(
             val sha512: String,
             val sha256: String,
             val sha1: String,
-            val md5: String
+            val md5: String,
         )
     }
 }

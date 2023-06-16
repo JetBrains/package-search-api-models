@@ -28,7 +28,7 @@ object VeryLenientDateTimeExtractor {
         "yyyy/MM_HH:mm:ss",
         "yyyy/MM_HH:mm",
         "yyyy/MM/dd",
-        "yyyy/MM"
+        "yyyy/MM",
     )
 
     val dateDividers = sequenceOf(".", "-", "")

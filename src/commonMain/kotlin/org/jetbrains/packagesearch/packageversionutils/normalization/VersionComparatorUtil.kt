@@ -20,7 +20,7 @@ object VersionComparatorUtil {
     fun compare(
         v1: String,
         v2: String,
-        tokenPriorityProvider: (String) -> Int = DEFAULT_TOKEN_PRIORITY_PROVIDER
+        tokenPriorityProvider: (String) -> Int = DEFAULT_TOKEN_PRIORITY_PROVIDER,
     ): Int = v1.splitVersionString()
         .zip(v2.splitVersionString())
         .map { (e1, e2) ->
@@ -72,7 +72,8 @@ object VersionComparatorUtil {
         WORD(90),
         DIGITS(100),
         BUNDLED(666),
-        SNAPSHOTS(10);
+        SNAPSHOTS(10),
+        ;
 
         companion object {
             fun lookup(str: String): VersionTokenType {

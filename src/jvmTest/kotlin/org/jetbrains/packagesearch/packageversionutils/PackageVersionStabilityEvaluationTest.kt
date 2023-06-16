@@ -54,10 +54,10 @@ internal class PackageVersionStabilityEvaluationTest {
             versionTemplates.map { template ->
                 String.format(
                     template,
-                    forbiddenWord
+                    forbiddenWord,
                 )
             }
-        }
+        },
     )
 
     object UnstableNamesProvider : ArgumentsProvider by arguments(shouldBeUnstable)
@@ -67,7 +67,7 @@ internal class PackageVersionStabilityEvaluationTest {
             simpleSeparators.flatMap { separator ->
                 simpleSuffixes.map { suffix -> Triple(prefix, separator, suffix) }
             }
-        }.map { (prefix, separator, suffix) -> "$prefix$separator$suffix" }
+        }.map { (prefix, separator, suffix) -> "$prefix$separator$suffix" },
     )
 
     object StableNamesProvider : ArgumentsProvider by arguments(shouldBeStable)
@@ -105,7 +105,7 @@ internal class PackageVersionStabilityEvaluationTest {
             "blah1%s01",
             "blah1%s.01",
             "blah1%s-01",
-            "blah1%s_01"
+            "blah1%s_01",
         )
 
         val shouldBeUnstable = listOf(
@@ -134,7 +134,7 @@ internal class PackageVersionStabilityEvaluationTest {
             "1.4.10-dev-67",
             "1.4.30-dev-75",
             "1.4.20.2-dev-62",
-            "main-81"
+            "main-81",
         )
 
         val shouldBeStable = listOf(
@@ -189,7 +189,7 @@ internal class PackageVersionStabilityEvaluationTest {
             "#1",
             "#1.1",
             "$1",
-            "$1.1"
+            "$1.1",
         )
 
         val forbiddenWords = listOf(
@@ -215,7 +215,7 @@ internal class PackageVersionStabilityEvaluationTest {
             "nightly",
             "weekly",
             "master",
-            "main"
+            "main",
         )
 
         val simplePrefixes = listOf("", "0", "1", "0.1", "1.0", "2.0")
@@ -224,7 +224,7 @@ internal class PackageVersionStabilityEvaluationTest {
 
         val simpleSuffixes = listOf(
             "snapshot", "alpha", "beta", "dev", "draft", "eap",
-            "release-candidate", "rc", "milestone", "test", "nightly"
+            "release-candidate", "rc", "milestone", "test", "nightly",
         )
     }
 }
@@ -233,7 +233,7 @@ fun Assert<String>.isConsideredStable() {
     given { versionName ->
         if (!PackageVersionUtils.evaluateStability(versionName)) {
             fail(
-                "The version '$versionName' should have been considered stable, but wasn't"
+                "The version '$versionName' should have been considered stable, but wasn't",
             )
         }
     }
@@ -243,7 +243,7 @@ fun Assert<String>.isNotConsideredStable() {
     given { versionName ->
         if (PackageVersionUtils.evaluateStability(versionName)) {
             fail(
-                "The version '$versionName' should have been considered unstable, but wasn't"
+                "The version '$versionName' should have been considered unstable, but wasn't",
             )
         }
     }

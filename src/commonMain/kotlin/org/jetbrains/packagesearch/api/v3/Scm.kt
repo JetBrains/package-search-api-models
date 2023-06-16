@@ -28,5 +28,5 @@ data class GitHub(
     val stars: Int? = null,
     val watchers: Int? = null,
     val forks: Int? = null,
-    val subscribers: Int? = null
+    val subscribers: Int? = null,
 ) : Scm

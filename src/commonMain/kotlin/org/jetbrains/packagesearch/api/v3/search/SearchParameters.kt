@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class SearchParameters(
     val packagesType: List<PackagesType>,
-    val searchQuery: String
+    val searchQuery: String,
 )
 
 @Serializable
@@ -24,20 +24,20 @@ object NpmPackages : PackagesType
 @SerialName("gradle")
 data class GradlePackages(
     val variants: List<Variant>,
-    val mustBeRootPublication: Boolean = true
+    val mustBeRootPublication: Boolean = true,
 ) : PackagesType {
 
     @Serializable
     data class Variant(
         val attributes: Map<String, String>,
-        val withFiles: Boolean
+        val withFiles: Boolean,
     )
 }
 
 @Serializable
 @SerialName("cocoapods")
 data class CocoapodsPackages(
-    val platformMinType: Map<Platform, String>
+    val platformMinType: Map<Platform, String>,
 ) : PackagesType {
     enum class Platform(val platformName: String) {
         IOS("ios"), MACOS("osx"), TVOS("tvos"), WATCHOS("watchos")

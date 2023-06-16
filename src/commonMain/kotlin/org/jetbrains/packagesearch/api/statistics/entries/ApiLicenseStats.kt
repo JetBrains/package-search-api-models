@@ -8,5 +8,5 @@ data class ApiLicenseStats(
     @SerialName("gpl") val gpl: Int,
     @SerialName("apache-2") val apache2: Int,
     @SerialName("mit") val mit: Int,
-    @SerialName("bsd") val bsd: Int
+    @SerialName("bsd") val bsd: Int,
 )

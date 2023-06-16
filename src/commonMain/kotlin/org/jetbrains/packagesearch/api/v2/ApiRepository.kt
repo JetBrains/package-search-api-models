@@ -14,7 +14,7 @@ data class ApiRepository(
     @SerialName("package_count") val packageCount: Int? = null,
     @SerialName("artifact_count") val artifactCount: Int? = null,
     @SerialName("named_links") val namedLinks: ApiNamedLinks? = null,
-    @SerialName("last_checked") val lastChecked: Long? = null
+    @SerialName("last_checked") val lastChecked: Long? = null,
 ) {
 
     companion object {
@@ -23,6 +23,6 @@ data class ApiRepository(
 
     @Serializable
     data class ApiNamedLinks(
-        @SerialName("browsable_url_template") val browsableUrlTemplate: String
+        @SerialName("browsable_url_template") val browsableUrlTemplate: String,
     )
 }

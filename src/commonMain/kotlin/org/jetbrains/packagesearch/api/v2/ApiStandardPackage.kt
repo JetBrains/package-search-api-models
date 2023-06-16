@@ -22,23 +22,23 @@ data class ApiStandardPackage(
     val dependencyRating: Double? = null,
     @SerialName("metrics") val metrics: ApiMetrics? = null,
     @SerialName("github") val gitHub: ApiGitHub? = null,
-    @SerialName("stackoverflow") val stackOverflow: ApiStackOverflow? = null
+    @SerialName("stackoverflow") val stackOverflow: ApiStackOverflow? = null,
 ) : ApiPackage<ApiStandardPackage.ApiStandardVersion> {
 
     @Serializable
     data class ApiLicenses(
         @SerialName("main_license") val mainLicense: ApiLinkedFile,
-        @SerialName("other_licenses") val otherLicenses: List<ApiLinkedFile>? = null
+        @SerialName("other_licenses") val otherLicenses: List<ApiLinkedFile>? = null,
     )
 
     @Serializable
     data class ApiScm(
-        @SerialName("url") val url: String
+        @SerialName("url") val url: String,
     )
 
     @Serializable
     data class ApiMpp(
-        @SerialName("module_type") val moduleType: String
+        @SerialName("module_type") val moduleType: String,
     ) {
 
         companion object {
@@ -51,7 +51,7 @@ data class ApiStandardPackage(
     @Serializable
     data class ApiPlatform(
         @SerialName("type") val type: String,
-        @SerialName("targets") val targets: List<String>? = null
+        @SerialName("targets") val targets: List<String>? = null,
     ) {
 
         companion object {
@@ -89,7 +89,8 @@ data class ApiStandardPackage(
 
             @SerialName("androidJvm")
             ANDROID_JVM("androidJvm"),
-            UNSUPPORTED("unsupported");
+            UNSUPPORTED("unsupported"),
+            ;
 
             companion object {
 
@@ -178,7 +179,8 @@ data class ApiStandardPackage(
             @SerialName("wasm32")
             WASM_32("wasm32"),
 
-            UNSUPPORTED("unsupported");
+            UNSUPPORTED("unsupported"),
+            ;
 
             companion object {
 
@@ -191,7 +193,7 @@ data class ApiStandardPackage(
     data class ApiAuthor(
         @SerialName("name") val name: String? = null,
         @SerialName("org") val org: String? = null,
-        @SerialName("org_url") val orgUrl: String? = null
+        @SerialName("org_url") val orgUrl: String? = null,
     )
 
     @Serializable
@@ -200,7 +202,7 @@ data class ApiStandardPackage(
         @SerialName("last_changed") val lastChanged: Long,
         @SerialName("stable") val stable: Boolean,
         @SerialName("repository_ids") override val repositoryIds: List<String>,
-        @SerialName("artifacts") val artifacts: List<ApiArtifact>
+        @SerialName("artifacts") val artifacts: List<ApiArtifact>,
     ) : ApiVersion {
 
         @Serializable
@@ -209,7 +211,7 @@ data class ApiStandardPackage(
             @SerialName("sha1") val sha1: String? = null,
             @SerialName("md5") val md5: String? = null,
             @SerialName("packaging") val packaging: String? = null,
-            @SerialName("classifier") val classifier: String? = null
+            @SerialName("classifier") val classifier: String? = null,
         )
     }
 
@@ -218,7 +220,7 @@ data class ApiStandardPackage(
         @SerialName("dependency_rating") val dependencyRating: Double = 0.0,
         @SerialName("stackoverflow_health") val stackoverflowHealth: Double = 0.0,
         @SerialName("oss_health") val ossHealth: Double = 0.0,
-        @SerialName("github_stars") val stars: Int = 0
+        @SerialName("github_stars") val stars: Int = 0,
     )
 
     @Serializable
@@ -231,7 +233,7 @@ data class ApiStandardPackage(
         @SerialName("subscribers") val subscribers: Int? = null,
         @SerialName("network") val network: Int? = null,
         @SerialName("community_profile") val communityProfile: ApiCommunityProfile? = null,
-        @SerialName("last_checked") val lastChecked: Long
+        @SerialName("last_checked") val lastChecked: Long,
     ) {
 
         @Serializable
@@ -239,7 +241,7 @@ data class ApiStandardPackage(
             @SerialName("files") val files: ApiCommunityProfileFiles,
             @SerialName("documentation") val documentation: String? = null,
             @SerialName("description") val description: String? = null,
-            @SerialName("health_percentage") val healthPercentage: Int
+            @SerialName("health_percentage") val healthPercentage: Int,
         ) {
 
             @Serializable
@@ -247,20 +249,20 @@ data class ApiStandardPackage(
                 @SerialName("license") val license: ApiLinkedFile? = null,
                 @SerialName("readme") val readme: ApiLinkedFile? = null,
                 @SerialName("code_of_conduct") val codeOfConduct: ApiLinkedFile? = null,
-                @SerialName("contributing") val contributing: ApiLinkedFile? = null
+                @SerialName("contributing") val contributing: ApiLinkedFile? = null,
             )
         }
     }
 
     @Serializable
     data class ApiStackOverflow(
-        @SerialName("tags") val tags: List<ApiStackOverflowTag>
+        @SerialName("tags") val tags: List<ApiStackOverflowTag>,
     ) {
 
         @Serializable
         data class ApiStackOverflowTag(
             @SerialName("tag") val tag: String,
-            @SerialName("count") val count: Int
+            @SerialName("count") val count: Int,
         )
     }
 
@@ -270,6 +272,6 @@ data class ApiStandardPackage(
         @SerialName("url") val url: String,
         @SerialName("html_url") val htmlUrl: String? = null,
         @SerialName("spdx_id") val spdxId: String? = null,
-        @SerialName("key") val key: String? = null
+        @SerialName("key") val key: String? = null,
     )
 }

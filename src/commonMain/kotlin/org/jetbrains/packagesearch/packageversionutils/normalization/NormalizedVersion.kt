@@ -16,12 +16,12 @@ sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
             return NormalizedVersionWeakCache.getOrPut(versionName, releasedAt) {
                 normalizePackageVersion(
                     versionName = versionName,
-                    isStable = PackageVersionUtils.evaluateStability(versionName)
+                    isStable = PackageVersionUtils.evaluateStability(versionName),
                 ) {
                     Garbage(
                         versionName = versionName,
                         isStable = PackageVersionUtils.evaluateStability(versionName),
-                        releasedAt = releasedAt
+                        releasedAt = releasedAt,
                     )
                 }
             }
@@ -30,7 +30,7 @@ sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
         private fun normalizePackageVersion(
             versionName: String,
             isStable: Boolean,
-            garbage: () -> Garbage
+            garbage: () -> Garbage,
         ): NormalizedVersion {
             if (looksLikeGitCommitOrOtherHash(versionName) || isOneBigHexadecimalBlob(versionName)) {
                 return garbage()
@@ -46,7 +46,7 @@ sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
                         ?.toInstant(),
                     timestampPrefix = timestampPrefix,
                     stabilityMarker = stabilitySuffixComponentOrNull(versionName, timestampPrefix),
-                    nonSemanticSuffix = nonSemanticSuffix(versionName, timestampPrefix)
+                    nonSemanticSuffix = nonSemanticSuffix(versionName, timestampPrefix),
                 )
             }
 
@@ -60,7 +60,7 @@ sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
                         ?.toInstant(),
                     semanticPart = semanticPart,
                     stabilityMarker = stabilitySuffixComponentOrNull(versionName, semanticPart),
-                    nonSemanticSuffix = nonSemanticSuffix(versionName, semanticPart)
+                    nonSemanticSuffix = nonSemanticSuffix(versionName, semanticPart),
                 )
             }
 
@@ -80,7 +80,7 @@ sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
         override val releasedAt: Instant?,
         val semanticPart: String,
         override val stabilityMarker: String?,
-        override val nonSemanticSuffix: String?
+        override val nonSemanticSuffix: String?,
     ) : NormalizedVersion, DecoratedVersion {
 
         val semanticPartWithStabilityMarker
@@ -96,7 +96,7 @@ sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
             // First, compare semantic parts and stability markers only
             val nameComparisonResult = VersionComparatorUtil.compare(
                 semanticPartWithStabilityMarker,
-                other.semanticPartWithStabilityMarker
+                other.semanticPartWithStabilityMarker,
             )
             if (nameComparisonResult != 0) return nameComparisonResult
 
@@ -139,7 +139,7 @@ sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
         override val releasedAt: Instant?,
         val timestampPrefix: String,
         override val stabilityMarker: String?,
-        override val nonSemanticSuffix: String?
+        override val nonSemanticSuffix: String?,
     ) : NormalizedVersion, DecoratedVersion {
 
         private val timestampPrefixWithStabilityMarker
@@ -155,7 +155,7 @@ sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
         private fun compareByNameAndThenByTimestamp(other: TimestampLike): Int {
             val nameComparisonResult = VersionComparatorUtil.compare(
                 timestampPrefixWithStabilityMarker,
-                other.timestampPrefixWithStabilityMarker
+                other.timestampPrefixWithStabilityMarker,
             )
 
             return if (nameComparisonResult == 0) {
@@ -171,7 +171,7 @@ sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
     data class Garbage(
         override val versionName: String,
         override val isStable: Boolean,
-        override val releasedAt: Instant?
+        override val releasedAt: Instant?,
     ) : NormalizedVersion {
 
         override fun compareTo(other: NormalizedVersion): Int =

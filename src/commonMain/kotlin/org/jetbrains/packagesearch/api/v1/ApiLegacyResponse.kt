@@ -5,5 +5,5 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class ApiLegacyResponse(
-    @SerialName("items") val items: List<ApiMinimalPackage>
+    @SerialName("items") val items: List<ApiMinimalPackage>,
 )

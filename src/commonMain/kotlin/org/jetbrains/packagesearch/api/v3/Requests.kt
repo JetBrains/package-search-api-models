@@ -7,7 +7,7 @@ import kotlinx.serialization.Serializable
 data class MavenHashLookupResponse(
     val packageInfo: ApiMavenPackage,
     val version: String,
-    val artifact: ApiArtifact
+    val artifact: ApiArtifact,
 )
 
 @Serializable
@@ -18,7 +18,7 @@ sealed interface MavenHashLookupRequest {
 @Serializable
 @SerialName("md5")
 data class MavenHashMd1LookupRequest(
-    val md1: String
+    val md1: String,
 ) : MavenHashLookupRequest {
     override val hash: String
         get() = md1
@@ -27,7 +27,7 @@ data class MavenHashMd1LookupRequest(
 @Serializable
 @SerialName("sha1")
 data class MavenHashSha1LookupRequest(
-    val sha1: String
+    val sha1: String,
 ) : MavenHashLookupRequest {
     override val hash: String
         get() = sha1
@@ -36,7 +36,7 @@ data class MavenHashSha1LookupRequest(
 @Serializable
 @SerialName("sha256")
 data class MavenHashSha256LookupRequest(
-    val sha256: String
+    val sha256: String,
 ) : MavenHashLookupRequest {
     override val hash: String
         get() = sha256
@@ -45,7 +45,7 @@ data class MavenHashSha256LookupRequest(
 @Serializable
 @SerialName("sha512")
 data class MavenHashSha512LookupRequest(
-    val sha512: String
+    val sha512: String,
 ) : MavenHashLookupRequest {
     override val hash: String
         get() = sha512
