@@ -9,7 +9,7 @@ dependencyResolutionManagement {
     }
     versionCatalogs {
         create("packageSearchApiModelsVersions") {
-            from(files("../packagesearch-api-models.toml"))
+            from(files("../packagesearch-api-models.versions.toml"))
         }
     }
 }

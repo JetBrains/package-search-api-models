@@ -6,7 +6,7 @@ plugins {
 
 catalog {
     versionCatalog {
-        from(files("../packagesearch-api-models.toml"))
+        from(files("../packagesearch-api-models.versions.toml"))
     }
 }
 
