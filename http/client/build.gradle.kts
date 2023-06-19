@@ -14,7 +14,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api(projects.packagesearchApiModels)
+                api(projects.packagesearchApiModels.http)
                 api(packageSearchApiModelsVersions.ktor.client.content.negotiation)
                 api(packageSearchApiModelsVersions.ktor.serialization.kotlinx.json)
             }

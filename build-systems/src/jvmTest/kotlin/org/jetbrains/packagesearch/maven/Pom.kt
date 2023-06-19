@@ -1,0 +1,72 @@
+package org.jetbrains.packagesearch.maven
+
+import io.ktor.client.*
+import io.ktor.client.engine.cio.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.logging.*
+import io.ktor.http.*
+import io.ktor.serialization.kotlinx.*
+import kotlinx.coroutines.test.runTest
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.encodeToString
+import nl.adaptivity.xmlutil.serialization.XML
+import org.junit.jupiter.params.ParameterizedTest
+import org.junit.jupiter.params.provider.ValueSource
+import kotlin.time.Duration.Companion.days
+
+
+class TestPom8 {
+    companion object {
+
+        fun readResourceAsText(path: String) = Thread.currentThread()
+            .contextClassLoader
+            .getResource(path)
+            ?.readText()
+            ?: error("Resource '$path' not found")
+
+    }
+
+    val xml = XML {
+        indentString = "    "
+    }
+
+    val httpClient = HttpClient(CIO) {
+        install(ContentNegotiation) {
+            serialization(ContentType.Application.Xml, xml)
+        }
+        install(Logging) {
+            level = LogLevel.BODY
+        }
+    }
+
+    @ParameterizedTest
+    @ValueSource(strings = ["maven.xml", "spring-core.xml", "maven-core.xml"])
+    fun `parse pom from resources`(path: String) = runTest {
+        val pom = xml.decodeFromString<ProjectModel>(readResourceAsText(path))
+        println(xml.encodeToString(pom))
+    }
+
+    @ParameterizedTest
+    @ValueSource(
+        strings = [
+            "org.apache.maven:maven:3.8.4",
+            "org.springframework:spring-core:5.3.15",
+            "com.fasterxml.jackson.core:jackson-databind:2.13.1",
+            "org.hibernate:hibernate-core:5.6.7.Final",
+            "org.apache.camel:camel-core:3.14.0",
+            "org.apache.camel:camel-spring:3.14.0",
+            "org.junit.jupiter:junit-jupiter-engine:5.9.1",
+            "org.junit.jupiter:junit-jupiter-api:5.9.1",
+            "org.junit.jupiter:junit-jupiter-params:5.9.1",
+            "org.junit.platform:junit-platform-suite:1.9.1",
+            "org.mockito:mockito-all:1.9.5",
+            "org.mockito:mockito-core:3.12.4"
+        ]
+    )
+    fun testSolver(coordinates: String) = runTest(timeout = 1.days) {
+        val (groupId, artifactId, version) = coordinates.split(':')
+        val pom = PomResolver().resolve(groupId, artifactId, version)
+        println(xml.encodeToString(pom))
+    }
+
+}

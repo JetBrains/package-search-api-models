@@ -19,7 +19,12 @@ dependencyResolutionManagement {
 }
 
 
-include(":client", ":build-systems", ":version-catalog")
+include(
+    ":http",
+    ":http:client",
+    ":build-systems",
+    ":version-catalog",
+)
 
 val isCi
     get() = System.getenv("CI") == "true"
