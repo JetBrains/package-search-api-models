@@ -6,18 +6,18 @@ import io.ktor.http.*
 import kotlinx.serialization.decodeFromString
 import nl.adaptivity.xmlutil.serialization.XML
 
-val ProjectModel.properties
+val ProjectObjectModel.properties
     get() = propertiesContainer?.properties ?: emptyMap()
-val ProjectModel.licenses
+val ProjectObjectModel.licenses
     get() = licensesContainer?.licenses ?: emptyList()
-val ProjectModel.dependencyManagement
+val ProjectObjectModel.dependencyManagement
     get() = dependencyManagementContainer?.dependencies?.dependencies ?: emptyList()
-val ProjectModel.dependencies
+val ProjectObjectModel.dependencies
     get() = dependenciesContainer?.dependencies ?: emptyList()
-val ProjectModel.developers
+val ProjectObjectModel.developers
     get() = developersContainer?.developers ?: emptyList()
 
-fun ProjectModel.copy(
+fun ProjectObjectModel.copy(
     dependencies: List<Dependency> = this.dependencies,
     dependencyManagement: List<Dependency> = this.dependencyManagement,
     properties: Map<String, String> = this.properties
@@ -53,6 +53,6 @@ internal fun evaluateProjectProperty(projectProperty: String, modelAccessor: Str
 internal expect fun getenv(it: String): String?
 internal expect fun getSystemProp(it: String): String?
 
-internal suspend fun HttpResponse.bodyAsPom(xml: XML) =
-    runCatching { body<ProjectModel>() }
-        .getOrElse { xml.decodeFromString<ProjectModel>(bodyAsText()) }
+internal suspend fun HttpResponse.bodyAsPom(xml: XML): ProjectObjectModel =
+    runCatching { body<ProjectObjectModel>() }
+        .getOrElse { xml.decodeFromString(bodyAsText()) }

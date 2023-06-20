@@ -1,54 +1,27 @@
 package org.jetbrains.packagesearch.maven
 
-import io.ktor.client.*
-import io.ktor.client.plugins.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.request.*
-import io.ktor.http.*
-import io.ktor.serialization.kotlinx.*
+import io.ktor.client.HttpClient
+import io.ktor.client.plugins.HttpRequestRetry
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.get
+import io.ktor.http.ContentType
+import io.ktor.http.URLBuilder
+import io.ktor.http.Url
+import io.ktor.serialization.kotlinx.KotlinxSerializationConverter
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.decodeFromString
 import nl.adaptivity.xmlutil.serialization.XML
 
 class PomResolver(
     val repositories: List<Url> = MAVEN_CENTRAL_MIRRORS,
-    httpClient: HttpClient? = null
+    val xml: XML = defaultXml(),
+    val httpClient: HttpClient = defaultHttpClient(xml),
 ) {
 
-    private val xml = XML {
-        defaultPolicy {
-            ignoreUnknownChildren()
-        }
-    }
-
-    private val httpClient = httpClient ?: HttpClient {
-        install(ContentNegotiation) {
-            serialization(ContentType.Application.Xml, xml)
-        }
-        install(HttpRequestRetry) {
-            maxRetries = 5
-            constantDelay(100, 50, false)
-        }
-    }
-
-    private fun buildUrl(action: URLBuilder.() -> Unit) = URLBuilder().apply(action).build()
-
-    private fun buildPomUrl(from: Url, groupId: String, artifactId: String, version: String) = buildUrl {
-        protocol = from.protocol
-        host = from.host
-        port = from.port
-        pathSegments = buildList {
-            addAll(from.pathSegments)
-            addAll(groupId.split('.'))
-            add(artifactId)
-            add(version)
-            add("$artifactId-$version.pom")
-        }
-    }
-
-    suspend fun resolve(groupId: String, artifactId: String, version: String): ProjectModel {
+    suspend fun resolve(groupId: String, artifactId: String, version: String): ProjectObjectModel {
         val model = repositories.asFlow()
             .map { buildPomUrl(it, groupId, artifactId, version) }
             .map { httpClient.get(it).bodyAsPom(xml) }
@@ -62,10 +35,12 @@ class PomResolver(
         return resolve(model)
     }
 
-    private suspend fun resolve(parent: Parent) =
-        resolve(parent.groupId, parent.artifactId, parent.version)
+    suspend fun resolve(url: Url) = resolve(httpClient.get(url).bodyAsPom(xml))
 
-    suspend fun resolve(model: ProjectModel): ProjectModel {
+    suspend fun resolve(pomText: String): ProjectObjectModel =
+        resolve(xml.decodeFromString<ProjectObjectModel>(pomText))
+
+    suspend fun resolve(model: ProjectObjectModel): ProjectObjectModel {
         val pomHierarchy = buildList {
             add(model)
             var currentParent = model.parent
@@ -107,6 +82,24 @@ class PomResolver(
         )
     }
 
+    private fun buildUrl(action: URLBuilder.() -> Unit) = URLBuilder().apply(action).build()
+
+    private fun buildPomUrl(from: Url, groupId: String, artifactId: String, version: String) = buildUrl {
+        protocol = from.protocol
+        host = from.host
+        port = from.port
+        pathSegments = buildList {
+            addAll(from.pathSegments)
+            addAll(groupId.split('.'))
+            add(artifactId)
+            add(version)
+            add("$artifactId-$version.pom")
+        }
+    }
+
+    private suspend fun resolve(parent: Parent) =
+        resolve(parent.groupId, parent.artifactId, parent.version)
+
     private val regex = Regex("""\$\{(.*?)}""")
     private val UNRESOLVED = "UNRESOLVED"
 
@@ -130,4 +123,22 @@ class PomResolver(
                 ?: UNRESOLVED
         }
     }.takeIf { UNRESOLVED !in it }
+}
+
+private fun defaultXml() = XML {
+    defaultPolicy {
+        ignoreUnknownChildren()
+    }
+}
+
+private fun defaultHttpClient(xml: XML) = HttpClient {
+    install(ContentNegotiation) {
+        val converter = KotlinxSerializationConverter(xml)
+        register(ContentType.Application.Xml, converter)
+        register(ContentType.Text.Xml, converter)
+    }
+    install(HttpRequestRetry) {
+        maxRetries = 5
+        constantDelay(100, 50, false)
+    }
 }

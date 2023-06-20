@@ -17,6 +17,7 @@ sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
                 normalizePackageVersion(
                     versionName = versionName,
                     isStable = PackageVersionUtils.evaluateStability(versionName),
+                    releasedAt = releasedAt,
                 ) {
                     Garbage(
                         versionName = versionName,
@@ -30,6 +31,7 @@ sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
         private fun normalizePackageVersion(
             versionName: String,
             isStable: Boolean,
+            releasedAt: Instant?,
             garbage: () -> Garbage,
         ): NormalizedVersion {
             if (looksLikeGitCommitOrOtherHash(versionName) || isOneBigHexadecimalBlob(versionName)) {
@@ -43,7 +45,8 @@ sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
                     isStable = isStable,
                     releasedAt = VeryLenientDateTimeExtractor
                         .extractTimestampLookingPrefixOrNull(timestampPrefix)
-                        ?.toInstant(),
+                        ?.toInstant()
+                        ?: releasedAt,
                     timestampPrefix = timestampPrefix,
                     stabilityMarker = stabilitySuffixComponentOrNull(versionName, timestampPrefix),
                     nonSemanticSuffix = nonSemanticSuffix(versionName, timestampPrefix),
@@ -57,7 +60,8 @@ sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
                     isStable = isStable,
                     releasedAt = VeryLenientDateTimeExtractor
                         .extractTimestampLookingPrefixOrNull(semanticPart)
-                        ?.toInstant(),
+                        ?.toInstant()
+                        ?: releasedAt,
                     semanticPart = semanticPart,
                     stabilityMarker = stabilitySuffixComponentOrNull(versionName, semanticPart),
                     nonSemanticSuffix = nonSemanticSuffix(versionName, semanticPart),

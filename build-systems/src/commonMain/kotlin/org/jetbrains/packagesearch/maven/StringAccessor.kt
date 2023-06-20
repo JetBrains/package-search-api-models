@@ -5,7 +5,7 @@ import org.jetbrains.packagesearch.maven.StringAccessor.SimpleAccessor
 import kotlin.jvm.JvmInline
 
 // should be generated...
-fun ProjectModel.asAccessor(): ObjectAccessor = object : ObjectAccessor {
+fun ProjectObjectModel.asAccessor(): ObjectAccessor = object : ObjectAccessor {
     override operator fun get(key: String) = when (key) {
         "groupId" -> SimpleAccessor(groupId)
         "artifactId" -> SimpleAccessor(artifactId)

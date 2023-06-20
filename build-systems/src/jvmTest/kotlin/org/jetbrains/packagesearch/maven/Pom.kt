@@ -1,18 +1,18 @@
 package org.jetbrains.packagesearch.maven
 
-import io.ktor.client.*
-import io.ktor.client.engine.cio.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.plugins.logging.*
-import io.ktor.http.*
-import io.ktor.serialization.kotlinx.*
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.http.ContentType
+import io.ktor.serialization.kotlinx.serialization
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import nl.adaptivity.xmlutil.serialization.XML
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
-import kotlin.time.Duration.Companion.days
 
 
 class TestPom8 {
@@ -28,21 +28,25 @@ class TestPom8 {
 
     val xml = XML {
         indentString = "    "
+        defaultPolicy {
+            ignoreUnknownChildren()
+        }
     }
 
     val httpClient = HttpClient(CIO) {
         install(ContentNegotiation) {
             serialization(ContentType.Application.Xml, xml)
+            serialization(ContentType.Text.Xml, xml)
         }
         install(Logging) {
-            level = LogLevel.BODY
+            level = LogLevel.HEADERS
         }
     }
 
     @ParameterizedTest
     @ValueSource(strings = ["maven.xml", "spring-core.xml", "maven-core.xml"])
     fun `parse pom from resources`(path: String) = runTest {
-        val pom = xml.decodeFromString<ProjectModel>(readResourceAsText(path))
+        val pom = xml.decodeFromString<ProjectObjectModel>(readResourceAsText(path))
         println(xml.encodeToString(pom))
     }
 
@@ -63,9 +67,9 @@ class TestPom8 {
             "org.mockito:mockito-core:3.12.4"
         ]
     )
-    fun testSolver(coordinates: String) = runTest(timeout = 1.days) {
+    fun testSolver(coordinates: String) = runTest {
         val (groupId, artifactId, version) = coordinates.split(':')
-        val pom = PomResolver().resolve(groupId, artifactId, version)
+        val pom = PomResolver(httpClient = httpClient).resolve(groupId, artifactId, version)
         println(xml.encodeToString(pom))
     }
 

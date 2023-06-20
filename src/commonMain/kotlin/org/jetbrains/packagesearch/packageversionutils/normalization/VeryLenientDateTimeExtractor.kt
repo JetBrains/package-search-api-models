@@ -33,7 +33,7 @@ object VeryLenientDateTimeExtractor {
 
     val dateDividers = sequenceOf(".", "-", "")
     val timeDividers = sequenceOf(".", "-", "")
-    val dateTimeSeparators = sequenceOf(".", "-", "T", "")
+    val dateTimeSeparators = sequenceOf(".", "-", "'T'", "")
 
     val datePatterns = basePatterns.flatMap { basePattern ->
         dateDividers.flatMap { dateDivider ->
