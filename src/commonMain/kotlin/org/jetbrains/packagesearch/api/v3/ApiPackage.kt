@@ -24,7 +24,7 @@ sealed interface ApiPackage {
     val scmUrl: String?
     val licenses: Licenses?
     val rankingMetric: Double?
-    val versions: List<ApiPackageVersion>
+    val versions: VersionsContainer<out ApiPackageVersion>
 
     companion object {
         fun hashPackageId(id: String) =
@@ -36,6 +36,13 @@ sealed interface ApiPackage {
 }
 
 @Serializable
+data class VersionsContainer<T : ApiPackageVersion>(
+    val latestStable: T?,
+    val latest: T?,
+    val all: List<T>
+)
+
+@Serializable
 sealed interface ApiPackageVersion {
     val normalized: NormalizedVersion
     val repositoryIds: List<String>
@@ -44,7 +51,7 @@ sealed interface ApiPackageVersion {
 
 @Serializable
 sealed interface ApiMavenPackage : ApiPackage {
-    override val versions: List<ApiMavenVersion>
+    override val versions: VersionsContainer<out ApiMavenVersion>
     val groupId: String
     val artifactId: String
 }
@@ -66,7 +73,7 @@ data class ApiBaseMavenPackage(
     override val scmUrl: String?,
     override val licenses: Licenses?,
     override val rankingMetric: Double?,
-    override val versions: List<BaseMavenVersion>,
+    override val versions: VersionsContainer<BaseMavenVersion>,
     override val groupId: String,
     override val artifactId: String,
 ) : ApiMavenPackage {
@@ -102,7 +109,7 @@ data class ApiGradlePackage(
     override val scmUrl: String?,
     override val licenses: Licenses?,
     override val rankingMetric: Double?,
-    override val versions: List<GradleVersion>,
+    override val versions: VersionsContainer<GradleVersion>,
     override val groupId: String,
     override val artifactId: String,
 ) : ApiMavenPackage {
