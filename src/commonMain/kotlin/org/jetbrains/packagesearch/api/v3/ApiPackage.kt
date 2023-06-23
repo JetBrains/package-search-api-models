@@ -142,20 +142,28 @@ data class ApiGradlePackage(
         @Serializable
         sealed interface Attribute {
 
+            companion object {
+                fun create(name: String, value: String) = when {
+                    name == "org.gradle.jvm.version" -> ComparableInteger(value.toInt())
+                    name == "or.gradle.libraryelements" && value == "aar" -> ExactMatch("aar", listOf("jar"))
+                    else -> ExactMatch(value)
+                }
+            }
+
             fun isCompatible(other: Attribute): Boolean
 
             @Serializable
             @SerialName("exactMatch")
-            data class ExactMatch(val value: String) : Attribute {
+            data class ExactMatch internal constructor(val value: String, val alternativeValues: List<String> = emptyList()) : Attribute {
                 override fun isCompatible(other: Attribute) = when (other) {
                     is ComparableInteger -> false
-                    is ExactMatch -> value == other.value
+                    is ExactMatch -> (alternativeValues + value).any { it == other.value }
                 }
             }
 
             @Serializable
             @SerialName("comparableInteger")
-            data class ComparableInteger(val value: Int) : Attribute {
+            data class ComparableInteger internal constructor(val value: Int) : Attribute {
                 override fun isCompatible(other: Attribute) = when (other) {
                     is ComparableInteger -> value < other.value
                     is ExactMatch -> false

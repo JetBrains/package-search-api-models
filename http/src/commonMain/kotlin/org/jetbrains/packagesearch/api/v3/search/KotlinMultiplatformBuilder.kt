@@ -3,20 +3,23 @@ package org.jetbrains.packagesearch.api.v3.search
 @SearchParametersBuilderDsl
 class KotlinMultiplatformBuilder internal constructor(private val delegate: GradlePackagesBuilder) {
 
-    fun jvm() {
+    fun genericJvm(libraryElements: String? = null) {
         delegate.variant {
             jvm()
             libraryCategory()
             javaApi()
-            libraryElements("jar")
+            libraryElements?.let { libraryElements(it) }
         }
         delegate.variant {
             jvm()
             libraryCategory()
             javaRuntime()
-            libraryElements("jar")
+            libraryElements?.let { libraryElements(it) }
         }
     }
+
+    fun jvm() = genericJvm("jar")
+    fun android() = genericJvm("aar")
 
     fun jsLegacy() {
         delegate.variant {
@@ -25,6 +28,7 @@ class KotlinMultiplatformBuilder internal constructor(private val delegate: Grad
             jsLegacy()
         }
     }
+
     fun jsIr() {
         delegate.variant {
             libraryCategory()

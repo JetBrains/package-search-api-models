@@ -48,5 +48,5 @@ class PackagesTypeBuilder {
     fun build() = packagesType.distinct()
 }
 
-fun buildPackagesType(block: PackagesTypeBuilder.() -> Unit) =
+fun buildPackageTypes(block: PackagesTypeBuilder.() -> Unit) =
     PackagesTypeBuilder().apply(block).build()

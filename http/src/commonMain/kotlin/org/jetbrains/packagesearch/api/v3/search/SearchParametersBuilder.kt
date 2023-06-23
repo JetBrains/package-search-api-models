@@ -10,7 +10,7 @@ class SearchParametersBuilder internal constructor() {
     var packagesType: List<PackagesType> = emptyList()
 
     fun packagesType(block: PackagesTypeBuilder.() -> Unit) {
-        packagesType = buildPackagesType(block)
+        packagesType = buildPackageTypes(block)
     }
 
     internal fun build(): SearchParameters {

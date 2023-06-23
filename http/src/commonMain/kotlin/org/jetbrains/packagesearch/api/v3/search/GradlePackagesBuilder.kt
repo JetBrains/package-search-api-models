@@ -19,9 +19,7 @@ class GradlePackagesBuilder internal constructor() {
         var mustHaveFilesAttribute: Boolean = false
 
         fun attribute(key: String, value: String) {
-            attributes[key] = if (key == "org.gradle.jvm.version")
-                Attribute.ComparableInteger(value.toInt())
-            else Attribute.ExactMatch(value)
+            attributes[key] = Attribute.create(key, value)
         }
 
         fun attribute(key: String, value: Attribute) {
