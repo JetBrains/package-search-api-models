@@ -2,6 +2,8 @@ package org.jetbrains.packagesearch.api.v3.search
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import org.jetbrains.packagesearch.api.v3.ApiGradlePackage
+import org.jetbrains.packagesearch.api.v3.ApiGradlePackage.ApiVariant.Attribute
 
 @Serializable
 data class SearchParameters(
@@ -29,9 +31,11 @@ data class GradlePackages(
 
     @Serializable
     data class Variant(
-        val attributes: Map<String, String>,
+        val attributes: Map<String, Attribute>,
         val withFiles: Boolean,
     )
+
+
 }
 
 @Serializable

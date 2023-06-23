@@ -139,13 +139,37 @@ data class ApiGradlePackage(
     @Serializable(with = GradleVariantSerializer::class)
     sealed interface ApiVariant {
 
+        @Serializable
+        sealed interface Attribute {
+
+            fun isCompatible(other: Attribute): Boolean
+
+            @Serializable
+            @SerialName("exactMatch")
+            data class ExactMatch(val value: String) : Attribute {
+                override fun isCompatible(other: Attribute) = when (other) {
+                    is ComparableInteger -> false
+                    is ExactMatch -> value == other.value
+                }
+            }
+
+            @Serializable
+            @SerialName("comparableInteger")
+            data class ComparableInteger(val value: Int, val isSmallerBetter: Boolean) : Attribute {
+                override fun isCompatible(other: Attribute) = when (other) {
+                    is ComparableInteger -> isSmallerBetter == (value < other.value)
+                    is ExactMatch -> false
+                }
+            }
+        }
+
         val name: String
-        val attributes: Map<String, String>
+        val attributes: Map<String, Attribute>
 
         @Serializable
         data class WithFiles(
             override val name: String,
-            override val attributes: Map<String, String>,
+            override val attributes: Map<String, Attribute>,
             val dependencies: List<ApiGradleDependency>,
             val files: List<File>,
         ) : ApiVariant
@@ -153,7 +177,7 @@ data class ApiGradlePackage(
         @Serializable
         data class WithAvailableAt(
             override val name: String,
-            override val attributes: Map<String, String>,
+            override val attributes: Map<String, Attribute>,
             @SerialName("available-at") val availableAt: AvailableAt,
         ) : ApiVariant {
 
