@@ -12,7 +12,9 @@ plugins {
 }
 
 kotlin {
-    jvm()
+    jvm {
+         jvmToolchain(11)
+    }
     js(IR) {
         browser()
         nodejs()

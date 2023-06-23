@@ -1,5 +1,7 @@
 package org.jetbrains.packagesearch.api.v3.search
 
+import org.jetbrains.packagesearch.api.v3.ApiGradlePackage
+import org.jetbrains.packagesearch.api.v3.ApiGradlePackage.ApiVariant.Attribute
 import org.jetbrains.packagesearch.api.v3.search.GradlePackages.Variant
 
 @SearchParametersBuilderDsl
@@ -13,10 +15,16 @@ class GradlePackagesBuilder internal constructor() {
 
     @SearchParametersBuilderDsl
     class VariantBuilder internal constructor() {
-        private val attributes: MutableMap<String, String> = mutableMapOf()
+        private val attributes: MutableMap<String, Attribute> = mutableMapOf()
         var mustHaveFilesAttribute: Boolean = false
 
         fun attribute(key: String, value: String) {
+            attributes[key] = if (key == "org.gradle.jvm.version")
+                Attribute.ComparableInteger(value.toInt())
+            else Attribute.ExactMatch(value)
+        }
+
+        fun attribute(key: String, value: Attribute) {
             attributes[key] = value
         }
 

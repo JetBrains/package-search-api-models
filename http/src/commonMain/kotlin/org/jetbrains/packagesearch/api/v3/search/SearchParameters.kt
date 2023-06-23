@@ -35,7 +35,6 @@ data class GradlePackages(
         val withFiles: Boolean,
     )
 
-
 }
 
 @Serializable

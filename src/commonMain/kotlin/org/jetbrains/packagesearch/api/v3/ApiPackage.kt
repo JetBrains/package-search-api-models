@@ -39,7 +39,7 @@ sealed interface ApiPackage {
 data class VersionsContainer<T : ApiPackageVersion>(
     val latestStable: T?,
     val latest: T?,
-    val all: List<T>
+    val all: Map<String, T>,
 )
 
 @Serializable
@@ -155,9 +155,9 @@ data class ApiGradlePackage(
 
             @Serializable
             @SerialName("comparableInteger")
-            data class ComparableInteger(val value: Int, val isSmallerBetter: Boolean) : Attribute {
+            data class ComparableInteger(val value: Int) : Attribute {
                 override fun isCompatible(other: Attribute) = when (other) {
-                    is ComparableInteger -> isSmallerBetter == (value < other.value)
+                    is ComparableInteger -> value < other.value
                     is ExactMatch -> false
                 }
             }
