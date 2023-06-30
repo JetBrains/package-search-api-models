@@ -1,7 +1,6 @@
 package org.jetbrains.packagesearch.api.v3.search
 
-import org.jetbrains.packagesearch.api.v3.ApiGradlePackage
-import org.jetbrains.packagesearch.api.v3.ApiGradlePackage.ApiVariant.Attribute
+import org.jetbrains.packagesearch.api.v3.ApiMavenPackage.ApiVariant.Attribute
 import org.jetbrains.packagesearch.api.v3.search.GradlePackages.Variant
 
 @SearchParametersBuilderDsl

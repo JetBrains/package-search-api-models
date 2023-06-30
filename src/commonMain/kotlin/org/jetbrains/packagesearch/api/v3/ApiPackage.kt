@@ -9,8 +9,7 @@ import org.jetbrains.packagesearch.packageversionutils.normalization.NormalizedV
  * The base interface for all packages stored in Package Search.
  * When serialized in JSON they will have the field `type`.
  * Available packages types are:
- * - [ApiGradlePackage]s - `type`: "gradle"
- * - [ApiBaseMavenPackage]s - `type`: "maven"
+ * - [ApiMavenPackage]s - `type`: "maven"
  *
  */
 @Serializable
@@ -18,11 +17,6 @@ sealed interface ApiPackage {
 
     val id: String
     val idHash: String
-    val name: String?
-    val description: String?
-    val authors: List<Author>
-    val scmUrl: String?
-    val licenses: Licenses?
     val rankingMetric: Double?
     val versions: VersionsContainer<out ApiPackageVersion>
 
@@ -36,13 +30,6 @@ sealed interface ApiPackage {
 }
 
 @Serializable
-data class VersionsContainer<T : ApiPackageVersion>(
-    val latestStable: T?,
-    val latest: T?,
-    val all: Map<String, T>,
-)
-
-@Serializable
 sealed interface ApiPackageVersion {
     val normalized: NormalizedVersion
     val repositoryIds: List<String>
@@ -50,83 +37,64 @@ sealed interface ApiPackageVersion {
 }
 
 @Serializable
-sealed interface ApiMavenPackage : ApiPackage {
-    override val versions: VersionsContainer<out ApiMavenVersion>
-    val groupId: String
-    val artifactId: String
-}
+data class VersionsContainer<T : ApiPackageVersion>(
+    val latestStable: T?,
+    val latest: T?,
+    val all: Map<String, T>,
+)
 
 @Serializable
 sealed interface ApiMavenVersion : ApiPackageVersion {
     val dependencies: List<Dependency>
     val artifacts: List<ApiArtifact>
+    val name: String?
+    val description: String?
+    val authors: List<Author>
+    val scmUrl: String?
+    val licenses: Licenses?
 }
 
 @Serializable
 @SerialName("maven")
-data class ApiBaseMavenPackage(
+data class ApiMavenPackage(
     override val id: String,
     override val idHash: String,
-    override val name: String?,
-    override val description: String?,
-    override val authors: List<Author>,
-    override val scmUrl: String?,
-    override val licenses: Licenses?,
     override val rankingMetric: Double?,
-    override val versions: VersionsContainer<BaseMavenVersion>,
-    override val groupId: String,
-    override val artifactId: String,
-) : ApiMavenPackage {
+    override val versions: VersionsContainer<ApiMavenVersion>,
+    val groupId: String,
+    val artifactId: String,
+) : ApiPackage {
 
     @Serializable
-    @SerialName("maven_version")
-    data class BaseMavenVersion(
+    @SerialName("mavenVersion")
+    data class MavenVersion(
         override val normalized: NormalizedVersion,
         override val repositoryIds: List<String>,
         override val vulnerability: Vulnerability,
         override val dependencies: List<Dependency>,
         override val artifacts: List<ApiArtifact>,
+        override val name: String?,
+        override val description: String?,
+        override val authors: List<Author>,
+        override val scmUrl: String?,
+        override val licenses: Licenses?
     ) : ApiMavenVersion
-}
-
-@Serializable
-data class ApiArtifact(
-    val name: String,
-    val md5: String,
-    val sha1: String,
-    val sha256: String,
-    val sha512: String,
-)
-
-@Serializable
-@SerialName("gradle")
-data class ApiGradlePackage(
-    override val id: String,
-    override val idHash: String,
-    override val name: String?,
-    override val description: String?,
-    override val authors: List<Author>,
-    override val scmUrl: String?,
-    override val licenses: Licenses?,
-    override val rankingMetric: Double?,
-    override val versions: VersionsContainer<GradleVersion>,
-    override val groupId: String,
-    override val artifactId: String,
-) : ApiMavenPackage {
-
-    val module: String
-        get() = artifactId
 
     @Serializable
-    @SerialName("gradle_version")
+    @SerialName("gradleVersion")
     data class GradleVersion(
         override val normalized: NormalizedVersion,
         override val repositoryIds: List<String>,
-        val variants: List<ApiVariant>,
         override val vulnerability: Vulnerability,
-        val parentComponent: String? = null,
         override val dependencies: List<Dependency>,
         override val artifacts: List<ApiArtifact>,
+        override val name: String?,
+        override val description: String?,
+        override val authors: List<Author>,
+        override val scmUrl: String?,
+        override val licenses: Licenses?,
+        val variants: List<ApiVariant>,
+        val parentComponent: String? = null
     ) : ApiMavenVersion
 
     @Serializable
@@ -209,4 +177,14 @@ data class ApiGradlePackage(
             val md5: String,
         )
     }
+
 }
+
+@Serializable
+data class ApiArtifact(
+    val name: String,
+    val md5: String?,
+    val sha1: String?,
+    val sha256: String?,
+    val sha512: String?,
+)

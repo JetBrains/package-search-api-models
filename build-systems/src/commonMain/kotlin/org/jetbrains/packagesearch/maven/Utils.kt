@@ -1,10 +1,7 @@
 package org.jetbrains.packagesearch.maven
 
-import io.ktor.client.call.*
-import io.ktor.client.statement.*
-import io.ktor.http.*
-import kotlinx.serialization.decodeFromString
-import nl.adaptivity.xmlutil.serialization.XML
+import io.ktor.http.URLProtocol
+import io.ktor.http.Url
 
 val ProjectObjectModel.properties
     get() = propertiesContainer?.properties ?: emptyMap()
@@ -29,10 +26,29 @@ fun ProjectObjectModel.copy(
 
 const val POM_XML_NAMESPACE = "http://maven.apache.org/POM/4.0.0"
 
-val MAVEN_CENTRAL_MIRRORS = listOf(
-    Url("https://maven-central.storage-download.googleapis.com/maven2"),
-    Url("https://repo1.maven.org/maven2")
-)
+interface MavenUrlBuilder {
+    fun buildArtifactUrl(groupId: String, artifactId: String, version: String, artifactExtension: String): Url
+}
+
+object GoogleMavenCentralMirror : MavenUrlBuilder {
+    override fun buildArtifactUrl(
+        groupId: String,
+        artifactId: String,
+        version: String,
+        artifactExtension: String
+    ) = buildUrl {
+        protocol = URLProtocol.HTTPS
+        host = "maven-central.storage-download.googleapis.com"
+        port = protocol.defaultPort
+        pathSegments = buildList {
+            add("maven2")
+            addAll(groupId.split("."))
+            add(artifactId)
+            add(version)
+            add("$artifactId-$version$artifactExtension")
+        }
+    }
+}
 
 internal data class DependencyKey(val groupId: String, val artifactId: String)
 
@@ -52,7 +68,3 @@ internal fun evaluateProjectProperty(projectProperty: String, modelAccessor: Str
 
 internal expect fun getenv(it: String): String?
 internal expect fun getSystemProp(it: String): String?
-
-internal suspend fun HttpResponse.bodyAsPom(xml: XML): ProjectObjectModel =
-    runCatching { body<ProjectObjectModel>() }
-        .getOrElse { xml.decodeFromString(bodyAsText()) }

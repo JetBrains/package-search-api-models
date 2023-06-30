@@ -1,6 +1,7 @@
 package org.jetbrains.packagesearch.maven
 
 import io.ktor.client.HttpClient
+import io.ktor.client.call.body
 import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
@@ -16,15 +17,15 @@ import kotlinx.serialization.decodeFromString
 import nl.adaptivity.xmlutil.serialization.XML
 
 class PomResolver(
-    val repositories: List<Url> = MAVEN_CENTRAL_MIRRORS,
+    val repositories: List<MavenUrlBuilder> = listOf(GoogleMavenCentralMirror),
     val xml: XML = defaultXml(),
     val httpClient: HttpClient = defaultHttpClient(xml),
 ) {
 
     suspend fun resolve(groupId: String, artifactId: String, version: String): ProjectObjectModel {
         val model = repositories.asFlow()
-            .map { buildPomUrl(it, groupId, artifactId, version) }
-            .map { httpClient.get(it).bodyAsPom(xml) }
+            .map { it.buildPomUrl(groupId, artifactId, version) }
+            .map { httpClient.get(it).body<ProjectObjectModel>() }
             .catch { it.printStackTrace() }
             .firstOrNull()
             ?: error(
@@ -35,7 +36,7 @@ class PomResolver(
         return resolve(model)
     }
 
-    suspend fun resolve(url: Url) = resolve(httpClient.get(url).bodyAsPom(xml))
+    suspend fun resolve(url: Url) = resolve(httpClient.get(url).body<ProjectObjectModel>())
 
     suspend fun resolve(pomText: String): ProjectObjectModel =
         resolve(xml.decodeFromString<ProjectObjectModel>(pomText))
@@ -45,7 +46,8 @@ class PomResolver(
             add(model)
             var currentParent = model.parent
             while (currentParent != null) {
-                runCatching { resolve(currentParent!!) }.getOrNull()
+                runCatching { resolve(currentParent!!) }
+                    .getOrNull()
                     ?.let {
                         add(it)
                         currentParent = it.parent
@@ -82,20 +84,6 @@ class PomResolver(
         )
     }
 
-    private fun buildUrl(action: URLBuilder.() -> Unit) = URLBuilder().apply(action).build()
-
-    private fun buildPomUrl(from: Url, groupId: String, artifactId: String, version: String) = buildUrl {
-        protocol = from.protocol
-        host = from.host
-        port = from.port
-        pathSegments = buildList {
-            addAll(from.pathSegments)
-            addAll(groupId.split('.'))
-            add(artifactId)
-            add(version)
-            add("$artifactId-$version.pom")
-        }
-    }
 
     private suspend fun resolve(parent: Parent) =
         resolve(parent.groupId, parent.artifactId, parent.version)
@@ -142,3 +130,11 @@ private fun defaultHttpClient(xml: XML) = HttpClient {
         constantDelay(100, 50, false)
     }
 }
+
+fun buildUrl(action: URLBuilder.() -> Unit) = URLBuilder().apply(action).build()
+
+fun MavenUrlBuilder.buildPomUrl(groupId: String, artifactId: String, version: String) =
+    buildArtifactUrl(groupId, artifactId, version, ".pom")
+
+fun MavenUrlBuilder.buildGradleMetadataUrl(groupId: String, artifactId: String, version: String) =
+    buildArtifactUrl(groupId, artifactId, version, ".module")

@@ -2,8 +2,7 @@ package org.jetbrains.packagesearch.api.v3.search
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.jetbrains.packagesearch.api.v3.ApiGradlePackage
-import org.jetbrains.packagesearch.api.v3.ApiGradlePackage.ApiVariant.Attribute
+import org.jetbrains.packagesearch.api.v3.ApiMavenPackage.ApiVariant.Attribute
 
 @Serializable
 data class SearchParameters(
