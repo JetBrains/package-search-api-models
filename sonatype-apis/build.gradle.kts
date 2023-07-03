@@ -5,7 +5,7 @@ plugins {
 publishing {
     publications {
         withType<MavenPublication> {
-            artifactId = "packagesearch-security-apis" + artifactId.removePrefix(project.name)
+            artifactId = "packagesearch-sonatype-apis" + artifactId.removePrefix(project.name)
         }
     }
 }
@@ -16,6 +16,7 @@ kotlin {
             dependencies {
                 api(packageSearchApiModelsVersions.kotlinx.serialization.json)
                 api(packageSearchApiModelsVersions.ktor.client.content.negotiation)
+                api(packageSearchApiModelsVersions.ktor.client.auth)
                 api(packageSearchApiModelsVersions.ktor.serialization.kotlinx.json)
                 api(packageSearchApiModelsVersions.ktor.serialization.kotlinx)
             }
