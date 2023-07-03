@@ -9,6 +9,7 @@ import io.ktor.http.ContentType
 import io.ktor.http.URLBuilder
 import io.ktor.http.Url
 import io.ktor.serialization.kotlinx.KotlinxSerializationConverter
+import io.ktor.utils.io.core.Closeable
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.firstOrNull
@@ -20,7 +21,7 @@ class PomResolver(
     val repositories: List<MavenUrlBuilder> = listOf(GoogleMavenCentralMirror),
     val xml: XML = defaultXml(),
     val httpClient: HttpClient = defaultHttpClient(xml),
-) {
+) : Closeable by httpClient {
 
     suspend fun resolve(groupId: String, artifactId: String, version: String): ProjectObjectModel {
         val model = repositories.asFlow()

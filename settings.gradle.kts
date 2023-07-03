@@ -22,6 +22,7 @@ dependencyResolutionManagement {
 
 include(
     ":http",
+    ":security",
     ":http:client",
     ":build-systems",
     ":version-catalog",
