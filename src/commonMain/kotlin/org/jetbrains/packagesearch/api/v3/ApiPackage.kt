@@ -13,15 +13,19 @@ import org.jetbrains.packagesearch.packageversionutils.normalization.NormalizedV
  *
  */
 @Serializable
-sealed interface ApiPackage {
+public sealed interface ApiPackage {
 
-    val id: String
-    val idHash: String
-    val rankingMetric: Double?
-    val versions: VersionsContainer<out ApiPackageVersion>
+    public val id: String
+    public val idHash: String
+    public val rankingMetric: Double?
+    public val versions: VersionsContainer<out ApiPackageVersion>
+    public val name: String?
+    public val description: String?
+    public val licenses: Licenses?
+    public val authors: List<Author>
 
-    companion object {
-        fun hashPackageId(id: String) =
+    public companion object {
+        public fun hashPackageId(id: String): String =
             SHA256.create()
                 .update(id.encodeToByteArray())
                 .digest()
@@ -30,100 +34,112 @@ sealed interface ApiPackage {
 }
 
 @Serializable
-sealed interface ApiPackageVersion {
-    val normalized: NormalizedVersion
-    val repositoryIds: List<String>
-    val vulnerability: Vulnerability
+public sealed interface ApiPackageVersion {
+    public val normalized: NormalizedVersion
+    public val repositoryIds: List<String>
+    public val vulnerability: Vulnerability
 }
 
 @Serializable
-data class VersionsContainer<T : ApiPackageVersion>(
-    val latestStable: T?,
-    val latest: T?,
-    val all: Map<String, T>,
+public data class VersionsContainer<T : ApiPackageVersion>(
+    public val latestStable: T?,
+    public val latest: T?,
+    public val all: Map<String, T>,
 )
 
 @Serializable
-sealed interface ApiMavenVersion : ApiPackageVersion {
-    val dependencies: List<Dependency>
-    val artifacts: List<ApiArtifact>
-    val name: String?
-    val description: String?
-    val authors: List<Author>
-    val scmUrl: String?
-    val licenses: Licenses?
+public sealed interface ApiMavenVersion : ApiPackageVersion {
+    public val dependencies: List<Dependency>
+    public val artifacts: List<ApiArtifact>
+    public val name: String?
+    public val description: String?
+    public val authors: List<Author>
+    public val scmUrl: String?
+    public val licenses: Licenses?
 }
 
 @Serializable
 @SerialName("maven")
-data class ApiMavenPackage(
-    override val id: String,
-    override val idHash: String,
-    override val rankingMetric: Double?,
-    override val versions: VersionsContainer<ApiMavenVersion>,
-    val groupId: String,
-    val artifactId: String,
+public data class ApiMavenPackage(
+    public override val id: String,
+    public override val idHash: String,
+    public override val rankingMetric: Double?,
+    public override val versions: VersionsContainer<ApiMavenVersion>,
+    public val groupId: String,
+    public val artifactId: String,
 ) : ApiPackage {
+
+    public override val name: String?
+        get() = versions.latest?.name
+    public override val description: String?
+        get() = versions.latest?.description
+    public override val licenses: Licenses?
+        get() = versions.latest?.licenses
+    public override val authors: List<Author>
+        get() = versions.latest?.authors ?: emptyList()
 
     @Serializable
     @SerialName("mavenVersion")
-    data class MavenVersion(
-        override val normalized: NormalizedVersion,
-        override val repositoryIds: List<String>,
-        override val vulnerability: Vulnerability,
-        override val dependencies: List<Dependency>,
-        override val artifacts: List<ApiArtifact>,
-        override val name: String?,
-        override val description: String?,
-        override val authors: List<Author>,
-        override val scmUrl: String?,
-        override val licenses: Licenses?
+    public data class MavenVersion(
+        public override val normalized: NormalizedVersion,
+        public override val repositoryIds: List<String>,
+        public override val vulnerability: Vulnerability,
+        public override val dependencies: List<Dependency>,
+        public override val artifacts: List<ApiArtifact>,
+        public override val name: String?,
+        public override val description: String?,
+        public override val authors: List<Author>,
+        public override val scmUrl: String?,
+        public override val licenses: Licenses?
     ) : ApiMavenVersion
 
     @Serializable
     @SerialName("gradleVersion")
-    data class GradleVersion(
-        override val normalized: NormalizedVersion,
-        override val repositoryIds: List<String>,
-        override val vulnerability: Vulnerability,
-        override val dependencies: List<Dependency>,
-        override val artifacts: List<ApiArtifact>,
-        override val name: String?,
-        override val description: String?,
-        override val authors: List<Author>,
-        override val scmUrl: String?,
-        override val licenses: Licenses?,
-        val variants: List<ApiVariant>,
-        val parentComponent: String? = null
+    public data class GradleVersion(
+        public override val normalized: NormalizedVersion,
+        public override val repositoryIds: List<String>,
+        public override val vulnerability: Vulnerability,
+        public override val dependencies: List<Dependency>,
+        public override val artifacts: List<ApiArtifact>,
+        public override val name: String?,
+        public override val description: String?,
+        public override val authors: List<Author>,
+        public override val scmUrl: String?,
+        public override val licenses: Licenses?,
+        public val variants: List<ApiVariant>,
+        public val parentComponent: String? = null
     ) : ApiMavenVersion
 
     @Serializable
-    data class ApiGradleDependency(
-        val group: String,
-        val module: String,
-        val version: String,
+    public data class ApiGradleDependency(
+        public val group: String,
+        public val module: String,
+        public val version: String,
     )
 
     @Serializable
-    sealed interface ApiVariant {
+    public sealed interface ApiVariant {
 
         @Serializable
-        sealed interface Attribute {
+        public sealed interface Attribute {
 
-            companion object {
-                fun create(name: String, value: String) = when {
+            public companion object {
+                public fun create(name: String, value: String): Attribute = when {
                     name == "org.gradle.jvm.version" -> ComparableInteger(value.toInt())
                     name == "or.gradle.libraryelements" && value == "aar" -> ExactMatch("aar", listOf("jar"))
                     else -> ExactMatch(value)
                 }
             }
 
-            fun isCompatible(other: Attribute): Boolean
+            public fun isCompatible(other: Attribute): Boolean
 
             @Serializable
             @SerialName("exactMatch")
-            data class ExactMatch internal constructor(val value: String, val alternativeValues: List<String> = emptyList()) : Attribute {
-                override fun isCompatible(other: Attribute) = when (other) {
+            public data class ExactMatch internal constructor(
+                public val value: String,
+                public val alternativeValues: List<String> = emptyList()
+            ) : Attribute {
+                public override fun isCompatible(other: Attribute): Boolean = when (other) {
                     is ComparableInteger -> false
                     is ExactMatch -> (alternativeValues + value).any { it == other.value }
                 }
@@ -131,60 +147,60 @@ data class ApiMavenPackage(
 
             @Serializable
             @SerialName("comparableInteger")
-            data class ComparableInteger internal constructor(val value: Int) : Attribute {
-                override fun isCompatible(other: Attribute) = when (other) {
+            public data class ComparableInteger internal constructor(public val value: Int) : Attribute {
+                public override fun isCompatible(other: Attribute): Boolean = when (other) {
                     is ComparableInteger -> value < other.value
                     is ExactMatch -> false
                 }
             }
         }
 
-        val name: String
-        val attributes: Map<String, Attribute>
+        public val name: String
+        public val attributes: Map<String, Attribute>
 
         @Serializable
-        data class WithFiles(
-            override val name: String,
-            override val attributes: Map<String, Attribute>,
-            val dependencies: List<ApiGradleDependency>,
-            val files: List<File>,
+        public data class WithFiles(
+            public override val name: String,
+            public override val attributes: Map<String, Attribute>,
+            public val dependencies: List<ApiGradleDependency>,
+            public val files: List<File>,
         ) : ApiVariant
 
         @Serializable
-        data class WithAvailableAt(
-            override val name: String,
-            override val attributes: Map<String, Attribute>,
-            @SerialName("available-at") val availableAt: AvailableAt,
+        public data class WithAvailableAt(
+            public override val name: String,
+            public override val attributes: Map<String, Attribute>,
+            @SerialName("available-at") public val availableAt: AvailableAt,
         ) : ApiVariant {
 
             @Serializable
-            data class AvailableAt(
-                val url: String,
-                val group: String,
-                val module: String,
-                val version: String,
+            public data class AvailableAt(
+                public val url: String,
+                public val group: String,
+                public val module: String,
+                public val version: String,
             )
         }
 
         @Serializable
-        data class File(
-            val name: String,
-            val url: String,
-            val size: Long,
-            val sha512: String,
-            val sha256: String,
-            val sha1: String,
-            val md5: String,
+        public data class File(
+            public val name: String,
+            public val url: String,
+            public val size: Long,
+            public val sha512: String,
+            public val sha256: String,
+            public val sha1: String,
+            public val md5: String,
         )
     }
 
 }
 
 @Serializable
-data class ApiArtifact(
-    val name: String,
-    val md5: String?,
-    val sha1: String?,
-    val sha256: String?,
-    val sha512: String?,
+public data class ApiArtifact(
+    public val name: String,
+    public val md5: String?,
+    public val sha1: String?,
+    public val sha256: String?,
+    public val sha512: String?,
 )

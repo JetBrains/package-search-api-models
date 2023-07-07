@@ -1,15 +1,15 @@
 package org.jetbrains.packagesearch.api.v3.search
 
 @DslMarker
-annotation class SearchParametersBuilderDsl
+public annotation class SearchParametersBuilderDsl
 
 @SearchParametersBuilderDsl
-class SearchParametersBuilder internal constructor() {
+public class SearchParametersBuilder internal constructor() {
 
-    var searchQuery: String? = null
-    var packagesType: List<PackagesType> = emptyList()
+    public var searchQuery: String? = null
+    public var packagesType: List<PackagesType> = emptyList()
 
-    fun packagesType(block: PackagesTypeBuilder.() -> Unit) {
+    public fun packagesType(block: PackagesTypeBuilder.() -> Unit) {
         packagesType = buildPackageTypes(block)
     }
 
@@ -25,5 +25,5 @@ class SearchParametersBuilder internal constructor() {
     }
 }
 
-fun buildSearchParameters(block: SearchParametersBuilder.() -> Unit) =
+public fun buildSearchParameters(block: SearchParametersBuilder.() -> Unit): SearchParameters =
     SearchParametersBuilder().apply(block).build()

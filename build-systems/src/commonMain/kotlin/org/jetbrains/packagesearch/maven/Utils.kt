@@ -3,40 +3,43 @@ package org.jetbrains.packagesearch.maven
 import io.ktor.http.URLProtocol
 import io.ktor.http.Url
 
-val ProjectObjectModel.properties
+public val ProjectObjectModel.properties: Map<String, String>
     get() = propertiesContainer?.properties ?: emptyMap()
-val ProjectObjectModel.licenses
+public val ProjectObjectModel.licenses: List<License>
     get() = licensesContainer?.licenses ?: emptyList()
-val ProjectObjectModel.dependencyManagement
+public val ProjectObjectModel.dependencyManagement: List<Dependency>
     get() = dependencyManagementContainer?.dependencies?.dependencies ?: emptyList()
-val ProjectObjectModel.dependencies
+public val ProjectObjectModel.dependencies: List<Dependency>
     get() = dependenciesContainer?.dependencies ?: emptyList()
-val ProjectObjectModel.developers
+public val ProjectObjectModel.developers: List<Developer>
     get() = developersContainer?.developers ?: emptyList()
 
-fun ProjectObjectModel.copy(
+public val Contributor.properties: Map<String, String>
+    get() = propertiesContainer?.properties ?: emptyMap()
+
+public fun ProjectObjectModel.copy(
     dependencies: List<Dependency> = this.dependencies,
     dependencyManagement: List<Dependency> = this.dependencyManagement,
     properties: Map<String, String> = this.properties
-) = copy (
+): ProjectObjectModel = copy (
     dependenciesContainer = Dependencies(dependencies),
     dependencyManagementContainer = DependencyManagement(Dependencies(dependencyManagement)),
     propertiesContainer = Properties(properties)
 )
 
-const val POM_XML_NAMESPACE = "http://maven.apache.org/POM/4.0.0"
+public const val POM_XML_NAMESPACE: String = "http://maven.apache.org/POM/4.0.0"
 
-interface MavenUrlBuilder {
-    fun buildArtifactUrl(groupId: String, artifactId: String, version: String, artifactExtension: String): Url
+public interface MavenUrlBuilder {
+    public fun buildArtifactUrl(groupId: String, artifactId: String, version: String, artifactExtension: String): Url
 }
 
-object GoogleMavenCentralMirror : MavenUrlBuilder {
-    override fun buildArtifactUrl(
+public object GoogleMavenCentralMirror : MavenUrlBuilder {
+    public override fun buildArtifactUrl(
         groupId: String,
         artifactId: String,
         version: String,
         artifactExtension: String
-    ) = buildUrl {
+    ): Url = buildUrl {
         protocol = URLProtocol.HTTPS
         host = "maven-central.storage-download.googleapis.com"
         port = protocol.defaultPort

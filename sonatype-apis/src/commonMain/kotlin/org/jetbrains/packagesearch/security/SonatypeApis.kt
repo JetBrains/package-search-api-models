@@ -15,10 +15,11 @@ import io.ktor.http.URLProtocol
 import io.ktor.http.contentType
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.utils.io.core.Closeable
+import kotlin.jvm.JvmName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class SonatypeVulnerabilityResponse(
+public data class SonatypeVulnerabilityResponse(
     val coordinates: String,
     val description: String,
     val reference: String,
@@ -27,7 +28,7 @@ data class SonatypeVulnerabilityResponse(
 )
 
 @Serializable
-data class Vulnerability(
+public data class Vulnerability(
     val id: String,
     val displayName: String,
     val title: String,
@@ -41,16 +42,16 @@ data class Vulnerability(
 )
 
 @Serializable
-data class VulnerabilityRequest(
+public data class VulnerabilityRequest(
     val coordinates: List<String>
 )
 
-class SonatypeSecurityApiClient(
+public class SonatypeSecurityApiClient(
     private val httpClient: HttpClient = defaultClient()
 ) : Closeable by httpClient {
 
-    companion object {
-        fun defaultClient(credentials: suspend () -> BasicAuthCredentials? = { null }) =
+    public companion object {
+        public fun defaultClient(credentials: suspend () -> BasicAuthCredentials? = { null }): HttpClient =
             HttpClient {
                 install(ContentNegotiation) {
                     json()
@@ -63,7 +64,7 @@ class SonatypeSecurityApiClient(
             }
     }
 
-    suspend fun getVulnerabilities(
+    public suspend fun getVulnerabilities(
         request: VulnerabilityRequest,
         authUrl: Boolean = false
     ): List<SonatypeVulnerabilityResponse> {
@@ -90,23 +91,24 @@ private fun <E> MutableList<E>.addAll(vararg elements: E) = elements.forEach(::a
 
 private fun buildUrl(action: URLBuilder.() -> Unit) = URLBuilder().apply(action).build()
 
-suspend fun SonatypeSecurityApiClient.getVulnerabilities(coordinates: List<String>) =
+@JvmName("getVulnerabilitiesByCoordinatesString")
+public suspend fun SonatypeSecurityApiClient.getVulnerabilities(coordinates: List<String>): List<SonatypeVulnerabilityResponse> =
     getVulnerabilities(VulnerabilityRequest(coordinates))
 
-suspend fun SonatypeSecurityApiClient.getVulnerabilities(requests: List<SonatypeVulnerabilityCoordinate>) =
+public suspend fun SonatypeSecurityApiClient.getVulnerabilities(requests: List<SonatypeVulnerabilityCoordinate>): List<SonatypeVulnerabilityResponse> =
     getVulnerabilities(requests.map { it.coordinates })
 
-val SonatypeVulnerabilityCoordinate.coordinates
+public val SonatypeVulnerabilityCoordinate.coordinates: String
     get() = "$type:$repositoryType/$name@$version"
 
-sealed interface SonatypeVulnerabilityCoordinate {
+public sealed interface SonatypeVulnerabilityCoordinate {
 
-    val type: String
-    val repositoryType: String
-    val name: String
-    val version: String
+    public val type: String
+    public val repositoryType: String
+    public val name: String
+    public val version: String
 
-    data class MavenPackage(
+    public data class MavenPackage(
         val groupId: String,
         val artifactId: String,
         override val version: String,
@@ -119,7 +121,7 @@ sealed interface SonatypeVulnerabilityCoordinate {
             get() = "$groupId/$artifactId"
     }
 
-    data class CocoapodsPackage(
+    public data class CocoapodsPackage(
         override val name: String,
         override val version: String
     ) : SonatypeVulnerabilityCoordinate {
@@ -129,7 +131,7 @@ sealed interface SonatypeVulnerabilityCoordinate {
             get() = "cocoapods"
     }
 
-    data class NpnPackage(
+    public data class NpnPackage(
         override val name: String,
         override val version: String
     ) : SonatypeVulnerabilityCoordinate {

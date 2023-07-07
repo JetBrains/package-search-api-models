@@ -4,46 +4,46 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MavenCentralApiResponse(
-    val responseHeader: ResponseHeader,
-    val response: Response
+public data class MavenCentralApiResponse(
+    public val responseHeader: ResponseHeader,
+    public val response: Response
 )
 
 @Serializable
-data class ResponseHeader(
-    val status: Int,
-    @SerialName("QTime") val qTime: Int,
-    val params: Params
+public data class ResponseHeader(
+    public val status: Int,
+    @SerialName("QTime") public val qTime: Int,
+    public val params: Params
 )
 
 @Serializable
-data class Params(
-    val q: String,
-    val core: String,
-    val indent: String,
-    val fl: String,
-    val start: String,
-    val sort: String,
-    val rows: String,
-    val wt: String,
-    val version: String
+public data class Params(
+    public val q: String,
+    public val core: String,
+    public val indent: String,
+    public val fl: String,
+    public val start: String,
+    public val sort: String,
+    public val rows: String,
+    public val wt: String,
+    public val version: String
 )
 
 @Serializable
-data class Response(
-    val numFound: Int,
-    val start: Int,
-    val docs: List<Doc>
+public data class Response(
+    public val numFound: Int,
+    public val start: Int,
+    public val docs: List<Doc>
 )
 
 @Serializable
-data class Doc(
-    val id: String,
-    val g: String,
-    val a: String,
-    val v: String,
-    val p: String,
-    val timestamp: Long,
-    val ec: List<String>,
-    val tags: List<String>
+public data class Doc(
+    public val id: String,
+    public val g: String,
+    public val a: String,
+    public val v: String,
+    public val p: String,
+    public val timestamp: Long,
+    public val ec: List<String>,
+    public val tags: List<String>
 )

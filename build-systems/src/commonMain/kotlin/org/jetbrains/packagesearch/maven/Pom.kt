@@ -1,7 +1,8 @@
 package org.jetbrains.packagesearch.maven
 
 import kotlinx.serialization.Serializable
-import nl.adaptivity.xmlutil.serialization.*
+import nl.adaptivity.xmlutil.serialization.XmlElement
+import nl.adaptivity.xmlutil.serialization.XmlSerialName
 
 
 @Serializable
@@ -9,25 +10,25 @@ import nl.adaptivity.xmlutil.serialization.*
     value = "project",
     namespace = POM_XML_NAMESPACE,
 )
-data class ProjectObjectModel(
-    @XmlElement val modelVersion: String? = null,
-    @XmlElement val groupId: String? = null,
-    @XmlElement val artifactId: String? = null,
-    @XmlElement val version: String? = null,
-    @XmlElement val name: String? = null,
-    @XmlElement val description: String? = null,
-    @XmlElement val url: String? = null,
-    val organization: Organization? = null,
-    val parent: Parent? = null,
-    @XmlElement val packaging: String? = null,
-    val propertiesContainer: Properties? = null,
-    val dependenciesContainer: Dependencies? = null,
-    val dependencyManagementContainer: DependencyManagement? = null,
-    val licensesContainer: Licenses? = null,
-    val developersContainer: Developers? = null,
-    val contributorsContainer: Contributors? = null,
-    val scm: Scm? = null,
-    val issueManagement: IssueManagement? = null
+public data class ProjectObjectModel(
+    @XmlElement public val modelVersion: String? = null,
+    @XmlElement public val groupId: String? = null,
+    @XmlElement public val artifactId: String? = null,
+    @XmlElement public val version: String? = null,
+    @XmlElement public val name: String? = null,
+    @XmlElement public val description: String? = null,
+    @XmlElement public val url: String? = null,
+    public val organization: Organization? = null,
+    public val parent: Parent? = null,
+    @XmlElement public val packaging: String? = null,
+    public val propertiesContainer: Properties? = null,
+    public val dependenciesContainer: Dependencies? = null,
+    public val dependencyManagementContainer: DependencyManagement? = null,
+    public val licensesContainer: Licenses? = null,
+    public val developersContainer: Developers? = null,
+    public val contributorsContainer: Contributors? = null,
+    public val scm: Scm? = null,
+    public val issueManagement: IssueManagement? = null
 )
 
 @Serializable
@@ -35,8 +36,8 @@ data class ProjectObjectModel(
     value = "contributors",
     namespace = POM_XML_NAMESPACE,
 )
-data class Contributors(
-    @XmlElement val contributor: List<Contributor> = emptyList()
+public data class Contributors(
+    @XmlElement public val contributor: List<Contributor> = emptyList()
 )
 
 @Serializable
@@ -44,31 +45,24 @@ data class Contributors(
     value = "contributor",
     namespace = POM_XML_NAMESPACE,
 )
-data class Contributor(
-    @XmlElement val name: String? = null,
-    @XmlElement val email: String? = null,
-    @XmlElement val url: String? = null,
-    @XmlElement val organization: String? = null,
-    @XmlElement val organizationUrl: String? = null,
-    private val rolesContainer: Roles? = null,
+public data class Contributor(
+    @XmlElement public val name: String? = null,
+    @XmlElement public val email: String? = null,
+    @XmlElement public val url: String? = null,
+    @XmlElement public val organization: String? = null,
+    @XmlElement public val organizationUrl: String? = null,
+    public val rolesContainer: Roles? = null,
     @XmlElement val timezone: String? = null,
-    private val propertiesContainer: Properties? = null
-) {
-    val roles
-        get() = rolesContainer?.roles ?: emptyList()
-
-    val properties
-        get() = propertiesContainer?.properties ?: emptyMap()
-
-}
+    public val propertiesContainer: Properties? = null
+)
 
 @Serializable(with = MavenPomPropertiesXmlSerializer::class)
 @XmlSerialName(
     value = "properties",
     namespace = POM_XML_NAMESPACE,
 )
-data class Properties(
-    val properties: Map<String, String> = emptyMap()
+public data class Properties(
+    public val properties: Map<String, String> = emptyMap()
 )
 
 @Serializable
@@ -76,9 +70,9 @@ data class Properties(
     value = "issueManagement",
     namespace = POM_XML_NAMESPACE,
 )
-data class IssueManagement(
-    @XmlElement val system: String? = null,
-    @XmlElement val url: String? = null
+public data class IssueManagement(
+    @XmlElement public val system: String? = null,
+    @XmlElement public val url: String? = null
 )
 
 @Serializable
@@ -86,9 +80,9 @@ data class IssueManagement(
     value = "organization",
     namespace = POM_XML_NAMESPACE,
 )
-data class Organization(
-    @XmlElement val name: String? = null,
-    @XmlElement val url: String? = null
+public data class Organization(
+    @XmlElement public val name: String? = null,
+    @XmlElement public val url: String? = null
 )
 
 @Serializable
@@ -96,11 +90,11 @@ data class Organization(
     value = "parent",
     namespace = POM_XML_NAMESPACE,
 )
-data class Parent(
-    @XmlElement val groupId: String,
-    @XmlElement val artifactId: String,
-    @XmlElement val version: String,
-    @XmlElement val relativePath: String? = null
+public data class Parent(
+    @XmlElement public val groupId: String,
+    @XmlElement public val artifactId: String,
+    @XmlElement public val version: String,
+    @XmlElement public val relativePath: String? = null
 )
 
 @Serializable
@@ -108,8 +102,8 @@ data class Parent(
     value = "dependencies",
     namespace = POM_XML_NAMESPACE,
 )
-data class Dependencies(
-    @XmlElement val dependencies: List<Dependency> = emptyList()
+public data class Dependencies(
+    @XmlElement public val dependencies: List<Dependency> = emptyList()
 )
 
 @Serializable
@@ -117,16 +111,16 @@ data class Dependencies(
     value = "dependency",
     namespace = POM_XML_NAMESPACE,
 )
-data class Dependency(
-    @XmlElement val groupId: String,
-    @XmlElement val artifactId: String,
-    @XmlElement val version: String? = null,
-    @XmlElement val classifier: String? = null,
-    @XmlElement val type: String? = null,
-    @XmlElement val scope: String? = null,
-    @XmlElement val optional: Boolean? = null,
-    @XmlElement val systemPath: String? = null,
-    val exclusionsContainer: Exclusions? = null,
+public data class Dependency(
+    @XmlElement public val groupId: String,
+    @XmlElement public val artifactId: String,
+    @XmlElement public val version: String? = null,
+    @XmlElement public val classifier: String? = null,
+    @XmlElement public val type: String? = null,
+    @XmlElement public val scope: String? = null,
+    @XmlElement public val optional: Boolean? = null,
+    @XmlElement public val systemPath: String? = null,
+    public val exclusionsContainer: Exclusions? = null,
 )
 
 @Serializable
@@ -134,16 +128,16 @@ data class Dependency(
     value = "exclusions",
     namespace = POM_XML_NAMESPACE,
 )
-data class Exclusions(val exclusions: List<Exclusion> = emptyList())
+public data class Exclusions(public val exclusions: List<Exclusion> = emptyList())
 
 @Serializable
 @XmlSerialName(
     value = "exclusion",
     namespace = POM_XML_NAMESPACE,
 )
-data class Exclusion(
-    @XmlElement val groupId: String? = null,
-    @XmlElement val artifactId: String? = null
+public data class Exclusion(
+    @XmlElement public val groupId: String? = null,
+    @XmlElement public val artifactId: String? = null
 )
 
 @Serializable
@@ -151,8 +145,8 @@ data class Exclusion(
     value = "dependencyManagement",
     namespace = POM_XML_NAMESPACE,
 )
-data class DependencyManagement(
-    val dependencies: Dependencies
+public data class DependencyManagement(
+    public val dependencies: Dependencies
 )
 
 @Serializable
@@ -160,8 +154,8 @@ data class DependencyManagement(
     value = "licenses",
     namespace = POM_XML_NAMESPACE,
 )
-data class Licenses(
-    val licenses: List<License>
+public data class Licenses(
+    public val licenses: List<License>
 )
 
 @Serializable
@@ -169,11 +163,11 @@ data class Licenses(
     value = "license",
     namespace = POM_XML_NAMESPACE,
 )
-data class License(
-    @XmlElement val name: String? = null,
-    @XmlElement val url: String? = null,
-    @XmlElement val distribution: String? = null,
-    @XmlElement val comments: String? = null
+public data class License(
+    @XmlElement public val name: String? = null,
+    @XmlElement public val url: String? = null,
+    @XmlElement public val distribution: String? = null,
+    @XmlElement public val comments: String? = null
 )
 
 @Serializable
@@ -181,8 +175,8 @@ data class License(
     value = "developers",
     namespace = POM_XML_NAMESPACE,
 )
-data class Developers(
-    val developers: List<Developer>
+public data class Developers(
+    public val developers: List<Developer>
 )
 
 @Serializable
@@ -190,12 +184,12 @@ data class Developers(
     value = "developer",
     namespace = POM_XML_NAMESPACE,
 )
-data class Developer(
-    @XmlElement val id: String? = null,
-    @XmlElement val name: String? = null,
-    @XmlElement val email: String? = null,
-    @XmlElement val organization: String? = null,
-    @XmlElement val roles: Roles? = null
+public data class Developer(
+    @XmlElement public val id: String? = null,
+    @XmlElement public val name: String? = null,
+    @XmlElement public val email: String? = null,
+    @XmlElement public val organization: String? = null,
+    @XmlElement public val roles: Roles? = null
 )
 
 @Serializable
@@ -203,8 +197,8 @@ data class Developer(
     value = "roles",
     namespace = POM_XML_NAMESPACE,
 )
-data class Roles(
-    @XmlElement val roles: List<String>
+public data class Roles(
+    @XmlElement public val roles: List<String>
 )
 
 @Serializable
@@ -212,9 +206,9 @@ data class Roles(
     value = "scm",
     namespace = POM_XML_NAMESPACE,
 )
-data class Scm(
-    @XmlElement val connection: String? = null,
-    @XmlElement val developerConnection: String? = null,
-    @XmlElement val url: String? = null,
-    @XmlElement val tag: String? = null
+public data class Scm(
+    @XmlElement public val connection: String? = null,
+    @XmlElement public val developerConnection: String? = null,
+    @XmlElement public val url: String? = null,
+    @XmlElement public val tag: String? = null
 )

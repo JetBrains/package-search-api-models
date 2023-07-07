@@ -5,7 +5,7 @@ import org.jetbrains.packagesearch.maven.StringAccessor.SimpleAccessor
 import kotlin.jvm.JvmInline
 
 // should be generated...
-fun ProjectObjectModel.asAccessor(): ObjectAccessor = object : ObjectAccessor {
+public fun ProjectObjectModel.asAccessor(): ObjectAccessor = object : ObjectAccessor {
     override operator fun get(key: String) = when (key) {
         "groupId" -> SimpleAccessor(groupId)
         "artifactId" -> SimpleAccessor(artifactId)
@@ -23,7 +23,7 @@ fun ProjectObjectModel.asAccessor(): ObjectAccessor = object : ObjectAccessor {
     }
 }
 
-fun Organization.asAccessor(): StringAccessor = object : ObjectAccessor {
+public fun Organization.asAccessor(): StringAccessor = object : ObjectAccessor {
     override fun get(key: String) = when (key) {
         "name" -> SimpleAccessor(name)
         "url" -> SimpleAccessor(url)
@@ -31,7 +31,7 @@ fun Organization.asAccessor(): StringAccessor = object : ObjectAccessor {
     }
 }
 
-fun Parent.asAccessor(): StringAccessor = object : ObjectAccessor {
+public fun Parent.asAccessor(): StringAccessor = object : ObjectAccessor {
     override fun get(key: String) = when (key) {
         "groupId" -> SimpleAccessor(groupId)
         "artifactId" -> SimpleAccessor(artifactId)
@@ -41,10 +41,10 @@ fun Parent.asAccessor(): StringAccessor = object : ObjectAccessor {
     }
 }
 
-sealed interface StringAccessor {
-    interface ObjectAccessor: StringAccessor {
-        operator fun get(key: String): StringAccessor?
+public sealed interface StringAccessor {
+    public interface ObjectAccessor: StringAccessor {
+        public operator fun get(key: String): StringAccessor?
     }
     @JvmInline
-    value class SimpleAccessor(val value: String?) : StringAccessor
+    public value class SimpleAccessor(public val value: String?) : StringAccessor
 }

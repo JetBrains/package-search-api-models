@@ -1,22 +1,22 @@
 package org.jetbrains.packagesearch.api.v3.search
 
 @SearchParametersBuilderDsl
-class PackagesTypeBuilder {
+public class PackagesTypeBuilder {
     private val packagesType: MutableList<PackagesType> = mutableListOf()
 
-    fun mavenPackages() {
+    public fun mavenPackages() {
         packagesType.add(MavenPackages)
     }
 
-    fun npmPackages() {
+    public fun npmPackages() {
         packagesType.add(NpmPackages)
     }
 
-    fun gradlePackages(gradlePackages: GradlePackages) {
+    public fun gradlePackages(gradlePackages: GradlePackages) {
         packagesType.add(gradlePackages)
     }
 
-    fun gradlePackages(variants: List<GradlePackages.Variant>, isRootPublication: Boolean = true) {
+    public fun gradlePackages(variants: List<GradlePackages.Variant>, isRootPublication: Boolean = true) {
         gradlePackages(
             buildGradlePackages {
                 variants(variants)
@@ -25,15 +25,15 @@ class PackagesTypeBuilder {
         )
     }
 
-    fun gradlePackages(block: GradlePackagesBuilder.() -> Unit) {
+    public fun gradlePackages(block: GradlePackagesBuilder.() -> Unit) {
         gradlePackages(buildGradlePackages(block))
     }
 
-    fun cocoapodsPackages(cocoapodsPackages: CocoapodsPackages) {
+    public fun cocoapodsPackages(cocoapodsPackages: CocoapodsPackages) {
         packagesType.add(cocoapodsPackages)
     }
 
-    fun cocoapodsPackages(platformMinType: Map<CocoapodsPackages.Platform, String>) {
+    public fun cocoapodsPackages(platformMinType: Map<CocoapodsPackages.Platform, String>) {
         cocoapodsPackages(
             buildCocoapodsPackages {
                 platformMinType.forEach { platform(it.key, it.value) }
@@ -41,12 +41,12 @@ class PackagesTypeBuilder {
         )
     }
 
-    fun cocoapodsPackages(block: CocoapodsPackagesBuilder.() -> Unit) {
+    public fun cocoapodsPackages(block: CocoapodsPackagesBuilder.() -> Unit) {
         cocoapodsPackages(buildCocoapodsPackages(block))
     }
 
-    fun build() = packagesType.distinct()
+    public fun build(): List<PackagesType> = packagesType.distinct()
 }
 
-fun buildPackageTypes(block: PackagesTypeBuilder.() -> Unit) =
+public fun buildPackageTypes(block: PackagesTypeBuilder.() -> Unit): List<PackagesType> =
     PackagesTypeBuilder().apply(block).build()

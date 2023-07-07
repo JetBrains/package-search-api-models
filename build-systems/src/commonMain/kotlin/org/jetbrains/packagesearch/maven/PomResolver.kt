@@ -17,13 +17,13 @@ import kotlinx.coroutines.flow.map
 import kotlinx.serialization.decodeFromString
 import nl.adaptivity.xmlutil.serialization.XML
 
-class PomResolver(
-    val repositories: List<MavenUrlBuilder> = listOf(GoogleMavenCentralMirror),
-    val xml: XML = defaultXml(),
-    val httpClient: HttpClient = defaultHttpClient(xml),
+public class PomResolver(
+    public val repositories: List<MavenUrlBuilder> = listOf(GoogleMavenCentralMirror),
+    public val xml: XML = defaultXml(),
+    public val httpClient: HttpClient = defaultHttpClient(xml),
 ) : Closeable by httpClient {
 
-    suspend fun resolve(groupId: String, artifactId: String, version: String): ProjectObjectModel {
+    public suspend fun resolve(groupId: String, artifactId: String, version: String): ProjectObjectModel {
         val model = repositories.asFlow()
             .map { it.buildPomUrl(groupId, artifactId, version) }
             .map { httpClient.get(it).body<ProjectObjectModel>() }
@@ -37,12 +37,12 @@ class PomResolver(
         return resolve(model)
     }
 
-    suspend fun resolve(url: Url) = resolve(httpClient.get(url).body<ProjectObjectModel>())
+    public suspend fun resolve(url: Url): ProjectObjectModel = resolve(httpClient.get(url).body<ProjectObjectModel>())
 
-    suspend fun resolve(pomText: String): ProjectObjectModel =
+    public suspend fun resolve(pomText: String): ProjectObjectModel =
         resolve(xml.decodeFromString<ProjectObjectModel>(pomText))
 
-    suspend fun resolve(model: ProjectObjectModel): ProjectObjectModel {
+    public suspend fun resolve(model: ProjectObjectModel): ProjectObjectModel {
         val pomHierarchy = buildList {
             add(model)
             var currentParent = model.parent
@@ -84,7 +84,6 @@ class PomResolver(
             properties = mergedPom.properties.mapValues { it.value.resolve(mergedPom.properties, accessor) ?: it.value }
         )
     }
-
 
     private suspend fun resolve(parent: Parent) =
         resolve(parent.groupId, parent.artifactId, parent.version)
@@ -132,10 +131,10 @@ private fun defaultHttpClient(xml: XML) = HttpClient {
     }
 }
 
-fun buildUrl(action: URLBuilder.() -> Unit) = URLBuilder().apply(action).build()
+internal fun buildUrl(action: URLBuilder.() -> Unit) = URLBuilder().apply(action).build()
 
-fun MavenUrlBuilder.buildPomUrl(groupId: String, artifactId: String, version: String) =
+public fun MavenUrlBuilder.buildPomUrl(groupId: String, artifactId: String, version: String): Url =
     buildArtifactUrl(groupId, artifactId, version, ".pom")
 
-fun MavenUrlBuilder.buildGradleMetadataUrl(groupId: String, artifactId: String, version: String) =
+public fun MavenUrlBuilder.buildGradleMetadataUrl(groupId: String, artifactId: String, version: String): Url =
     buildArtifactUrl(groupId, artifactId, version, ".module")

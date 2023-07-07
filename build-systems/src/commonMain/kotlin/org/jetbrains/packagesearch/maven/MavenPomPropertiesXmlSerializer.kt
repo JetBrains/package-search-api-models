@@ -14,7 +14,7 @@ import nl.adaptivity.xmlutil.XmlWriter
 import nl.adaptivity.xmlutil.consecutiveTextContent
 import nl.adaptivity.xmlutil.serialization.XML
 
-object MavenPomPropertiesXmlSerializer : KSerializer<Properties> {
+public object MavenPomPropertiesXmlSerializer : KSerializer<Properties> {
     private val fallbackSerializer = MapSerializer(String.serializer(), String.serializer())
 
     override val descriptor: SerialDescriptor = buildClassSerialDescriptor("maven.properties") {
@@ -66,10 +66,10 @@ object MavenPomPropertiesXmlSerializer : KSerializer<Properties> {
         }
     }
 
-    override fun deserialize(decoder: Decoder) =
+    override fun deserialize(decoder: Decoder): Properties =
         Properties(decoder.xmlReaderOrNull?.decodeProperties() ?: fallbackSerializer.deserialize(decoder))
 
-    override fun serialize(encoder: Encoder, value: Properties) =
+    override fun serialize(encoder: Encoder, value: Properties): Unit =
         encoder.xmlWriterOrNull?.encodeProperties(value.properties)
             ?: fallbackSerializer.serialize(encoder, value.properties)
 

@@ -5,38 +5,38 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed interface ApiRepository {
+public sealed interface ApiRepository {
 
-    val id: String
-    val lastChecked: Instant?
+    public val id: String
+    public val lastChecked: Instant?
 }
 
 @Serializable
 @SerialName("maven")
-data class ApiMavenRepository(
-    override val id: String,
-    override val lastChecked: Instant?,
-    val url: String,
-    val alternateUrls: List<String>,
-    val friendlyName: String,
-    val userFacingUrl: String? = null,
-    val packageCount: Int? = null,
-    val artifactCount: Int? = null,
-    val namedLinks: String? = null,
+public data class ApiMavenRepository(
+    public override val id: String,
+    public override val lastChecked: Instant?,
+    public val url: String,
+    public val alternateUrls: List<String>,
+    public val friendlyName: String,
+    public val userFacingUrl: String? = null,
+    public val packageCount: Int? = null,
+    public val artifactCount: Int? = null,
+    public val namedLinks: String? = null,
 ) : ApiRepository
 
 @Serializable
 @SerialName("cocoapods")
-object ApiCocoapodsRepository : ApiRepository {
+public object ApiCocoapodsRepository : ApiRepository {
 
-    override val id = "cocoapods"
-    override val lastChecked: Instant? = null
+    public override val id: String = "cocoapods"
+    public override val lastChecked: Instant? = null
 }
 
 @Serializable
 @SerialName("npm")
-object ApiNpmRepository : ApiRepository {
+public object ApiNpmRepository : ApiRepository {
 
-    override val id = "npm"
-    override val lastChecked: Instant? = null
+    public override val id: String = "npm"
+    public override val lastChecked: Instant? = null
 }

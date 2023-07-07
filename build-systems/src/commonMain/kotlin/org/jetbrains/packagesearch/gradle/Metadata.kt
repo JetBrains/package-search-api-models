@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GradleMetadata(
+public data class GradleMetadata(
     val formatVersion: String,
     val component: Component,
     val createdBy: CreatedBy? = null,
@@ -12,7 +12,7 @@ data class GradleMetadata(
 )
 
 @Serializable
-data class Component(
+public data class Component(
     val group: String,
     val module: String,
     val version: String,
@@ -21,18 +21,18 @@ data class Component(
 )
 
 @Serializable
-data class CreatedBy(
+public data class CreatedBy(
     val gradle: Gradle
 )
 
 @Serializable
-data class Gradle(
+public data class Gradle(
     val version: String,
     val buildId: String? = null
 )
 
 @Serializable
-data class Variant(
+public data class Variant(
     val name: String,
     val attributes: Map<String, String>? = null,
     @SerialName("available-at") val availableAt: AvailableAt? = null,
@@ -42,7 +42,7 @@ data class Variant(
 )
 
 @Serializable
-data class AvailableAt(
+public data class AvailableAt(
     val url: String,
     val group: String,
     val module: String,
@@ -50,26 +50,26 @@ data class AvailableAt(
 )
 
 @Serializable
-data class Dependency(
+public data class Dependency(
     val group: String,
     val module: String,
     val version: Version
 )
 
 @Serializable
-data class Version(
+public data class Version(
     val requires: String
 )
 
 @Serializable
-data class DependencyConstraint(
+public data class DependencyConstraint(
     val group: String,
     val module: String,
     val version: Version
 )
 
 @Serializable
-data class File(
+public data class File(
     val name: String,
     val url: String,
     val size: Int,

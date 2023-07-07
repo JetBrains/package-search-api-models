@@ -19,14 +19,14 @@ import org.jetbrains.packagesearch.api.v3.MavenHashLookupRequest
 import org.jetbrains.packagesearch.api.v3.MavenHashLookupResponse
 import org.jetbrains.packagesearch.api.v3.search.SearchParameters
 
-class PackageSearchApiClient(
-    val endpoints: PackageSearchEndpoints,
+public class PackageSearchApiClient(
+    public val endpoints: PackageSearchEndpoints,
     private val httpClient: HttpClient = defaultHttpClient()
 ) {
 
-    companion object {
-        fun defaultHttpClient(additionalConfig: HttpClientConfig<HttpClientEngineConfig>.() -> Unit = {}) =
-            HttpClient(DefaultEngine) {
+    public companion object {
+        public fun defaultHttpClient(additionalConfig: HttpClientConfig<*>.() -> Unit = {}): HttpClient =
+            HttpClient {
                 install(ContentNegotiation) {
                     protobuf()
                     json()
@@ -50,21 +50,21 @@ class PackageSearchApiClient(
             header(HttpHeaders.Accept, ContentType.Application.Json)
         }.body<R>()
 
-    suspend fun getKnownRepositories(): List<ApiRepository> =
+    public suspend fun getKnownRepositories(): List<ApiRepository> =
         defaultRequest(endpoints.knownRepositories)
 
-    suspend fun getPackageInfoByIds(ids: Set<String>): List<ApiPackage> =
+    public suspend fun getPackageInfoByIds(ids: Set<String>): List<ApiPackage> =
         defaultRequest(endpoints.packageInfoByIds, GetPackageInfoRequest(ids))
 
-    suspend fun getPackageInfoByIdHashes(ids: Set<String>): List<ApiPackage> =
+    public suspend fun getPackageInfoByIdHashes(ids: Set<String>): List<ApiPackage> =
         defaultRequest(endpoints.packageInfoByIdHashes, GetPackageInfoRequest(ids))
 
-    suspend fun searchPackages(searchParameters: SearchParameters): List<ApiPackage> =
+    public suspend fun searchPackages(searchParameters: SearchParameters): List<ApiPackage> =
         defaultRequest(endpoints.searchPackages, searchParameters)
 
-    suspend fun getMavenPackageInfoByFileHash(request: MavenHashLookupRequest): MavenHashLookupResponse =
+    public suspend fun getMavenPackageInfoByFileHash(request: MavenHashLookupRequest): MavenHashLookupResponse =
         defaultRequest(endpoints.mavenPackageInfoByFileHash, request)
 
-    suspend fun getScmByUrl(request: GetScmByUrlRequest): String? =
+    public suspend fun getScmByUrl(request: GetScmByUrlRequest): String? =
         defaultRequest(endpoints.getScmsByUrl, request)
 }

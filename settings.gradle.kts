@@ -23,6 +23,7 @@ dependencyResolutionManagement {
 include(
     ":http",
     ":sonatype-apis",
+    ":version-utils",
     ":http:client",
     ":build-systems",
     ":version-catalog",

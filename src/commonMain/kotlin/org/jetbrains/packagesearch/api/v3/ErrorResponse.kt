@@ -3,19 +3,19 @@ package org.jetbrains.packagesearch.api.v3
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class ErrorResponse(
-    val error: Error,
+public data class ErrorResponse(
+    public val error: Error,
 ) {
 
     @Serializable
-    data class Error(
-        val message: String,
-        val stackTrace: List<String> = emptyList(),
+    public data class Error(
+        public val message: String,
+        public val stackTrace: List<String> = emptyList(),
     )
 
-    companion object {
+    public companion object {
 
-        fun with(message: String, stackTrace: List<String> = emptyList()) =
+        public fun with(message: String, stackTrace: List<String> = emptyList()): ErrorResponse =
             ErrorResponse(Error(message, stackTrace))
     }
 }

@@ -6,6 +6,7 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
+                api(projects.versionUtils)
                 api(packageSearchApiModelsVersions.datetime)
                 api(packageSearchApiModelsVersions.kotlinx.serialization.json)
                 api(packageSearchApiModelsVersions.krypto)

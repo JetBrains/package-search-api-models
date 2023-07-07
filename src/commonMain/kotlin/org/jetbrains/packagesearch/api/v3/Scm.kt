@@ -4,29 +4,24 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-sealed interface Scm {
-
-    val scmUrl: String
-    val description: String?
-
-    @SerialName("oss_health_index")
-    val ossHealthIndex: Double?
-
-    @SerialName("readme_url")
-    val readmeUrl: String?
+public sealed interface Scm {
+    public val scmUrl: String
+    public val description: String?
+    public val ossHealthIndex: Double?
+    public val readmeUrl: String?
 }
 
 @Serializable
 @SerialName("github")
-data class GitHub(
-    override val scmUrl: String,
-    override val description: String? = null,
-    @SerialName("readme_url") override val readmeUrl: String? = null,
-    val httpUrl: String,
-    @SerialName("is_fork") val isFork: Boolean? = null,
-    @SerialName("oss_health_index") override val ossHealthIndex: Double?,
-    val stars: Int? = null,
-    val watchers: Int? = null,
-    val forks: Int? = null,
-    val subscribers: Int? = null,
+public data class GitHub(
+    public override val scmUrl: String,
+    public override val description: String? = null,
+    public override val readmeUrl: String? = null,
+    public val httpUrl: String,
+    public val isFork: Boolean? = null,
+    public override val ossHealthIndex: Double?,
+    public val stars: Int? = null,
+    public val watchers: Int? = null,
+    public val forks: Int? = null,
+    public val subscribers: Int? = null,
 ) : Scm

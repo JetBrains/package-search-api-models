@@ -1,9 +1,9 @@
 package org.jetbrains.packagesearch.api.v3.search
 
 @SearchParametersBuilderDsl
-class KotlinMultiplatformBuilder internal constructor(private val delegate: GradlePackagesBuilder) {
+public class KotlinMultiplatformBuilder internal constructor(private val delegate: GradlePackagesBuilder) {
 
-    fun genericJvm(libraryElements: String? = null) {
+    public fun genericJvm(libraryElements: String? = null) {
         delegate.variant {
             jvm()
             libraryCategory()
@@ -18,10 +18,14 @@ class KotlinMultiplatformBuilder internal constructor(private val delegate: Grad
         }
     }
 
-    fun jvm() = genericJvm("jar")
-    fun android() = genericJvm("aar")
+    public fun jvm() {
+        genericJvm("jar")
+    }
+    public fun android() {
+        genericJvm("aar")
+    }
 
-    fun jsLegacy() {
+    public fun jsLegacy() {
         delegate.variant {
             libraryCategory()
             usage("kotlin-api")
@@ -29,7 +33,7 @@ class KotlinMultiplatformBuilder internal constructor(private val delegate: Grad
         }
     }
 
-    fun jsIr() {
+    public fun jsIr() {
         delegate.variant {
             libraryCategory()
             usage("kotlin-api")
@@ -37,12 +41,12 @@ class KotlinMultiplatformBuilder internal constructor(private val delegate: Grad
         }
     }
 
-    fun js(withLegacy: Boolean = true) {
+    public fun js(withLegacy: Boolean = true) {
         jsIr()
         if (withLegacy) jsLegacy()
     }
 
-    fun native(platform: String) {
+    public fun native(platform: String) {
         delegate.variant {
             native(platform)
             libraryCategory()
@@ -51,6 +55,6 @@ class KotlinMultiplatformBuilder internal constructor(private val delegate: Grad
     }
 }
 
-fun GradlePackagesBuilder.kotlinMultiplatform(builder: KotlinMultiplatformBuilder.() -> Unit) {
+public fun GradlePackagesBuilder.kotlinMultiplatform(builder: KotlinMultiplatformBuilder.() -> Unit) {
     KotlinMultiplatformBuilder(this).apply(builder)
 }
