@@ -4,8 +4,12 @@ on:
     types: [ published ]
   push:
     branches: [ main, lamberto.basti/v3 ]
+
 jobs:
   publish:
+    concurrency:
+      group: ${{ github.ref }}
+      cancel-in-progress: true
     name: Publish
     runs-on: macos-latest
     steps:
