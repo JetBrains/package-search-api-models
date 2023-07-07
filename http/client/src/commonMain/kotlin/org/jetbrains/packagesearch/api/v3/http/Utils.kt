@@ -5,8 +5,8 @@ import io.ktor.http.*
 public suspend fun PackageSearchApiClient.getScmByUrl(urls: List<String>): String? =
     getScmByUrl(GetScmByUrlRequest(urls))
 
-internal fun buildUrl(action: URLBuilder.() -> Unit) = URLBuilder().apply(action).build()
+public fun buildUrl(action: URLBuilder.() -> Unit): Url = URLBuilder().apply(action).build()
 
-internal fun HttpMessageBuilder.header(key: String, vararg values: Any?): Unit {
+internal fun HttpMessageBuilder.header(key: String, vararg values: Any?) {
     headers.append(key, values.joinToString())
 }
