@@ -1,7 +1,9 @@
 package org.jetbrains.packagesearch.api.v3.http
 
-import io.ktor.client.HttpClient
+import io.ktor.client.*
 import io.ktor.client.call.body
+import io.ktor.client.engine.*
+import io.ktor.client.plugins.compression.*
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
 import io.ktor.client.request.header
@@ -10,25 +12,37 @@ import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.Url
 import io.ktor.serialization.kotlinx.json.json
+import io.ktor.serialization.kotlinx.protobuf.*
 import org.jetbrains.packagesearch.api.v3.ApiPackage
 import org.jetbrains.packagesearch.api.v3.ApiRepository
 import org.jetbrains.packagesearch.api.v3.MavenHashLookupRequest
 import org.jetbrains.packagesearch.api.v3.MavenHashLookupResponse
 import org.jetbrains.packagesearch.api.v3.search.SearchParameters
 
-class PackageSearchApiClient(val endpoints: PackageSearchEndpoints) {
+class PackageSearchApiClient(
+    val endpoints: PackageSearchEndpoints,
+    private val httpClient: HttpClient = defaultHttpClient()
+) {
 
-    private val httpClient = HttpClient(DefaultEngine) {
-        install(ContentNegotiation) {
-            json()
-        }
+    companion object {
+        fun defaultHttpClient(additionalConfig: HttpClientConfig<HttpClientEngineConfig>.() -> Unit = {}) =
+            HttpClient(DefaultEngine) {
+                install(ContentNegotiation) {
+                    protobuf()
+                    json()
+                }
+                install(ContentEncoding) {
+                    gzip()
+                }
+                additionalConfig()
+            }
     }
 
     private suspend inline fun <reified T, reified R> defaultRequest(url: Url, body: T) =
         httpClient.get(url) {
             setBody(body)
             header(HttpHeaders.ContentType, ContentType.Application.Json)
-            header(HttpHeaders.Accept, ContentType.Application.Json)
+            header(HttpHeaders.Accept, ContentType.Application.ProtoBuf, ContentType.Application.Json)
         }.body<R>()
 
     private suspend inline fun <reified R> defaultRequest(url: Url) =

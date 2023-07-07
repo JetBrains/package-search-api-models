@@ -21,7 +21,7 @@ data class Author(
 @Serializable
 data class Licenses(
     val mainLicense: LicenseFile,
-    val otherLicenses: List<LicenseFile>? = null,
+    val otherLicenses: List<LicenseFile> = emptyList(),
 )
 
 @Serializable

@@ -1,5 +1,3 @@
-@file:Suppress("UNUSED_VARIABLE")
-
 import org.jetbrains.kotlin.gradle.plugin.KotlinDependencyHandler
 
 plugins {
@@ -27,6 +25,11 @@ kotlin {
     tvos()
 
     sourceSets {
+        all {
+            languageSettings {
+                optIn("kotlinx.serialization.ExperimentalSerializationApi")
+            }
+        }
         val commonMain by getting
         val appleMain by creating {
             dependsOn(commonMain)

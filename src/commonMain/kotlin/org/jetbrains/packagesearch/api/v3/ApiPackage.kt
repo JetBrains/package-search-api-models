@@ -104,7 +104,7 @@ data class ApiMavenPackage(
         val version: String,
     )
 
-    @Serializable(with = GradleVariantSerializer::class)
+    @Serializable
     sealed interface ApiVariant {
 
         @Serializable
