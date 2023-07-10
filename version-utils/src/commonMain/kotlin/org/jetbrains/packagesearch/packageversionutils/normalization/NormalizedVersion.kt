@@ -81,10 +81,10 @@ public sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
     public data class Semantic(
         public override val versionName: String,
         public override val isStable: Boolean,
-        public override val releasedAt: Instant?,
+        public override val releasedAt: Instant? = null,
         public val semanticPart: String,
-        public override val stabilityMarker: String?,
-        public override val nonSemanticSuffix: String?,
+        public override val stabilityMarker: String? = null,
+        public override val nonSemanticSuffix: String? = null,
     ) : NormalizedVersion, DecoratedVersion {
 
         public val semanticPartWithStabilityMarker: String
@@ -140,10 +140,10 @@ public sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
     public data class TimestampLike(
         public override val versionName: String,
         public override val isStable: Boolean,
-        public override val releasedAt: Instant?,
+        public override val releasedAt: Instant? = null,
         public val timestampPrefix: String,
-        public override val stabilityMarker: String?,
-        public override val nonSemanticSuffix: String?,
+        public override val stabilityMarker: String? = null,
+        public override val nonSemanticSuffix: String? = null,
     ) : NormalizedVersion, DecoratedVersion {
 
         private val timestampPrefixWithStabilityMarker
@@ -175,7 +175,7 @@ public sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
     public data class Garbage(
         public override val versionName: String,
         public override val isStable: Boolean,
-        public override val releasedAt: Instant?,
+        public override val releasedAt: Instant? = null,
     ) : NormalizedVersion {
 
         override fun compareTo(other: NormalizedVersion): Int =

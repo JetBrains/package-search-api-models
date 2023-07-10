@@ -53,7 +53,9 @@ public data class AvailableAt(
 public data class Dependency(
     val group: String,
     val module: String,
-    val version: Version
+    val version: Version,
+    val attributes: Map<String, String>? = null,
+    val endorseStrictVersion: Boolean? = null
 )
 
 @Serializable

@@ -54,13 +54,13 @@ public class PackageSearchApiClient(
         defaultRequest(endpoints.knownRepositories)
 
     public suspend fun getPackageInfoByIds(ids: Set<String>): List<ApiPackage> =
-        defaultRequest(endpoints.packageInfoByIds, GetPackageInfoRequest(ids))
+        defaultRequest<_, GetPackageInfoResponse>(endpoints.packageInfoByIds, GetPackageInfoRequest(ids)).packages
 
     public suspend fun getPackageInfoByIdHashes(ids: Set<String>): List<ApiPackage> =
-        defaultRequest(endpoints.packageInfoByIdHashes, GetPackageInfoRequest(ids))
+        defaultRequest<_, GetPackageInfoResponse>(endpoints.packageInfoByIdHashes, GetPackageInfoRequest(ids)).packages
 
     public suspend fun searchPackages(searchParameters: SearchParameters): List<ApiPackage> =
-        defaultRequest(endpoints.searchPackages, searchParameters)
+        defaultRequest<_, GetPackageInfoResponse>(endpoints.searchPackages, searchParameters).packages
 
     public suspend fun getMavenPackageInfoByFileHash(request: MavenHashLookupRequest): MavenHashLookupResponse =
         defaultRequest(endpoints.mavenPackageInfoByFileHash, request)
