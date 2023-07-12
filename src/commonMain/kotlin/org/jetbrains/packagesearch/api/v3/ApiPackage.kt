@@ -35,6 +35,9 @@ public sealed interface ApiPackage {
 
 @Serializable
 public sealed interface ApiPackageVersion {
+    public companion object {
+        public const val MAVEN_REPO_ID: String = "maven2"
+    }
     public val normalized: NormalizedVersion
     public val repositoryIds: List<String>
     public val vulnerability: Vulnerability
@@ -64,7 +67,7 @@ public data class ApiMavenPackage(
     public override val id: String,
     public override val idHash: String,
     public override val rankingMetric: Double?,
-    public override val versions: VersionsContainer<ApiMavenVersion>,
+    public override val versions: VersionsContainer<out ApiMavenVersion>,
     public val groupId: String,
     public val artifactId: String,
 ) : ApiPackage {
@@ -90,7 +93,7 @@ public data class ApiMavenPackage(
         public override val description: String?,
         public override val authors: List<Author>,
         public override val scmUrl: String?,
-        public override val licenses: Licenses?
+        public override val licenses: Licenses?,
     ) : ApiMavenVersion
 
     @Serializable
@@ -107,7 +110,7 @@ public data class ApiMavenPackage(
         public override val scmUrl: String?,
         public override val licenses: Licenses?,
         public val variants: List<ApiVariant>,
-        public val parentComponent: String? = null
+        public val parentComponent: String? = null,
     ) : ApiMavenVersion
 
     @Serializable
@@ -193,7 +196,6 @@ public data class ApiMavenPackage(
             public val md5: String,
         )
     }
-
 }
 
 @Serializable
