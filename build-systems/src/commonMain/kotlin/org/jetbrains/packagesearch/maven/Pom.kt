@@ -189,7 +189,8 @@ public data class Developer(
     @XmlElement public val name: String? = null,
     @XmlElement public val email: String? = null,
     @XmlElement public val organization: String? = null,
-    @XmlElement public val roles: Roles? = null
+    @XmlElement public val organizationUrl: String? = null,
+    @XmlElement public val roles: Roles? = null,
 )
 
 @Serializable
