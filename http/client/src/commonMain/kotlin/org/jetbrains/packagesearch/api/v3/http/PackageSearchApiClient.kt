@@ -14,11 +14,8 @@ import org.jetbrains.packagesearch.api.v3.ApiPackage
 import org.jetbrains.packagesearch.api.v3.ApiRepository
 import org.jetbrains.packagesearch.api.v3.MavenHashLookupRequest
 import org.jetbrains.packagesearch.api.v3.MavenHashLookupResponse
-import org.jetbrains.packagesearch.api.v3.search.SearchParameters
-import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
-import kotlin.time.Duration.Companion.seconds
 
 public class PackageSearchApiClient(
     public val endpoints: PackageSearchEndpoints,
@@ -70,8 +67,8 @@ public class PackageSearchApiClient(
     public suspend fun getPackageInfoByIdHashes(ids: Set<String>): List<ApiPackage> =
         defaultRequest<_, GetPackageInfoResponse>(endpoints.packageInfoByIdHashes, GetPackageInfoRequest(ids)).packages
 
-    public suspend fun searchPackages(searchParameters: SearchParameters): List<ApiPackage> =
-        defaultRequest<_, GetPackageInfoResponse>(endpoints.searchPackages, searchParameters).packages
+    public suspend fun searchPackages(request: SearchPackagesRequest): List<ApiPackage> =
+        defaultRequest<_, SearchPackagesResponse>(endpoints.searchPackages, request).packages
 
     public suspend fun getMavenPackageInfoByFileHash(request: MavenHashLookupRequest): MavenHashLookupResponse =
         defaultRequest(endpoints.mavenPackageInfoByFileHash, request)

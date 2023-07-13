@@ -5,12 +5,6 @@ import kotlinx.serialization.Serializable
 import org.jetbrains.packagesearch.api.v3.ApiMavenPackage.ApiVariant.Attribute
 
 @Serializable
-public data class SearchParameters(
-    public val packagesType: List<PackagesType>,
-    public val searchQuery: String,
-)
-
-@Serializable
 public sealed interface PackagesType
 
 @Serializable

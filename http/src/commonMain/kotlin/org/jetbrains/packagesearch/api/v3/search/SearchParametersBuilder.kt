@@ -1,10 +1,12 @@
 package org.jetbrains.packagesearch.api.v3.search
 
+import org.jetbrains.packagesearch.api.v3.http.SearchPackagesRequest
+
 @DslMarker
 public annotation class SearchParametersBuilderDsl
 
 @SearchParametersBuilderDsl
-public class SearchParametersBuilder internal constructor() {
+public class SearchParametersBuilder {
 
     public var searchQuery: String? = null
     public var packagesType: List<PackagesType> = emptyList()
@@ -13,17 +15,17 @@ public class SearchParametersBuilder internal constructor() {
         packagesType = buildPackageTypes(block)
     }
 
-    internal fun build(): SearchParameters {
+    internal fun build(): SearchPackagesRequest {
         val query = searchQuery
         val errorText = "Search query is null or blank."
         requireNotNull(query) { errorText }
         require(query.isNotBlank()) { errorText }
-        return SearchParameters(
+        return SearchPackagesRequest(
             packagesType = packagesType,
             searchQuery = query,
         )
     }
 }
 
-public fun buildSearchParameters(block: SearchParametersBuilder.() -> Unit): SearchParameters =
+public fun buildSearchParameters(block: SearchParametersBuilder.() -> Unit): SearchPackagesRequest =
     SearchParametersBuilder().apply(block).build()
