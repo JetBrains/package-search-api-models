@@ -1,23 +1,24 @@
 package org.jetbrains.packagesearch.api.v3.http
 
 import io.ktor.client.*
-import io.ktor.client.call.body
+import io.ktor.client.call.*
 import io.ktor.client.engine.*
+import io.ktor.client.plugins.*
 import io.ktor.client.plugins.compression.*
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.request.get
-import io.ktor.client.request.header
-import io.ktor.client.request.setBody
-import io.ktor.http.ContentType
-import io.ktor.http.HttpHeaders
-import io.ktor.http.Url
-import io.ktor.serialization.kotlinx.json.json
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.request.*
+import io.ktor.http.*
+import io.ktor.serialization.kotlinx.json.*
 import io.ktor.serialization.kotlinx.protobuf.*
 import org.jetbrains.packagesearch.api.v3.ApiPackage
 import org.jetbrains.packagesearch.api.v3.ApiRepository
 import org.jetbrains.packagesearch.api.v3.MavenHashLookupRequest
 import org.jetbrains.packagesearch.api.v3.MavenHashLookupResponse
 import org.jetbrains.packagesearch.api.v3.search.SearchParameters
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 
 public class PackageSearchApiClient(
     public val endpoints: PackageSearchEndpoints,
@@ -28,11 +29,22 @@ public class PackageSearchApiClient(
         public fun defaultHttpClient(additionalConfig: HttpClientConfig<*>.() -> Unit = {}): HttpClient =
             HttpClient {
                 install(ContentNegotiation) {
-                    protobuf()
+//                    protobuf()
                     json()
                 }
                 install(ContentEncoding) {
                     gzip()
+                }
+                install(HttpRequestRetry) {
+                    maxRetries = 5
+                    constantDelay(
+                        delay = 500.milliseconds,
+                        randomization = 100.milliseconds,
+                        respectRetryAfterHeader = false
+                    )
+                }
+                install(HttpTimeout) {
+                    requestTimeout = 1.minutes
                 }
                 additionalConfig()
             }
@@ -42,7 +54,6 @@ public class PackageSearchApiClient(
         httpClient.get(url) {
             setBody(body)
             header(HttpHeaders.ContentType, ContentType.Application.Json)
-            header(HttpHeaders.Accept, ContentType.Application.ProtoBuf, ContentType.Application.Json)
         }.body<R>()
 
     private suspend inline fun <reified R> defaultRequest(url: Url) =

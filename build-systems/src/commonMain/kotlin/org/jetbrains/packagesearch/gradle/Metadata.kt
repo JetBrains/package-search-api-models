@@ -2,6 +2,7 @@ package org.jetbrains.packagesearch.gradle
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.JsonPrimitive
 
 @Serializable
 public data class GradleMetadata(
@@ -17,7 +18,7 @@ public data class Component(
     val module: String,
     val version: String,
     val url: String? = null,
-    val attributes: Map<String, String>? = null
+    val attributes: Map<String, JsonPrimitive>? = null
 )
 
 @Serializable
@@ -34,7 +35,7 @@ public data class Gradle(
 @Serializable
 public data class Variant(
     val name: String,
-    val attributes: Map<String, String>? = null,
+    val attributes: Map<String, JsonPrimitive>? = null,
     @SerialName("available-at") val availableAt: AvailableAt? = null,
     val dependencies: List<Dependency>? = null,
     val dependencyConstraints: List<DependencyConstraint>? = null,
@@ -54,7 +55,7 @@ public data class Dependency(
     val group: String,
     val module: String,
     val version: Version,
-    val attributes: Map<String, String>? = null,
+    val attributes: Map<String, JsonPrimitive>? = null,
     val endorseStrictVersion: Boolean? = null
 )
 

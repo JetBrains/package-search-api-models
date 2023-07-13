@@ -5,6 +5,7 @@ import io.ktor.client.call.body
 import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
+import io.ktor.client.statement.*
 import io.ktor.http.ContentType
 import io.ktor.http.URLBuilder
 import io.ktor.http.Url
@@ -23,19 +24,26 @@ public class PomResolver(
     public val httpClient: HttpClient = defaultHttpClient(xml),
 ) : Closeable by httpClient {
 
-    public suspend fun resolve(groupId: String, artifactId: String, version: String): ProjectObjectModel {
-        val model = repositories.asFlow()
-            .map { it.buildPomUrl(groupId, artifactId, version) }
-            .map { httpClient.get(it).body<ProjectObjectModel>() }
-            .catch { it.printStackTrace() }
-            .firstOrNull()
-            ?: error(
-                "Pom not found for $groupId:$artifactId:$version in:" +
-                        "\n${repositories.joinToString("\n") { "- $it" }}"
-            )
-
-        return resolve(model)
+    public companion object {
+        public fun defaultHttpClient(xml: XML): HttpClient = HttpClient {
+            install(ContentNegotiation) {
+                val converter = KotlinxSerializationConverter(xml)
+                register(ContentType.Application.Xml, converter)
+                register(ContentType.Text.Xml, converter)
+            }
+            install(HttpRequestRetry) {
+                maxRetries = 5
+                constantDelay(100, 50, false)
+            }
+        }
     }
+
+    public suspend fun resolve(groupId: String, artifactId: String, version: String): ProjectObjectModel? =
+        repositories.asFlow()
+            .map { it.buildPomUrl(groupId, artifactId, version) }
+            .map { httpClient.get(it).bodyAsPom(xml) }
+            .firstOrNull()
+            ?.let { resolve(it) }
 
     public suspend fun resolve(url: Url): ProjectObjectModel = resolve(httpClient.get(url).body<ProjectObjectModel>())
 
@@ -113,21 +121,13 @@ public class PomResolver(
     }.takeIf { UNRESOLVED !in it }
 }
 
+private suspend fun HttpResponse.bodyAsPom(xml: XML) =
+    runCatching { body<ProjectObjectModel>() }.getOrNull()
+        ?: xml.decodeFromString(bodyAsText())
+
 private fun defaultXml() = XML {
     defaultPolicy {
         ignoreUnknownChildren()
-    }
-}
-
-private fun defaultHttpClient(xml: XML) = HttpClient {
-    install(ContentNegotiation) {
-        val converter = KotlinxSerializationConverter(xml)
-        register(ContentType.Application.Xml, converter)
-        register(ContentType.Text.Xml, converter)
-    }
-    install(HttpRequestRetry) {
-        maxRetries = 5
-        constantDelay(100, 50, false)
     }
 }
 

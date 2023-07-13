@@ -21,7 +21,7 @@ kotlin {
         commonMain {
             dependencies {
                 api(packageSearchApiModelsVersions.xmlutil)
-                api(packageSearchApiModelsVersions.kotlinx.serialization.core)
+                api(packageSearchApiModelsVersions.kotlinx.serialization.json)
                 api(packageSearchApiModelsVersions.ktor.client.content.negotiation)
                 api(packageSearchApiModelsVersions.ktor.serialization.kotlinx)
             }
