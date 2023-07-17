@@ -31,6 +31,7 @@ kotlin {
         jvmMain {
             dependencies {
                 api(packageSearchApiModelsVersions.ktor.client.cio)
+                api(packageSearchApiModelsVersions.logback.classic)
             }
         }
         appleMain {
