@@ -16,6 +16,8 @@ import org.jetbrains.packagesearch.api.v3.MavenHashLookupRequest
 import org.jetbrains.packagesearch.api.v3.MavenHashLookupResponse
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
+import org.jetbrains.packagesearch.api.v3.search.SearchParametersBuilder
+import org.jetbrains.packagesearch.api.v3.search.buildSearchParameters
 
 public class PackageSearchDefaultEndpoints(
     public val protocol: URLProtocol,
@@ -50,26 +52,31 @@ public class PackageSearchApiClient(
 ) {
 
     public companion object {
+
+        public fun HttpClientConfig<*>.defaultHttpClientConfig(protobuf: Boolean = true) {
+            install(ContentNegotiation) {
+                if (protobuf) protobuf()
+                json()
+            }
+            install(ContentEncoding) {
+                gzip()
+            }
+            install(HttpRequestRetry) {
+                maxRetries = 5
+                constantDelay(
+                    delay = 500.milliseconds,
+                    randomization = 100.milliseconds,
+                    respectRetryAfterHeader = false
+                )
+            }
+            install(HttpTimeout) {
+                requestTimeout = 1.minutes
+            }
+        }
+
         public fun defaultHttpClient(additionalConfig: HttpClientConfig<*>.() -> Unit = {}): HttpClient =
             HttpClient {
-                install(ContentNegotiation) {
-                    protobuf()
-                    json()
-                }
-                install(ContentEncoding) {
-                    gzip()
-                }
-                install(HttpRequestRetry) {
-                    maxRetries = 5
-                    constantDelay(
-                        delay = 500.milliseconds,
-                        randomization = 100.milliseconds,
-                        respectRetryAfterHeader = false
-                    )
-                }
-                install(HttpTimeout) {
-                    requestTimeout = 1.minutes
-                }
+                defaultHttpClientConfig()
                 additionalConfig()
             }
     }
@@ -103,3 +110,6 @@ public class PackageSearchApiClient(
     public suspend fun getScmByUrl(request: GetScmByUrlRequest): String? =
         defaultRequest(endpoints.getScmsByUrl, request)
 }
+
+public suspend fun PackageSearchApiClient.searchPackages(builder: SearchParametersBuilder.() -> Unit): List<ApiPackage> =
+    searchPackages(buildSearchParameters(builder))

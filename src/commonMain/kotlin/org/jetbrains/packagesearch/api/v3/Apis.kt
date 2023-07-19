@@ -36,7 +36,7 @@ public data class LicenseFile(
 @Serializable
 public data class Vulnerability(
     public val isVulnerable: Boolean,
-    public val issues: List<String> = emptyList(),
+    public val issues: List<String>? = null,
 ) {
     public companion object {
         public val NOT_VULNERABLE: Vulnerability = Vulnerability(false)

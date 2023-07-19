@@ -45,8 +45,8 @@ public sealed interface ApiPackageVersion {
 
 @Serializable
 public data class VersionsContainer<T : ApiPackageVersion>(
-    public val latestStable: T?,
-    public val latest: T?,
+    public val latestStable: T? = null,
+    public val latest: T? = null,
     public val all: Map<String, T>,
 )
 
@@ -66,7 +66,7 @@ public sealed interface ApiMavenVersion : ApiPackageVersion {
 public data class ApiMavenPackage(
     public override val id: String,
     public override val idHash: String,
-    public override val rankingMetric: Double?,
+    public override val rankingMetric: Double? = null,
     public override val versions: VersionsContainer<out ApiMavenVersion>,
     public val groupId: String,
     public val artifactId: String,
@@ -89,11 +89,11 @@ public data class ApiMavenPackage(
         public override val vulnerability: Vulnerability,
         public override val dependencies: List<Dependency>,
         public override val artifacts: List<ApiArtifact>,
-        public override val name: String?,
-        public override val description: String?,
+        public override val name: String? = null,
+        public override val description: String? = null,
         public override val authors: List<Author>,
-        public override val scmUrl: String?,
-        public override val licenses: Licenses?,
+        public override val scmUrl: String? = null,
+        public override val licenses: Licenses? = null,
     ) : ApiMavenVersion
 
     @Serializable
@@ -104,11 +104,11 @@ public data class ApiMavenPackage(
         public override val vulnerability: Vulnerability,
         public override val dependencies: List<Dependency>,
         public override val artifacts: List<ApiArtifact>,
-        public override val name: String?,
-        public override val description: String?,
+        public override val name: String? = null,
+        public override val description: String? = null,
         public override val authors: List<Author>,
-        public override val scmUrl: String?,
-        public override val licenses: Licenses?,
+        public override val scmUrl: String? = null,
+        public override val licenses: Licenses? = null,
         public val variants: List<ApiVariant>,
         public val parentComponent: String? = null,
     ) : ApiMavenVersion
@@ -140,11 +140,18 @@ public data class ApiMavenPackage(
             @SerialName("exactMatch")
             public data class ExactMatch internal constructor(
                 public val value: String,
-                public val alternativeValues: List<String> = emptyList(),
+                public val alternativeValues: List<String>? = null,
             ) : Attribute {
+
+                public val allValues: Set<String>
+                    get() = buildSet {
+                        alternativeValues?.also { addAll(it) }
+                        add(value)
+                    }
+
                 public override fun isCompatible(other: Attribute): Boolean = when (other) {
                     is ComparableInteger -> false
-                    is ExactMatch -> (alternativeValues + value).any { it == other.value }
+                    is ExactMatch -> allValues.any { it in other.allValues }
                 }
             }
 
@@ -201,8 +208,8 @@ public data class ApiMavenPackage(
 @Serializable
 public data class ApiArtifact(
     public val name: String,
-    public val md5: String?,
-    public val sha1: String?,
-    public val sha256: String?,
-    public val sha512: String?,
+    public val md5: String? = null,
+    public val sha1: String? = null,
+    public val sha256: String? = null,
+    public val sha512: String? = null,
 )
