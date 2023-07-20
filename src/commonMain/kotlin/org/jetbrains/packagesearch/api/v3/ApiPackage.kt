@@ -117,7 +117,7 @@ public data class ApiMavenPackage(
     public data class ApiGradleDependency(
         public val group: String,
         public val module: String,
-        public val version: String,
+        public val version: String?,
     )
 
     @Serializable
@@ -197,10 +197,10 @@ public data class ApiMavenPackage(
             public val name: String,
             public val url: String,
             public val size: Long,
-            public val sha512: String,
-            public val sha256: String,
             public val sha1: String,
             public val md5: String,
+            public val sha256: String? = null,
+            public val sha512: String? = null,
         )
     }
 }
