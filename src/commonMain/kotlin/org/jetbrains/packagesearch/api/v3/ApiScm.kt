@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-public sealed interface Scm {
+public sealed interface ApiScm {
     public val scmUrl: String
     public val description: String?
     public val ossHealthIndex: Double?
@@ -24,4 +24,4 @@ public data class GitHub(
     public val watchers: Int? = null,
     public val forks: Int? = null,
     public val subscribers: Int? = null,
-) : Scm
+) : ApiScm
