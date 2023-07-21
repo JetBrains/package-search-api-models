@@ -33,7 +33,7 @@ public data class CreatedBy(
 @Serializable
 public data class Gradle(
     val version: String,
-    val buildId: String
+    val buildId: String? = null
 )
 
 @Serializable
@@ -64,6 +64,7 @@ public data class Dependency(
     val reason: String? = null,
     val attributes: Attributes? = null,
     val requestedCapabilities: List<Capability>? = null,
+    val endorseStrictVersions: Boolean? = null
 )
 
 @Serializable
@@ -89,7 +90,9 @@ public data class File(
     val url: String,
     val size: Int,
     val sha1: String,
-    val md5: String
+    val md5: String,
+    val sha256: String? = null,
+    val sha512: String? = null
 )
 
 public typealias Attributes = Map<String, JsonPrimitive>
