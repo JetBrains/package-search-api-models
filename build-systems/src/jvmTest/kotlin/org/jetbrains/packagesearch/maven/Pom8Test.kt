@@ -11,20 +11,12 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import nl.adaptivity.xmlutil.serialization.XML
+import org.jetbrains.packagesearch.BuildSystemsTestBase
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
 
-class TestPom8 {
-    companion object {
-
-        fun readResourceAsText(path: String) = Thread.currentThread()
-            .contextClassLoader
-            .getResource(path)
-            ?.readText()
-            ?: error("Resource '$path' not found")
-
-    }
+class Pom8Test : BuildSystemsTestBase() {
 
     val xml = XML {
         indentString = "    "
@@ -44,7 +36,7 @@ class TestPom8 {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = ["maven.xml", "spring-core.xml", "maven-core.xml"])
+    @ValueSource(strings = ["maven/maven.xml", "maven/spring-core.xml", "maven/maven-core.xml"])
     fun `parse pom from resources`(path: String) = runTest {
         val pom = xml.decodeFromString<ProjectObjectModel>(readResourceAsText(path))
         println(xml.encodeToString(pom))
