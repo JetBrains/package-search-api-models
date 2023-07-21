@@ -5,14 +5,14 @@ import io.ktor.client.call.body
 import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.get
-import io.ktor.client.statement.*
+import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.http.URLBuilder
 import io.ktor.http.Url
 import io.ktor.serialization.kotlinx.KotlinxSerializationConverter
 import io.ktor.utils.io.core.Closeable
 import kotlinx.coroutines.flow.asFlow
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.decodeFromString
@@ -25,6 +25,13 @@ public class PomResolver(
 ) : Closeable by httpClient {
 
     public companion object {
+
+        public fun defaultXml(): XML = XML {
+            defaultPolicy {
+                ignoreUnknownChildren()
+            }
+        }
+
         public fun defaultHttpClient(xml: XML): HttpClient = HttpClient {
             install(ContentNegotiation) {
                 val converter = KotlinxSerializationConverter(xml)
@@ -45,7 +52,8 @@ public class PomResolver(
             .firstOrNull()
             ?.let { resolve(it) }
 
-    public suspend fun resolve(url: Url): ProjectObjectModel = resolve(httpClient.get(url).body<ProjectObjectModel>())
+    public suspend fun resolve(url: Url): ProjectObjectModel =
+        resolve(httpClient.get(url).body<ProjectObjectModel>())
 
     public suspend fun resolve(pomText: String): ProjectObjectModel =
         resolve(xml.decodeFromString<ProjectObjectModel>(pomText))
@@ -89,7 +97,11 @@ public class PomResolver(
         return mergedPom.copy(
             dependencies = resolvedDependencies,
             dependencyManagement = resolvedDependencyManagement.values.toList(),
-            properties = mergedPom.properties.mapValues { it.value.resolve(mergedPom.properties, accessor) ?: it.value }
+            properties = mergedPom.properties.mapValues {
+                it.value.resolve(mergedPom.properties, accessor) ?: it.value
+            },
+            name = mergedPom.name?.resolve(mergedPom.properties, accessor),
+            description = mergedPom.description?.resolve(mergedPom.properties, accessor),
         )
     }
 
@@ -124,12 +136,6 @@ public class PomResolver(
 private suspend fun HttpResponse.bodyAsPom(xml: XML) =
     runCatching { body<ProjectObjectModel>() }.getOrNull()
         ?: xml.decodeFromString(bodyAsText())
-
-private fun defaultXml() = XML {
-    defaultPolicy {
-        ignoreUnknownChildren()
-    }
-}
 
 internal fun buildUrl(action: URLBuilder.() -> Unit) = URLBuilder().apply(action).build()
 

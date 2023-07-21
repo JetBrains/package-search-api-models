@@ -27,6 +27,18 @@ public data class SearchPackagesResponse(
 )
 
 @Serializable
+public data class SearchProjectsResponse(
+    public val query: Query,
+    public val packages: List<ApiPackage> = emptyList()
+) {
+    @Serializable
+    public data class Query(
+        public val query: String,
+        public val onlyStable: Boolean,
+    )
+}
+
+@Serializable
 public data class GetScmByUrlRequest(
     public val urls: List<String> = emptyList(),
 )

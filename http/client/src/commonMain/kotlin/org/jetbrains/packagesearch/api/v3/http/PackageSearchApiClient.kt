@@ -10,12 +10,12 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.serialization.kotlinx.protobuf.*
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.minutes
 import org.jetbrains.packagesearch.api.v3.ApiPackage
 import org.jetbrains.packagesearch.api.v3.ApiRepository
 import org.jetbrains.packagesearch.api.v3.MavenHashLookupRequest
 import org.jetbrains.packagesearch.api.v3.MavenHashLookupResponse
-import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.minutes
 import org.jetbrains.packagesearch.api.v3.search.SearchParametersBuilder
 import org.jetbrains.packagesearch.api.v3.search.buildSearchParameters
 
@@ -40,6 +40,8 @@ public class PackageSearchDefaultEndpoints(
         get() = buildPkgsUrl("package-info-by-id-hashes")
     override val searchPackages: Url
         get() = buildPkgsUrl("search-packages")
+    override val searchProjects: Url
+        get() = buildPkgsUrl("search-projects")
     override val getScmsByUrl: Url
         get() = buildPkgsUrl("scms-by-url")
     override val mavenPackageInfoByFileHash: Url

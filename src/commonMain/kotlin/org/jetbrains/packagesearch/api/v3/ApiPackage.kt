@@ -20,6 +20,7 @@ public sealed interface ApiPackage {
     public val rankingMetric: Double?
     public val versions: VersionsContainer<out ApiPackageVersion>
     public val name: String?
+    public val coordinates: String
     public val description: String?
     public val licenses: Licenses?
     public val authors: List<Author>
@@ -72,6 +73,8 @@ public data class ApiMavenPackage(
     public val artifactId: String,
 ) : ApiPackage {
 
+    override val coordinates: String
+        get() = "$groupId:$artifactId"
     public override val name: String?
         get() = versions.latest?.name
     public override val description: String?

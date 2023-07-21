@@ -20,11 +20,15 @@ public val Contributor.properties: Map<String, String>
 public fun ProjectObjectModel.copy(
     dependencies: List<Dependency> = this.dependencies,
     dependencyManagement: List<Dependency> = this.dependencyManagement,
-    properties: Map<String, String> = this.properties
+    properties: Map<String, String> = this.properties,
+    name: String? = this.name,
+    description: String? = this.description,
 ): ProjectObjectModel = copy (
     dependenciesContainer = Dependencies(dependencies),
     dependencyManagementContainer = DependencyManagement(Dependencies(dependencyManagement)),
-    propertiesContainer = Properties(properties)
+    propertiesContainer = Properties(properties),
+    name = name,
+    description = description
 )
 
 public const val POM_XML_NAMESPACE: String = "http://maven.apache.org/POM/4.0.0"
