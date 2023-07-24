@@ -15,7 +15,6 @@ import io.ktor.utils.io.core.Closeable
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
-import kotlinx.serialization.decodeFromString
 import nl.adaptivity.xmlutil.serialization.XML
 
 public class PomResolver(
@@ -56,7 +55,7 @@ public class PomResolver(
         resolve(httpClient.get(url).body<ProjectObjectModel>())
 
     public suspend fun resolve(pomText: String): ProjectObjectModel =
-        resolve(xml.decodeFromString<ProjectObjectModel>(pomText))
+        resolve(xml.decodePomFromString(pomText))
 
     public suspend fun resolve(model: ProjectObjectModel): ProjectObjectModel {
         val pomHierarchy = buildList {
@@ -135,7 +134,7 @@ public class PomResolver(
 
 private suspend fun HttpResponse.bodyAsPom(xml: XML) =
     runCatching { body<ProjectObjectModel>() }.getOrNull()
-        ?: xml.decodeFromString(bodyAsText())
+        ?: xml.decodePomFromString(bodyAsText())
 
 internal fun buildUrl(action: URLBuilder.() -> Unit) = URLBuilder().apply(action).build()
 

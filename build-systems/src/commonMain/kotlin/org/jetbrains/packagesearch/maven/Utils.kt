@@ -2,6 +2,9 @@ package org.jetbrains.packagesearch.maven
 
 import io.ktor.http.URLProtocol
 import io.ktor.http.Url
+import nl.adaptivity.xmlutil.XmlReader
+import nl.adaptivity.xmlutil.XmlStreaming
+import nl.adaptivity.xmlutil.serialization.XML
 
 public val ProjectObjectModel.properties: Map<String, String>
     get() = propertiesContainer?.properties ?: emptyMap()
@@ -75,3 +78,11 @@ internal fun evaluateProjectProperty(projectProperty: String, modelAccessor: Str
 
 internal expect fun getenv(it: String): String?
 internal expect fun getSystemProp(it: String): String?
+
+@Suppress("DELEGATED_MEMBER_HIDES_SUPERTYPE_OVERRIDE")
+internal fun XML.decodePomFromString(string: String): ProjectObjectModel {
+    val namespaceAgnosticReader = object : XmlReader by XmlStreaming.newReader(string) {
+        override val namespaceURI: String get() = POM_XML_NAMESPACE
+    }
+    return decodeFromReader<ProjectObjectModel>(namespaceAgnosticReader)
+}

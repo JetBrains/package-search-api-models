@@ -1,14 +1,12 @@
 package org.jetbrains.packagesearch.maven
 
-import io.ktor.client.HttpClient
-import io.ktor.client.engine.cio.CIO
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.plugins.logging.LogLevel
-import io.ktor.client.plugins.logging.Logging
-import io.ktor.http.ContentType
-import io.ktor.serialization.kotlinx.serialization
+import io.ktor.client.*
+import io.ktor.client.engine.cio.*
+import io.ktor.client.plugins.contentnegotiation.*
+import io.ktor.client.plugins.logging.*
+import io.ktor.http.*
+import io.ktor.serialization.kotlinx.*
 import kotlinx.coroutines.test.runTest
-import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import nl.adaptivity.xmlutil.serialization.XML
 import org.jetbrains.packagesearch.BuildSystemsTestBase
@@ -36,9 +34,16 @@ class Pom8Test : BuildSystemsTestBase() {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = ["maven/maven.xml", "maven/spring-core.xml", "maven/maven-core.xml"])
+    @ValueSource(
+        strings = [
+            "maven/maven.xml",
+            "maven/spring-core.xml",
+            "maven/maven-core.xml",
+            "maven/abbot.xml"
+        ]
+    )
     fun `parse pom from resources`(path: String) = runTest {
-        val pom = xml.decodeFromString<ProjectObjectModel>(readResourceAsText(path))
+        val pom = xml.decodePomFromString(readResourceAsText(path))
         println(xml.encodeToString(pom))
     }
 
