@@ -1,42 +1,36 @@
 name: Run code quality on commits
-on: push
+
+on: [push, pull_request]
+
 jobs:
-  build:
-    name: Compile classes
-    runs-on: macos-latest
-    steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-java@v2
-        with:
-          distribution: temurin
-          java-version: 17
-      - name: Setup Gradle
-        run: chmod +x gradlew
-      - name: Run Gradle
-        run: ./gradlew assemble
+  timeout-minutes: 30
+
   detekt:
     name: Detekt
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-java@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
         with:
           distribution: temurin
           java-version: 17
-      - name: Setup Gradle
-        run: chmod +x gradlew
+
       - name: Run Gradle
-        run: ./gradlew detekt
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: "detekt"
+
   klint:
     name: Klint
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-java@v2
+      - uses: actions/checkout@v3
+      - uses: actions/setup-java@v3
         with:
           distribution: temurin
           java-version: 17
-      - name: Setup Gradle
-        run: chmod +x gradlew
+
       - name: Run Gradle
-        run: ./gradlew lintKotlin
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: "lintKotlin"
