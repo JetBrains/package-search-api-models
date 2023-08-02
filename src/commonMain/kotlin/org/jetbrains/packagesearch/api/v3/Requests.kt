@@ -17,11 +17,11 @@ public sealed interface MavenHashLookupRequest {
 
 @Serializable
 @SerialName("md5")
-public data class MavenHashMd1LookupRequest(
-    public val md1: String,
+public data class MavenHashMd5LookupRequest(
+    public val md5: String,
 ) : MavenHashLookupRequest {
     public override val hash: String
-        get() = md1
+        get() = md5
 }
 
 @Serializable
