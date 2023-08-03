@@ -1,4 +1,4 @@
-# Package Search shared API models
+# Package Search shared API models [![official JetBrains project](https://jb.gg/badges/official-flat-square.svg)](https://confluence.jetbrains.com/display/ALL/JetBrains+on+GitHub)
 
 This module contains the API models for the Package Search APIs. The models are annotated for use
 with `kotlinx.serialization`, and should at all
