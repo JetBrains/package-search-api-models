@@ -36,7 +36,7 @@ kotlin {
         }
         appleMain {
             dependencies {
-                api(packageSearchApiModelsVersions.ktor.client.cio)
+                api(packageSearchApiModelsVersions.ktor.client.darwin)
             }
         }
     }

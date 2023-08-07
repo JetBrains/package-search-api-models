@@ -19,6 +19,9 @@ import org.jetbrains.packagesearch.api.v3.MavenHashLookupResponse
 import org.jetbrains.packagesearch.api.v3.search.SearchParametersBuilder
 import org.jetbrains.packagesearch.api.v3.search.buildSearchParameters
 
+public expect val DefaultEngine: HttpClientEngineFactory<HttpClientEngineConfig>
+
+
 public class PackageSearchApiClient(
     public val endpoints: PackageSearchEndpoints,
     private val httpClient: HttpClient = defaultHttpClient()
@@ -48,7 +51,7 @@ public class PackageSearchApiClient(
         }
 
         public fun defaultHttpClient(additionalConfig: HttpClientConfig<*>.() -> Unit = {}): HttpClient =
-            HttpClient {
+            HttpClient(DefaultEngine) {
                 defaultHttpClientConfig()
                 additionalConfig()
             }
