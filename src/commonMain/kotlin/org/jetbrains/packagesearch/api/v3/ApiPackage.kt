@@ -132,7 +132,6 @@ public data class ApiMavenPackage(
             public companion object {
                 public fun create(name: String, value: String): Attribute = when {
                     name == "org.gradle.jvm.version" -> ComparableInteger(value.toInt())
-                    name == "or.gradle.libraryelements" && value == "aar" -> ExactMatch("aar", listOf("jar"))
                     else -> ExactMatch(value)
                 }
             }
@@ -143,18 +142,11 @@ public data class ApiMavenPackage(
             @SerialName("exactMatch")
             public data class ExactMatch internal constructor(
                 public val value: String,
-                public val alternativeValues: List<String>? = null,
             ) : Attribute {
-
-                public val allValues: Set<String>
-                    get() = buildSet {
-                        alternativeValues?.also { addAll(it) }
-                        add(value)
-                    }
 
                 public override fun isCompatible(other: Attribute): Boolean = when (other) {
                     is ComparableInteger -> false
-                    is ExactMatch -> allValues.any { it in other.allValues }
+                    is ExactMatch -> value == other.value
                 }
             }
 
@@ -162,7 +154,7 @@ public data class ApiMavenPackage(
             @SerialName("comparableInteger")
             public data class ComparableInteger internal constructor(public val value: Int) : Attribute {
                 public override fun isCompatible(other: Attribute): Boolean = when (other) {
-                    is ComparableInteger -> value < other.value
+                    is ComparableInteger -> value <= other.value
                     is ExactMatch -> false
                 }
             }

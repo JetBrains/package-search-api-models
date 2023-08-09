@@ -25,7 +25,7 @@ public data class GradlePackages(
     @Serializable
     public data class Variant(
         public val attributes: Map<String, Attribute>,
-        public val withFiles: Boolean,
+        public val mustBeWithFiles: Boolean,
     )
 
 }
