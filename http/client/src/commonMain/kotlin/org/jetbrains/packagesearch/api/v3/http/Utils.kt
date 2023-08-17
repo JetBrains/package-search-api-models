@@ -6,9 +6,6 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
-public suspend fun PackageSearchApiClient.getScmByUrl(urls: List<String>): String? =
-    getScmByUrl(GetScmByUrlRequest(urls))
-
 public fun buildUrl(action: URLBuilder.() -> Unit): Url = URLBuilder().apply(action).build()
 
 internal fun HttpMessageBuilder.header(key: String, vararg values: Any?) {

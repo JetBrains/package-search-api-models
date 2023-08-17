@@ -13,6 +13,7 @@ import io.ktor.serialization.kotlinx.protobuf.*
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.minutes
 import org.jetbrains.packagesearch.api.v3.ApiPackage
+import org.jetbrains.packagesearch.api.v3.ApiProject
 import org.jetbrains.packagesearch.api.v3.ApiRepository
 import org.jetbrains.packagesearch.api.v3.MavenHashLookupRequest
 import org.jetbrains.packagesearch.api.v3.MavenHashLookupResponse
@@ -29,7 +30,7 @@ public class PackageSearchApiClient(
 
     public companion object {
 
-        public fun HttpClientConfig<*>.defaultHttpClientConfig(protobuf: Boolean = true) {
+        public fun HttpClientConfig<HttpClientEngineConfig>.defaultHttpClientConfig(protobuf: Boolean = true) {
             install(ContentNegotiation) {
                 if (protobuf) protobuf()
                 json()
@@ -80,11 +81,12 @@ public class PackageSearchApiClient(
     public suspend fun searchPackages(request: SearchPackagesRequest): List<ApiPackage> =
         defaultRequest<_, SearchPackagesResponse>(endpoints.searchPackages, request).packages
 
+    public suspend fun searchProjects(request: SearchProjectRequest): List<ApiProject> =
+        defaultRequest<_, SearchProjectResponse>(endpoints.searchPackages, request).projects
+
     public suspend fun getMavenPackageInfoByFileHash(request: MavenHashLookupRequest): MavenHashLookupResponse =
         defaultRequest(endpoints.mavenPackageInfoByFileHash, request)
 
-    public suspend fun getScmByUrl(request: GetScmByUrlRequest): String? =
-        defaultRequest(endpoints.getScmsByUrl, request)
 }
 
 public suspend fun PackageSearchApiClient.searchPackages(builder: SearchParametersBuilder.() -> Unit): List<ApiPackage> =

@@ -8,6 +8,5 @@ public interface PackageSearchEndpoints {
     public val packageInfoByIdHashes: Url
     public val searchPackages: Url
     public val searchProjects: Url
-    public val getScmsByUrl: Url
     public val mavenPackageInfoByFileHash: Url
 }

@@ -2,11 +2,17 @@ package org.jetbrains.packagesearch.api.v3.http
 
 import kotlinx.serialization.Serializable
 import org.jetbrains.packagesearch.api.v3.ApiPackage
+import org.jetbrains.packagesearch.api.v3.ApiProject
 import org.jetbrains.packagesearch.api.v3.search.PackagesType
 
 @Serializable
 public data class GetPackageInfoRequest(
     public val ids: Set<String> = emptySet(),
+)
+
+@Serializable
+public data class SearchProjectRequest(
+    public val query: String
 )
 
 @Serializable
@@ -22,8 +28,14 @@ public data class SearchPackagesRequest(
 
 @Serializable
 public data class SearchPackagesResponse(
-    public val query: SearchPackagesRequest,
+    public val request: SearchPackagesRequest,
     public val packages: List<ApiPackage> = emptyList()
+)
+
+@Serializable
+public data class SearchProjectResponse(
+    public val request: SearchProjectRequest,
+    public val projects: List<ApiProject>
 )
 
 @Serializable
