@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 public sealed interface ApiScm {
-    public val scmUrl: String
+    public val url: String
     public val description: String?
     public val ossHealthIndex: Double?
     public val readmeUrl: String?
@@ -14,7 +14,7 @@ public sealed interface ApiScm {
 @Serializable
 @SerialName("github")
 public data class GitHub(
-    public override val scmUrl: String,
+    public override val url: String,
     public override val description: String? = null,
     public override val readmeUrl: String? = null,
     public val httpUrl: String,
