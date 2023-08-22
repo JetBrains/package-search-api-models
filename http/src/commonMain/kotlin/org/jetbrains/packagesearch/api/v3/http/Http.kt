@@ -54,3 +54,9 @@ public data class SearchProjectsResponse(
 public data class GetScmByUrlRequest(
     public val urls: List<String> = emptyList(),
 )
+
+@Serializable
+public data class ProcessScmRequest(
+    public val url: String,
+    public val pkgIdHash: String,
+)
