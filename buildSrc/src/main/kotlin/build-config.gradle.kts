@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 import org.jetbrains.kotlin.gradle.plugin.KotlinDependencyHandler
 
 plugins {
@@ -82,13 +84,13 @@ publishing {
     publications {
         withType<MavenPublication> {
             pom {
-                name.set("Package Search - Version Utils")
-                description.set("Utility to compare versions in Package Search")
-                url.set("https://package-search.jetbrains.com/")
+                name = "Package Search - Version Utils"
+                description = "Utility to compare versions in Package Search"
+                url = "https://package-search.jetbrains.com/"
                 scm {
-                    connection.set("scm:https://github.com/JetBrains/package-search-version-utils.git")
-                    developerConnection.set("scm:https://github.com/JetBrains/package-search-version-utils.git")
-                    url.set("https://github.com/JetBrains/package-search-version-utils")
+                    connection = "scm:https://github.com/JetBrains/package-search-version-utils.git"
+                    developerConnection = "scm:https://github.com/JetBrains/package-search-version-utils.git"
+                    url = "https://github.com/JetBrains/package-search-version-utils"
                 }
             }
         }
