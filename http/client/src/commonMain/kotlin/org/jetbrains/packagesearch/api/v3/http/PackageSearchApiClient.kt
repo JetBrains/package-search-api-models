@@ -30,30 +30,26 @@ public class PackageSearchApiClient(
 
     public companion object {
 
-        public fun HttpClientConfig<HttpClientEngineConfig>.defaultHttpClientConfig(protobuf: Boolean = true) {
-            install(ContentNegotiation) {
-                if (protobuf) protobuf()
-                json()
-            }
-            install(ContentEncoding) {
-                gzip()
-            }
-            install(HttpRequestRetry) {
-                maxRetries = 5
-                constantDelay(
-                    delay = 500.milliseconds,
-                    randomization = 100.milliseconds,
-                    respectRetryAfterHeader = false
-                )
-            }
-            install(HttpTimeout) {
-                requestTimeout = 1.minutes
-            }
-        }
-
-        public fun defaultHttpClient(additionalConfig: HttpClientConfig<*>.() -> Unit = {}): HttpClient =
+        public fun defaultHttpClient(protobuf: Boolean = true, additionalConfig: HttpClientConfig<*>.() -> Unit = {}): HttpClient =
             HttpClient(DefaultEngine) {
-                defaultHttpClientConfig()
+                install(ContentNegotiation) {
+                    if (protobuf) protobuf()
+                    json()
+                }
+                install(ContentEncoding) {
+                    gzip()
+                }
+                install(HttpRequestRetry) {
+                    maxRetries = 5
+                    constantDelay(
+                        delay = 500.milliseconds,
+                        randomization = 100.milliseconds,
+                        respectRetryAfterHeader = false
+                    )
+                }
+                install(HttpTimeout) {
+                    requestTimeout = 1.minutes
+                }
                 additionalConfig()
             }
     }
