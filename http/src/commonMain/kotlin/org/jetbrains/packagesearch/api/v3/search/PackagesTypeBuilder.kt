@@ -5,18 +5,18 @@ public class PackagesTypeBuilder {
     private val packagesType: MutableList<PackagesType> = mutableListOf()
 
     public fun mavenPackages() {
-        packagesType.add(MavenPackages)
+        packagesType.add(PackagesType.Maven)
     }
 
     public fun npmPackages() {
-        packagesType.add(NpmPackages)
+        packagesType.add(PackagesType.Npm)
     }
 
-    public fun gradlePackages(gradlePackages: GradlePackages) {
+    public fun gradlePackages(gradlePackages: PackagesType.Gradle) {
         packagesType.add(gradlePackages)
     }
 
-    public fun gradlePackages(variants: List<GradlePackages.Variant>, isRootPublication: Boolean = true) {
+    public fun gradlePackages(variants: List<PackagesType.Gradle.Variant>, isRootPublication: Boolean = true) {
         gradlePackages(
             buildGradlePackages {
                 variants(variants)
@@ -29,11 +29,11 @@ public class PackagesTypeBuilder {
         gradlePackages(buildGradlePackages(block))
     }
 
-    public fun cocoapodsPackages(cocoapodsPackages: CocoapodsPackages) {
+    public fun cocoapodsPackages(cocoapodsPackages: PackagesType.Cocoapods) {
         packagesType.add(cocoapodsPackages)
     }
 
-    public fun cocoapodsPackages(platformMinType: Map<CocoapodsPackages.Platform, String>) {
+    public fun cocoapodsPackages(platformMinType: Map<PackagesType.Cocoapods.Platform, String>) {
         cocoapodsPackages(
             buildCocoapodsPackages {
                 platformMinType.forEach { platform(it.key, it.value) }

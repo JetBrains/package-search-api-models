@@ -48,7 +48,7 @@ public sealed interface ApiPackageVersion {
 @Serializable
 public data class VersionsContainer<T : ApiPackageVersion>(
     public val latestStable: T? = null,
-    public val latest: T? = null,
+    public val latest: T,
     public val all: Map<String, T>,
 )
 
@@ -116,7 +116,83 @@ public data class ApiMavenPackage(
         public override val licenses: Licenses? = null,
         public val variants: List<ApiVariant>,
         public val parentComponent: String? = null,
-    ) : ApiMavenVersion
+    ) : ApiMavenVersion {
+        @Serializable
+        public sealed interface ApiVariant {
+
+            @Serializable
+            public sealed interface Attribute {
+
+                public companion object {
+                    public fun create(name: String, value: String): Attribute = when {
+                        name == "org.gradle.jvm.version" -> ComparableInteger(value.toInt())
+                        else -> ExactMatch(value)
+                    }
+                }
+
+                public fun isCompatible(other: Attribute): Boolean
+
+                @Serializable
+                @SerialName("exactMatch")
+                public data class ExactMatch internal constructor(
+                    public val value: String,
+                ) : Attribute {
+
+                    public override fun isCompatible(other: Attribute): Boolean = when (other) {
+                        is ComparableInteger -> false
+                        is ExactMatch -> value == other.value
+                    }
+                }
+
+                @Serializable
+                @SerialName("comparableInteger")
+                public data class ComparableInteger internal constructor(public val value: Int) : Attribute {
+                    public override fun isCompatible(other: Attribute): Boolean = when (other) {
+                        is ComparableInteger -> value <= other.value
+                        is ExactMatch -> false
+                    }
+                }
+            }
+
+            public val name: String
+            public val attributes: Map<String, Attribute>
+
+            @Serializable
+            public data class WithFiles(
+                public override val name: String,
+                public override val attributes: Map<String, Attribute>,
+                public val dependencies: List<ApiGradleDependency>,
+                public val files: List<File>,
+            ) : ApiVariant
+
+            @Serializable
+            public data class WithAvailableAt(
+                public override val name: String,
+                public override val attributes: Map<String, Attribute>,
+                @SerialName("available-at") public val availableAt: AvailableAt,
+            ) : ApiVariant {
+
+                @Serializable
+                public data class AvailableAt(
+                    public val url: String,
+                    public val group: String,
+                    public val module: String,
+                    public val version: String,
+                )
+            }
+
+            @Serializable
+            public data class File(
+                public val name: String,
+                public val url: String,
+                public val size: Long,
+                public val sha1: String,
+                public val md5: String,
+                public val sha256: String? = null,
+                public val sha512: String? = null,
+            )
+        }
+    }
 
     @Serializable
     public data class ApiGradleDependency(
@@ -124,82 +200,6 @@ public data class ApiMavenPackage(
         public val module: String,
         public val version: String?,
     )
-
-    @Serializable
-    public sealed interface ApiVariant {
-
-        @Serializable
-        public sealed interface Attribute {
-
-            public companion object {
-                public fun create(name: String, value: String): Attribute = when {
-                    name == "org.gradle.jvm.version" -> ComparableInteger(value.toInt())
-                    else -> ExactMatch(value)
-                }
-            }
-
-            public fun isCompatible(other: Attribute): Boolean
-
-            @Serializable
-            @SerialName("exactMatch")
-            public data class ExactMatch internal constructor(
-                public val value: String,
-            ) : Attribute {
-
-                public override fun isCompatible(other: Attribute): Boolean = when (other) {
-                    is ComparableInteger -> false
-                    is ExactMatch -> value == other.value
-                }
-            }
-
-            @Serializable
-            @SerialName("comparableInteger")
-            public data class ComparableInteger internal constructor(public val value: Int) : Attribute {
-                public override fun isCompatible(other: Attribute): Boolean = when (other) {
-                    is ComparableInteger -> value <= other.value
-                    is ExactMatch -> false
-                }
-            }
-        }
-
-        public val name: String
-        public val attributes: Map<String, Attribute>
-
-        @Serializable
-        public data class WithFiles(
-            public override val name: String,
-            public override val attributes: Map<String, Attribute>,
-            public val dependencies: List<ApiGradleDependency>,
-            public val files: List<File>,
-        ) : ApiVariant
-
-        @Serializable
-        public data class WithAvailableAt(
-            public override val name: String,
-            public override val attributes: Map<String, Attribute>,
-            @SerialName("available-at") public val availableAt: AvailableAt,
-        ) : ApiVariant {
-
-            @Serializable
-            public data class AvailableAt(
-                public val url: String,
-                public val group: String,
-                public val module: String,
-                public val version: String,
-            )
-        }
-
-        @Serializable
-        public data class File(
-            public val name: String,
-            public val url: String,
-            public val size: Long,
-            public val sha1: String,
-            public val md5: String,
-            public val sha256: String? = null,
-            public val sha512: String? = null,
-        )
-    }
 }
 
 @Serializable
