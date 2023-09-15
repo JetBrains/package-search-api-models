@@ -78,13 +78,13 @@ public data class ApiMavenPackage(
     override val coordinates: String
         get() = "$groupId:$artifactId"
     public override val name: String?
-        get() = versions.latest?.name
+        get() = versions.latest.name
     public override val description: String?
-        get() = versions.latest?.description
+        get() = versions.latest.description
     public override val licenses: Licenses?
-        get() = versions.latest?.licenses
+        get() = versions.latest.licenses
     public override val authors: List<Author>
-        get() = versions.latest?.authors ?: emptyList()
+        get() = versions.latest.authors
 
     @Serializable
     @SerialName("mavenVersion")
@@ -185,9 +185,9 @@ public data class ApiMavenPackage(
             public data class File(
                 public val name: String,
                 public val url: String,
-                public val size: Long,
-                public val sha1: String,
-                public val md5: String,
+                public val size: Int?,
+                public val sha1: String?,
+                public val md5: String?,
                 public val sha256: String? = null,
                 public val sha512: String? = null,
             )

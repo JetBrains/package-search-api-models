@@ -88,9 +88,9 @@ public data class DependencyConstraint(
 public data class File(
     val name: String,
     val url: String,
-    val size: Int,
-    val sha1: String,
-    val md5: String,
+    val size: Int? = null,
+    val sha1: String? = null,
+    val md5: String? = null,
     val sha256: String? = null,
     val sha512: String? = null
 )
