@@ -22,11 +22,20 @@ import org.jetbrains.packagesearch.api.v3.search.buildSearchParameters
 
 public expect val DefaultEngine: HttpClientEngineFactory<HttpClientEngineConfig>
 
+public interface PackageSearchApi {
+    public suspend fun getKnownRepositories(): List<ApiRepository>
+    public suspend fun getPackageInfoByIds(ids: Set<String>): Map<String, ApiPackage>
+    public suspend fun getPackageInfoByIdHashes(ids: Set<String>): Map<String, ApiPackage>
+    public suspend fun searchPackages(request: SearchPackagesRequest): List<ApiPackage>
+    public suspend fun searchPackageIds(request: SearchPackagesRequest): List<String>
+    public suspend fun searchProjects(request: SearchProjectRequest): List<ApiProject>
+    public suspend fun getMavenPackageInfoByFileHash(request: MavenHashLookupRequest): MavenHashLookupResponse
+}
 
 public class PackageSearchApiClient(
     public val endpoints: PackageSearchEndpoints,
     private val httpClient: HttpClient = defaultHttpClient()
-) {
+) : PackageSearchApi {
 
     public companion object {
 
@@ -65,22 +74,29 @@ public class PackageSearchApiClient(
             header(HttpHeaders.Accept, ContentType.Application.Json)
         }.body<R>()
 
-    public suspend fun getKnownRepositories(): List<ApiRepository> =
+    override suspend fun getKnownRepositories(): List<ApiRepository> =
         defaultRequest(endpoints.knownRepositories)
 
-    public suspend fun getPackageInfoByIds(ids: Set<String>): List<ApiPackage> =
-        defaultRequest<_, GetPackageInfoResponse>(endpoints.packageInfoByIds, GetPackageInfoRequest(ids)).packages
+    override suspend fun getPackageInfoByIds(ids: Set<String>): Map<String, ApiPackage> =
+        defaultRequest<_, GetPackageInfoResponse>(endpoints.packageInfoByIds, GetPackageInfoRequest(ids))
+            .packages
+            .associateBy { it.id }
 
-    public suspend fun getPackageInfoByIdHashes(ids: Set<String>): List<ApiPackage> =
-        defaultRequest<_, GetPackageInfoResponse>(endpoints.packageInfoByIdHashes, GetPackageInfoRequest(ids)).packages
+    override suspend fun getPackageInfoByIdHashes(ids: Set<String>): Map<String, ApiPackage> =
+        defaultRequest<_, GetPackageInfoResponse>(endpoints.packageInfoByIdHashes, GetPackageInfoRequest(ids))
+            .packages
+            .associateBy { it.id }
 
-    public suspend fun searchPackages(request: SearchPackagesRequest): List<ApiPackage> =
+    override suspend fun searchPackages(request: SearchPackagesRequest): List<ApiPackage> =
         defaultRequest<_, SearchPackagesResponse>(endpoints.searchPackages, request).packages
 
-    public suspend fun searchProjects(request: SearchProjectRequest): List<ApiProject> =
+    override suspend fun searchPackageIds(request: SearchPackagesRequest): List<String> =
+        searchPackages(request).map { it.id }
+
+    override suspend fun searchProjects(request: SearchProjectRequest): List<ApiProject> =
         defaultRequest<_, SearchProjectResponse>(endpoints.searchPackages, request).projects
 
-    public suspend fun getMavenPackageInfoByFileHash(request: MavenHashLookupRequest): MavenHashLookupResponse =
+    override suspend fun getMavenPackageInfoByFileHash(request: MavenHashLookupRequest): MavenHashLookupResponse =
         defaultRequest(endpoints.mavenPackageInfoByFileHash, request)
 
 }

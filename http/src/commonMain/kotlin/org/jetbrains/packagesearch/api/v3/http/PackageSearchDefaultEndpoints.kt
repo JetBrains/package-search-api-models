@@ -1,10 +1,6 @@
 package org.jetbrains.packagesearch.api.v3.http
 
-import io.ktor.http.URLProtocol
-import io.ktor.http.Url
-import io.ktor.http.encodedPath
-
-
+import io.ktor.http.*
 
 public class PackageSearchDefaultEndpoints(
     public val protocol: URLProtocol,
@@ -32,3 +28,5 @@ public class PackageSearchDefaultEndpoints(
     override val mavenPackageInfoByFileHash: Url
         get() = buildPkgsUrl("maven-package-info-by-file-hash")
 }
+
+private fun buildUrl(action: URLBuilder.() -> Unit): Url = URLBuilder().apply(action).build()

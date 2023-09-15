@@ -1,6 +1,6 @@
 package org.jetbrains.packagesearch.api.v3.http
 
-import io.ktor.http.Url
+import io.ktor.http.*
 
 public interface PackageSearchEndpoints {
     public val knownRepositories: Url
@@ -9,4 +9,11 @@ public interface PackageSearchEndpoints {
     public val searchPackages: Url
     public val searchProjects: Url
     public val mavenPackageInfoByFileHash: Url
+
+    public companion object {
+        public val DEV: PackageSearchDefaultEndpoints = PackageSearchDefaultEndpoints(
+            protocol = URLProtocol.HTTPS,
+            host = "api.dev.package-search.services.jetbrains.com",
+        )
+    }
 }

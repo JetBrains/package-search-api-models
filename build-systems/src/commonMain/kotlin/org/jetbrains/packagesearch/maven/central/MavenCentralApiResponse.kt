@@ -5,45 +5,33 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 public data class MavenCentralApiResponse(
-    public val responseHeader: ResponseHeader,
-    public val response: Response
-)
-
-@Serializable
-public data class ResponseHeader(
-    public val status: Int,
-    @SerialName("QTime") public val qTime: Int,
-    public val params: Params
-)
-
-@Serializable
-public data class Params(
-    public val q: String,
-    public val core: String,
-    public val indent: String,
-    public val fl: String,
-    public val start: String,
-    public val sort: String,
-    public val rows: String,
-    public val wt: String,
-    public val version: String
+    public val response: Response,
 )
 
 @Serializable
 public data class Response(
     public val numFound: Int,
     public val start: Int,
-    public val docs: List<Doc>
+    public val docs: List<Doc>,
 )
 
 @Serializable
 public data class Doc(
     public val id: String,
-    public val g: String,
-    public val a: String,
-    public val v: String,
-    public val p: String,
+    @SerialName("g") public val groupId: String,
+    @SerialName("a") public val artifactId: String,
+    @SerialName("v") public val version: String? = null,
+    @SerialName("p") public val packaging: String,
+    public val latestVersion: String? = null,
+    public val repositoryId: String? = null,
     public val timestamp: Long,
-    public val ec: List<String>,
-    public val tags: List<String>
+    public val versionCount: Int? = null,
+    public val text: List<String> = emptyList(),
+    public val ec: List<String> = emptyList(),
+    public val tags: List<String> = emptyList(),
+)
+
+@Serializable
+public data class Spellcheck(
+    val suggestions: List<String> = emptyList(),
 )
