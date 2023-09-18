@@ -60,7 +60,6 @@ public sealed interface ApiMavenVersion : ApiPackageVersion {
     public val description: String?
     public val authors: List<Author>
     public val scmUrl: String?
-    public val licenses: Licenses?
 }
 
 @Serializable
@@ -70,6 +69,7 @@ public data class ApiMavenPackage(
     public override val idHash: String,
     public override val rankingMetric: Double? = null,
     public override val versions: VersionsContainer<out ApiMavenVersion>,
+    public override val licenses: Licenses? = null,
     public val groupId: String,
     public val artifactId: String,
     override val scm: ApiScm? = null,
@@ -81,8 +81,6 @@ public data class ApiMavenPackage(
         get() = versions.latest.name
     public override val description: String?
         get() = versions.latest.description
-    public override val licenses: Licenses?
-        get() = versions.latest.licenses
     public override val authors: List<Author>
         get() = versions.latest.authors
 
@@ -98,7 +96,6 @@ public data class ApiMavenPackage(
         public override val description: String? = null,
         public override val authors: List<Author>,
         public override val scmUrl: String?,
-        public override val licenses: Licenses? = null,
     ) : ApiMavenVersion
 
     @Serializable
@@ -113,7 +110,6 @@ public data class ApiMavenPackage(
         public override val description: String? = null,
         public override val authors: List<Author>,
         public override val scmUrl: String?,
-        public override val licenses: Licenses? = null,
         public val variants: List<ApiVariant>,
         public val parentComponent: String? = null,
     ) : ApiMavenVersion {
