@@ -15,6 +15,10 @@ import io.ktor.utils.io.core.Closeable
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
+import kotlinx.serialization.json.Json
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.encodeToJsonElement
+import kotlinx.serialization.json.jsonObject
 import nl.adaptivity.xmlutil.serialization.XML
 
 public class PomResolver(
@@ -38,7 +42,7 @@ public class PomResolver(
                 register(ContentType.Text.Xml, converter)
             }
             install(HttpRequestRetry) {
-                maxRetries = 5
+                retryOnExceptionOrServerErrors(10)
                 constantDelay(100, 50, false)
             }
         }
@@ -58,28 +62,20 @@ public class PomResolver(
         resolve(xml.decodePomFromString(pomText))
 
     public suspend fun resolve(model: ProjectObjectModel): ProjectObjectModel {
-        val pomHierarchy = buildList {
-            add(model)
-            var currentParent = model.parent
-            while (currentParent != null) {
-                runCatching { resolve(currentParent!!) }
-                    .getOrNull()
-                    ?.let {
-                        add(it)
-                        currentParent = it.parent
-                    }
-            }
-        }
-
-        val mergedPom = pomHierarchy.reduce { acc, projectModel ->
-            acc.copy(
-                dependencies = acc.dependencies + projectModel.dependencies,
-                dependencyManagement = acc.dependencyManagement + projectModel.dependencyManagement,
-                properties = acc.properties + projectModel.properties,
+        var mergedPom = model
+        var count = 0
+        while (count < 10) {
+            count++
+            val parent = mergedPom.parent ?: break
+            val parentPom = runCatching { resolve(parent) }.getOrNull() ?: break
+            mergedPom = mergedPom.copy(
+                dependencies = parentPom.dependencies.plus(mergedPom.dependencies).distinct(),
+                dependencyManagement = parentPom.dependencyManagement.plus(mergedPom.dependencyManagement).distinct(),
+                properties = parentPom.properties + mergedPom.properties,
             )
         }
 
-        val accessor = mergedPom.asAccessor()
+        val accessor = Json.encodeToJsonElement(mergedPom).jsonObject
 
         val resolvedDependencyManagement = mergedPom.dependencyManagement
             .map { it.copy(version = it.version?.resolve(mergedPom.properties, accessor)) }
@@ -112,8 +108,8 @@ public class PomResolver(
 
     private fun String.resolve(
         allProperties: Map<String, String?>,
-        modelAccessor: StringAccessor.ObjectAccessor,
-        currentDepth: Int = 0
+        modelAccessor: JsonObject,
+        currentDepth: Int = 0,
     ): String? = replace(regex) {
         when {
             currentDepth > 10 -> it.value

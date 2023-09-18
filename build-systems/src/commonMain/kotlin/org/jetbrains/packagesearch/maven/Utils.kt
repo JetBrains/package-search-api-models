@@ -2,6 +2,8 @@ package org.jetbrains.packagesearch.maven
 
 import io.ktor.http.URLProtocol
 import io.ktor.http.Url
+import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 import nl.adaptivity.xmlutil.XmlReader
 import nl.adaptivity.xmlutil.XmlStreaming
 import nl.adaptivity.xmlutil.serialization.XML
@@ -62,17 +64,18 @@ public object GoogleMavenCentralMirror : MavenUrlBuilder {
 
 internal data class DependencyKey(val groupId: String, val artifactId: String)
 
-internal fun evaluateProjectProperty(projectProperty: String, modelAccessor: StringAccessor.ObjectAccessor): String? {
+internal fun evaluateProjectProperty(projectProperty: String, modelAccessor: JsonObject): String? {
     val property = projectProperty.split('.').firstOrNull() ?: return null
     val accessor = modelAccessor[property] ?: return null
     return when (accessor) {
-        is StringAccessor.SimpleAccessor -> accessor.value
-        is StringAccessor.ObjectAccessor -> evaluateProjectProperty(
+        is JsonPrimitive -> accessor.content
+        is JsonObject -> evaluateProjectProperty(
             projectProperty = projectProperty.removePrefix("$property.")
                 .takeIf { it.isNotEmpty() }
                 ?: return null,
             modelAccessor = accessor
         )
+        else -> null
     }
 }
 

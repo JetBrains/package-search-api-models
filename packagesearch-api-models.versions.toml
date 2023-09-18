@@ -9,7 +9,7 @@ kotlinx-datetime = "0.4.0"
 kotlinx-serialization = "1.5.1"
 krypto = "4.0.5"
 ktor = "2.3.3"
-xmlutil = "0.86.0"
+xmlutil = "0.86.2"
 coroutines = "1.7.1"
 logback = "1.4.8"
 

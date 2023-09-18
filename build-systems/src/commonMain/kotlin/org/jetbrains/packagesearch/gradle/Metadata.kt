@@ -11,7 +11,7 @@ import kotlinx.serialization.json.JsonPrimitive
 
 @Serializable
 public data class GradleMetadata(
-    val formatVersion: String,
+    val formatVersion: String? = null,
     val component: Component? = null,
     val createdBy: CreatedBy? = null,
     val variants: List<Variant>? = null
