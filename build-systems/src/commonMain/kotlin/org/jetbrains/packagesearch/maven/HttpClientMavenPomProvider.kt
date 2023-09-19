@@ -17,7 +17,7 @@ import nl.adaptivity.xmlutil.serialization.XML
 
 public class HttpClientMavenPomProvider(
     public val repositories: List<MavenUrlBuilder>,
-    public val httpClient: HttpClient,
+    override val httpClient: HttpClient,
     public val xml: XML = PomResolver.defaultXml()
 ): MavenPomProvider, Closeable by httpClient {
 
