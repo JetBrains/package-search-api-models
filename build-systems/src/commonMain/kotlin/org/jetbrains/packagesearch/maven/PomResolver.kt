@@ -1,20 +1,10 @@
 package org.jetbrains.packagesearch.maven
 
-import io.ktor.client.HttpClient
-import io.ktor.client.call.body
-import io.ktor.client.plugins.HttpRequestRetry
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.request.get
-import io.ktor.client.statement.HttpResponse
-import io.ktor.client.statement.bodyAsText
-import io.ktor.http.ContentType
+import io.ktor.client.*
 import io.ktor.http.URLBuilder
 import io.ktor.http.Url
-import io.ktor.serialization.kotlinx.KotlinxSerializationConverter
 import io.ktor.utils.io.core.Closeable
-import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.firstOrNull
-import kotlinx.coroutines.flow.map
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.encodeToJsonElement
@@ -22,10 +12,9 @@ import kotlinx.serialization.json.jsonObject
 import nl.adaptivity.xmlutil.serialization.XML
 
 public class PomResolver(
-    public val repositories: List<MavenUrlBuilder> = listOf(GoogleMavenCentralMirror),
-    public val xml: XML = defaultXml(),
-    public val httpClient: HttpClient = defaultHttpClient(xml),
-) : Closeable by httpClient {
+    public val pomProvider: MavenPomProvider,
+    public val xml: XML = defaultXml()
+) : Closeable {
 
     public companion object {
 
@@ -35,28 +24,25 @@ public class PomResolver(
             }
         }
 
-        public fun defaultHttpClient(xml: XML): HttpClient = HttpClient {
-            install(ContentNegotiation) {
-                val converter = KotlinxSerializationConverter(xml)
-                register(ContentType.Application.Xml, converter)
-                register(ContentType.Text.Xml, converter)
-            }
-            install(HttpRequestRetry) {
-                retryOnExceptionOrServerErrors(10)
-                constantDelay(100, 50, false)
-            }
+        public fun defaultPomProvider(
+            repositories: List<MavenUrlBuilder> = listOf(GoogleMavenCentralMirror),
+            xml: XML = defaultXml(),
+            httpClient: HttpClient = HttpClientMavenPomProvider.defaultHttpClient(xml)
+        ): MavenPomProvider {
+            return HttpClientMavenPomProvider(
+                repositories,
+                httpClient,
+                xml
+            )
         }
     }
 
     public suspend fun resolve(groupId: String, artifactId: String, version: String): ProjectObjectModel? =
-        repositories.asFlow()
-            .map { it.buildPomUrl(groupId, artifactId, version) }
-            .map { httpClient.get(it).bodyAsPom(xml) }
-            .firstOrNull()
-            ?.let { resolve(it) }
+        pomProvider.getPomFromMultipleRepositories(groupId, artifactId, version)
+            .firstOrNull()?.let { resolve(it) }
 
     public suspend fun resolve(url: Url): ProjectObjectModel =
-        resolve(httpClient.get(url).body<ProjectObjectModel>())
+        pomProvider.getPomByUrl(url)
 
     public suspend fun resolve(pomText: String): ProjectObjectModel =
         resolve(xml.decodePomFromString(pomText))
@@ -126,16 +112,13 @@ public class PomResolver(
                 ?: UNRESOLVED
         }
     }.takeIf { UNRESOLVED !in it }
+
+    override fun close() {
+        if (pomProvider is Closeable) pomProvider.close()
+    }
 }
 
-private suspend fun HttpResponse.bodyAsPom(xml: XML) =
-    runCatching { body<ProjectObjectModel>() }.getOrNull()
-        ?: xml.decodePomFromString(bodyAsText())
-
 internal fun buildUrl(action: URLBuilder.() -> Unit) = URLBuilder().apply(action).build()
-
-public fun MavenUrlBuilder.buildPomUrl(groupId: String, artifactId: String, version: String): Url =
-    buildArtifactUrl(groupId, artifactId, version, ".pom")
 
 public fun MavenUrlBuilder.buildGradleMetadataUrl(groupId: String, artifactId: String, version: String): Url =
     buildArtifactUrl(groupId, artifactId, version, ".module")

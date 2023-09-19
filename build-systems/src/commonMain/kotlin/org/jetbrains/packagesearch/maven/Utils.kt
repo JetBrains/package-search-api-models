@@ -83,7 +83,7 @@ internal expect fun getenv(it: String): String?
 internal expect fun getSystemProp(it: String): String?
 
 @Suppress("DELEGATED_MEMBER_HIDES_SUPERTYPE_OVERRIDE")
-internal fun XML.decodePomFromString(string: String): ProjectObjectModel {
+public fun XML.decodePomFromString(string: String): ProjectObjectModel {
     val namespaceAgnosticReader = object : XmlReader by XmlStreaming.newReader(string) {
         override val namespaceURI: String get() = POM_XML_NAMESPACE
     }

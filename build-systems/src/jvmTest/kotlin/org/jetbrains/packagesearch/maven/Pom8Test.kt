@@ -10,6 +10,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.encodeToString
 import nl.adaptivity.xmlutil.serialization.XML
 import org.jetbrains.packagesearch.BuildSystemsTestBase
+import org.jetbrains.packagesearch.maven.PomResolver.Companion.defaultPomProvider
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
@@ -66,7 +67,7 @@ class Pom8Test : BuildSystemsTestBase() {
     )
     fun testSolver(coordinates: String) = runTest {
         val (groupId, artifactId, version) = coordinates.split(':')
-        val pom = PomResolver(httpClient = httpClient).resolve(groupId, artifactId, version)
+        val pom = PomResolver(pomProvider = defaultPomProvider(httpClient = httpClient)).resolve(groupId, artifactId, version)
         println(xml.encodeToString(pom))
     }
 
