@@ -2,7 +2,6 @@ package org.jetbrains.packagesearch.api.v3.search
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import org.jetbrains.packagesearch.api.v3.ApiMavenPackage
 import org.jetbrains.packagesearch.api.v3.ApiMavenPackage.GradleVersion.ApiVariant
 
 @Serializable
@@ -19,7 +18,7 @@ public sealed interface PackagesType {
     @Serializable
     @SerialName("gradle")
     public data class Gradle(
-        public val variants: List<Variant>,
+        public val variants: List<Variant> = emptyList(),
         public val mustBeRootPublication: Boolean = true,
     ) : PackagesType {
 
