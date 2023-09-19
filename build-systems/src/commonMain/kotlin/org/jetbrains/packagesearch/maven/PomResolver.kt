@@ -1,6 +1,6 @@
 package org.jetbrains.packagesearch.maven
 
-import io.ktor.client.*
+import io.ktor.client.HttpClient
 import io.ktor.http.URLBuilder
 import io.ktor.http.Url
 import io.ktor.utils.io.core.Closeable
@@ -37,11 +37,11 @@ public class PomResolver(
         }
     }
 
-    public suspend fun resolve(groupId: String, artifactId: String, version: String): ProjectObjectModel? =
+    public suspend fun getPom(groupId: String, artifactId: String, version: String): ProjectObjectModel? =
         pomProvider.getPomFromMultipleRepositories(groupId, artifactId, version)
             .firstOrNull()?.let { resolve(it) }
 
-    public suspend fun resolve(url: Url): ProjectObjectModel =
+    public suspend fun getPom(url: Url): ProjectObjectModel =
         pomProvider.getPomByUrl(url)
 
     public suspend fun resolve(pomText: String): ProjectObjectModel =
@@ -49,16 +49,18 @@ public class PomResolver(
 
     public suspend fun resolve(model: ProjectObjectModel): ProjectObjectModel {
         var mergedPom = model
+        var currentParent = mergedPom.parent
         var count = 0
         while (count < 10) {
             count++
-            val parent = mergedPom.parent ?: break
-            val parentPom = runCatching { resolve(parent) }.getOrNull() ?: break
+            val parent = currentParent ?: break
+            val parentPom = runCatching { getPom(parent) }.getOrNull() ?: break
             mergedPom = mergedPom.copy(
                 dependencies = parentPom.dependencies.plus(mergedPom.dependencies).distinct(),
                 dependencyManagement = parentPom.dependencyManagement.plus(mergedPom.dependencyManagement).distinct(),
                 properties = parentPom.properties + mergedPom.properties,
             )
+            currentParent = parentPom.parent
         }
 
         val accessor = Json.encodeToJsonElement(mergedPom).jsonObject
@@ -86,8 +88,8 @@ public class PomResolver(
         )
     }
 
-    private suspend fun resolve(parent: Parent) =
-        resolve(parent.groupId, parent.artifactId, parent.version)
+    private suspend fun getPom(parent: Parent) =
+        getPom(parent.groupId, parent.artifactId, parent.version)
 
     private val regex = Regex("""\$\{(.*?)}""")
     private val UNRESOLVED = "UNRESOLVED"

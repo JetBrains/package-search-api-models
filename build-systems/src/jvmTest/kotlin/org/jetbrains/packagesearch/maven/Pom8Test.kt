@@ -1,11 +1,12 @@
 package org.jetbrains.packagesearch.maven
 
-import io.ktor.client.*
-import io.ktor.client.engine.cio.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.plugins.logging.*
-import io.ktor.http.*
-import io.ktor.serialization.kotlinx.*
+import io.ktor.client.HttpClient
+import io.ktor.client.engine.cio.CIO
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.plugins.logging.LogLevel
+import io.ktor.client.plugins.logging.Logging
+import io.ktor.http.ContentType
+import io.ktor.serialization.kotlinx.serialization
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.encodeToString
 import nl.adaptivity.xmlutil.serialization.XML
@@ -67,7 +68,8 @@ class Pom8Test : BuildSystemsTestBase() {
     )
     fun testSolver(coordinates: String) = runTest {
         val (groupId, artifactId, version) = coordinates.split(':')
-        val pom = PomResolver(pomProvider = defaultPomProvider(httpClient = httpClient)).resolve(groupId, artifactId, version)
+        val pom =
+            PomResolver(pomProvider = defaultPomProvider(httpClient = httpClient)).getPom(groupId, artifactId, version)
         println(xml.encodeToString(pom))
     }
 

@@ -23,12 +23,14 @@ public val Contributor.properties: Map<String, String>
     get() = propertiesContainer?.properties ?: emptyMap()
 
 public fun ProjectObjectModel.copy(
+    parent: Parent? = this.parent,
     dependencies: List<Dependency> = this.dependencies,
     dependencyManagement: List<Dependency> = this.dependencyManagement,
     properties: Map<String, String> = this.properties,
     name: String? = this.name,
     description: String? = this.description,
 ): ProjectObjectModel = copy (
+    parent = parent,
     dependenciesContainer = Dependencies(dependencies),
     dependencyManagementContainer = DependencyManagement(Dependencies(dependencyManagement)),
     propertiesContainer = Properties(properties),
