@@ -1,14 +1,16 @@
 package org.jetbrains.packagesearch.maven
 
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.plugins.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.request.*
-import io.ktor.client.statement.*
-import io.ktor.http.*
-import io.ktor.serialization.kotlinx.*
-import io.ktor.utils.io.core.*
+import io.ktor.client.HttpClient
+import io.ktor.client.call.body
+import io.ktor.client.plugins.HttpRequestRetry
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.get
+import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsText
+import io.ktor.http.ContentType
+import io.ktor.http.Url
+import io.ktor.serialization.kotlinx.KotlinxSerializationConverter
+import io.ktor.utils.io.core.Closeable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.first
@@ -17,8 +19,8 @@ import nl.adaptivity.xmlutil.serialization.XML
 
 public class HttpClientMavenPomProvider(
     public val repositories: List<MavenUrlBuilder>,
-    override val httpClient: HttpClient,
-    public val xml: XML = PomResolver.defaultXml()
+    public val httpClient: HttpClient,
+    public val xml: XML = PomResolver.defaultXml(),
 ): MavenPomProvider, Closeable by httpClient {
 
     public companion object {
