@@ -22,7 +22,7 @@ public sealed interface ApiPackage {
     public val name: String?
     public val coordinates: String
     public val description: String?
-    public val licenses: Licenses?
+    public val licenses: Licenses<out LicenseFile>?
     public val authors: List<Author>
     public val scm: ApiScm?
 
@@ -69,7 +69,7 @@ public data class ApiMavenPackage(
     public override val idHash: String,
     public override val rankingMetric: Double? = null,
     public override val versions: VersionsContainer<out ApiMavenVersion>,
-    public override val licenses: Licenses? = null,
+    public override val licenses: Licenses<PomLicenseFile>? = null,
     public val groupId: String,
     public val artifactId: String,
     override val scm: ApiScm? = null,

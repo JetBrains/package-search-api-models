@@ -19,21 +19,6 @@ public data class Author(
 )
 
 @Serializable
-public data class Licenses(
-    public val mainLicense: LicenseFile,
-    public val otherLicenses: List<LicenseFile> = emptyList(),
-)
-
-@Serializable
-public data class LicenseFile(
-    public val name: String? = null,
-    public val url: String,
-    public val htmlUrl: String? = null,
-    public val spdxId: String? = null,
-    public val key: String? = null,
-)
-
-@Serializable
 public data class Vulnerability(
     public val isVulnerable: Boolean,
     public val issues: List<String>? = null,

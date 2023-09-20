@@ -11,6 +11,7 @@ public sealed interface ApiScm {
     public val description: String?
     public val ossHealthIndex: Double?
     public val readmeUrl: String?
+    public val license: ScmLicenseFile?
 
     public companion object {
         public fun hashScmUrl(url: String): String =
@@ -28,6 +29,7 @@ public data class GitHub(
     public override val urlHash: String,
     public override val description: String? = null,
     public override val readmeUrl: String? = null,
+    public override val license: ScmLicenseFile? = null,
     public val htmlUrl: String,
     public val isFork: Boolean? = null,
     public override val ossHealthIndex: Double?,
