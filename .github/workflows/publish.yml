@@ -3,7 +3,7 @@ on:
   release:
     types: [ published ]
   push:
-    branches: [ main, lamberto.basti/v3 ]
+    branches: [ main ]
 
 jobs:
   publish:
