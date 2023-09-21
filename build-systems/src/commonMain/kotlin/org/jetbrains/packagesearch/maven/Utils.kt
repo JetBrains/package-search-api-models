@@ -84,6 +84,18 @@ internal fun evaluateProjectProperty(projectProperty: String, modelAccessor: Jso
 internal expect fun getenv(it: String): String?
 internal expect fun getSystemProp(it: String): String?
 
+@Deprecated(
+    "Use decodeFromString instead",
+    ReplaceWith(
+        "decodeFromString<ProjectObjectModel>(POM_XML_NAMESPACE, string)",
+        "org.jetbrains.packagesearch.maven.decodeFromString",
+        "org.jetbrains.packagesearch.maven.ProjectObjectModel"
+    )
+)
+public fun XML.decodePomFromString(string: String): ProjectObjectModel {
+    return decodeFromString(POM_XML_NAMESPACE, string)
+}
+
 @Suppress("DELEGATED_MEMBER_HIDES_SUPERTYPE_OVERRIDE")
 public inline fun <reified T : Any> XML.decodeFromString(namespace: String, string: String): T {
     return decodeFromReader<T>(object : XmlReader by XmlStreaming.newReader(string) {
