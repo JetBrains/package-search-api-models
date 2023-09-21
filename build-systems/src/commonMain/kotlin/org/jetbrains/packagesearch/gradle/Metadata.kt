@@ -23,6 +23,7 @@ public data class Component(
     val module: String,
     val version: String,
     val url: String? = null,
+    val attributes: Map<String, String>? = null,
 )
 
 @Serializable
