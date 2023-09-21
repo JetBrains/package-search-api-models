@@ -62,7 +62,7 @@ public class HttpClientMavenPomProvider(
 
     private suspend fun HttpResponse.bodyAsPom(xml: XML) =
         runCatching { body<ProjectObjectModel>() }.getOrNull()
-            ?: xml.decodePomFromString(bodyAsText())
+            ?: xml.decodeFromString(POM_XML_NAMESPACE, bodyAsText())
 
     private fun MavenUrlBuilder.buildPomUrl(groupId: String, artifactId: String, version: String): Url =
         buildArtifactUrl(groupId, artifactId, version, ".pom")

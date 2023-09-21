@@ -45,7 +45,7 @@ public class PomResolver(
         pomProvider.getPomByUrl(url)
 
     public suspend fun resolve(pomText: String): ProjectObjectModel =
-        resolve(xml.decodePomFromString(pomText))
+        resolve(xml.decodeFromString<ProjectObjectModel>(POM_XML_NAMESPACE, pomText))
 
     public suspend fun resolve(model: ProjectObjectModel): ProjectObjectModel {
         var mergedPom = model

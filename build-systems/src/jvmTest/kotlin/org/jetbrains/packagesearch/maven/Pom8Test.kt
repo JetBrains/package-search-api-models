@@ -45,7 +45,7 @@ class Pom8Test : BuildSystemsTestBase() {
         ]
     )
     fun `parse pom from resources`(path: String) = runTest {
-        val pom = xml.decodePomFromString(readResourceAsText(path))
+        val pom = xml.decodeFromString<ProjectObjectModel>(POM_XML_NAMESPACE, readResourceAsText(path))
         println(xml.encodeToString(pom))
     }
 
