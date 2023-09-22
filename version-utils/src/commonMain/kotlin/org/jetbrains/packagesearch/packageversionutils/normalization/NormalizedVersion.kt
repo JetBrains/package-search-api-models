@@ -197,7 +197,7 @@ public sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
 
     @Serializable
     @SerialName("missing")
-    public object Missing : NormalizedVersion {
+    public data object Missing : NormalizedVersion {
 
         public override val versionName: String = ""
         public override val releasedAt: Instant? = null
