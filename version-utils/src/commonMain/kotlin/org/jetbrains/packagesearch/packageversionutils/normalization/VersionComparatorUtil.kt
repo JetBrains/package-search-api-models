@@ -3,7 +3,7 @@ package org.jetbrains.packagesearch.packageversionutils.normalization
 import kotlin.math.sign
 
 public object VersionComparatorUtil {
-    private val WORDS_SPLITTER = Regex("\\d+|\\D+")
+    private val VERSION_SPLITTER = Regex("(\\d+|[^\\d\\s()._\\-;:/, +~]+)")
     private val ZERO_PATTERN = Regex("0+")
     private val DIGITS_PATTERN = Regex("\\d+")
     private val DEFAULT_TOKEN_PRIORITY_PROVIDER: (String) -> Int =
@@ -13,9 +13,7 @@ public object VersionComparatorUtil {
     public fun min(v1: String, v2: String): String = if (compare(v1, v2) < 0) v1 else v2
 
     private fun String.splitVersionString(): Sequence<String> =
-        trim { it <= ' ' }
-            .splitToSequence(*"()._-;:/, +~".toCharArray(), ignoreCase = true)
-            .flatMap { WORDS_SPLITTER.find(it)?.groups?.mapNotNull { it?.value } ?: emptyList() }
+        VERSION_SPLITTER.findAll(this).map { it.value }
 
     public fun compare(
         v1: String,
