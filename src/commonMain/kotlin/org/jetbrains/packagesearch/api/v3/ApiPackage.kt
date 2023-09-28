@@ -41,7 +41,7 @@ public sealed interface ApiPackageVersion {
         public const val MAVEN_REPO_ID: String = "maven2"
     }
     public val normalized: NormalizedVersion
-    public val repositoryIds: List<String>
+    public val repositoryIds: Set<String>
     public val vulnerability: Vulnerability
 }
 
@@ -88,7 +88,7 @@ public data class ApiMavenPackage(
     @SerialName("mavenVersion")
     public data class MavenVersion(
         public override val normalized: NormalizedVersion,
-        public override val repositoryIds: List<String>,
+        public override val repositoryIds: Set<String>,
         public override val vulnerability: Vulnerability,
         public override val dependencies: List<Dependency>,
         public override val artifacts: List<ApiArtifact>,
@@ -102,7 +102,7 @@ public data class ApiMavenPackage(
     @SerialName("gradleVersion")
     public data class GradleVersion(
         public override val normalized: NormalizedVersion,
-        public override val repositoryIds: List<String>,
+        public override val repositoryIds: Set<String>,
         public override val vulnerability: Vulnerability,
         public override val dependencies: List<Dependency>,
         public override val artifacts: List<ApiArtifact>,
