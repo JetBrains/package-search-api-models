@@ -9,13 +9,14 @@ import io.ktor.http.encodedPath
 public class PackageSearchDefaultEndpoints(
     public val protocol: URLProtocol,
     public val host: String,
+    public val segments: List<String> = listOf("api", "v3"),
     public val port: Int = protocol.defaultPort
 ) : PackageSearchEndpoints {
 
     private fun buildPkgsUrl(path: String) = buildUrl {
         protocol = this@PackageSearchDefaultEndpoints.protocol
         host = this@PackageSearchDefaultEndpoints.host
-        encodedPath = "/api/v3/$path"
+        pathSegments = segments + path
         port = this@PackageSearchDefaultEndpoints.port
     }
 
