@@ -13,6 +13,14 @@ public class PackageSearchDefaultEndpoints(
     public val port: Int = protocol.defaultPort
 ) : PackageSearchEndpoints {
 
+    public companion object {
+        public val DEV: PackageSearchDefaultEndpoints = PackageSearchDefaultEndpoints(
+            protocol = URLProtocol.HTTPS,
+            host = "api.dev.package-search.services.jetbrains.com",
+            segments = emptyList(),
+        )
+    }
+
     private fun buildPkgsUrl(path: String) = buildUrl {
         protocol = this@PackageSearchDefaultEndpoints.protocol
         host = this@PackageSearchDefaultEndpoints.host
