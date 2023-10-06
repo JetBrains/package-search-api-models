@@ -102,7 +102,7 @@ public typealias Attributes = Map<String, JsonPrimitive>
 public data class Capability(
     val group: String,
     val name: String,
-    val version: String
+    val version: String? = null,
 )
 
 @Serializable
