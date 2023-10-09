@@ -49,7 +49,7 @@ public sealed interface ApiPackageVersion {
 public data class VersionsContainer<T : ApiPackageVersion>(
     public val latestStable: T? = null,
     public val latest: T,
-    public val all: Map<String, List<String>>,
+    public val all: Map<String, T>,
 )
 
 @Serializable
