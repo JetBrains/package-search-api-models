@@ -40,6 +40,7 @@ public sealed interface ApiPackageVersion {
     public companion object {
         public const val MAVEN_REPO_ID: String = "maven2"
     }
+
     public val normalized: NormalizedVersion
     public val repositoryIds: Set<String>
     public val vulnerability: Vulnerability
@@ -49,7 +50,13 @@ public sealed interface ApiPackageVersion {
 public data class VersionsContainer<T : ApiPackageVersion>(
     public val latestStable: T? = null,
     public val latest: T,
-    public val all: Map<String, List<String>>,
+    public val all: List<VersionWithRepositories>,
+)
+
+@Serializable
+public data class VersionWithRepositories(
+    public val normalizedVersion: NormalizedVersion,
+    public val repositoryIds: Set<String>,
 )
 
 @Serializable
@@ -68,7 +75,7 @@ public data class ApiMavenPackage(
     public override val id: String,
     public override val idHash: String,
     public override val rankingMetric: Double? = null,
-    public override val versions: VersionsContainer<out ApiMavenVersion>,
+    public override val versions: VersionsContainer<ApiMavenVersion>,
     public override val licenses: Licenses<PomLicenseFile>? = null,
     public val groupId: String,
     public val artifactId: String,
