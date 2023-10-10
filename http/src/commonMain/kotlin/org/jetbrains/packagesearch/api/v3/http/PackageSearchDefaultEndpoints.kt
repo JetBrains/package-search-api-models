@@ -25,8 +25,6 @@ public class PackageSearchDefaultEndpoints(
         get() = buildPkgsUrl("search-packages")
     override val searchProjects: Url
         get() = buildPkgsUrl("search-projects")
-    override val mavenPackageInfoByFileHash: Url
-        get() = buildPkgsUrl("maven-package-info-by-file-hash")
 }
 
 private fun buildUrl(action: URLBuilder.() -> Unit): Url = URLBuilder().apply(action).build()
