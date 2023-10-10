@@ -15,8 +15,6 @@ import kotlin.time.Duration.Companion.minutes
 import org.jetbrains.packagesearch.api.v3.ApiPackage
 import org.jetbrains.packagesearch.api.v3.ApiProject
 import org.jetbrains.packagesearch.api.v3.ApiRepository
-import org.jetbrains.packagesearch.api.v3.MavenHashLookupRequest
-import org.jetbrains.packagesearch.api.v3.MavenHashLookupResponse
 import org.jetbrains.packagesearch.api.v3.search.SearchParametersBuilder
 import org.jetbrains.packagesearch.api.v3.search.buildSearchParameters
 
@@ -27,9 +25,7 @@ public interface PackageSearchApi {
     public suspend fun getPackageInfoByIds(ids: Set<String>): Map<String, ApiPackage>
     public suspend fun getPackageInfoByIdHashes(ids: Set<String>): Map<String, ApiPackage>
     public suspend fun searchPackages(request: SearchPackagesRequest): List<ApiPackage>
-    public suspend fun searchPackageIds(request: SearchPackagesRequest): List<String>
     public suspend fun searchProjects(request: SearchProjectRequest): List<ApiProject>
-    public suspend fun getMavenPackageInfoByFileHash(request: MavenHashLookupRequest): MavenHashLookupResponse
 }
 
 public class PackageSearchApiClient(
@@ -90,14 +86,8 @@ public class PackageSearchApiClient(
     override suspend fun searchPackages(request: SearchPackagesRequest): List<ApiPackage> =
         defaultRequest<_, SearchPackagesResponse>(endpoints.searchPackages, request).packages
 
-    override suspend fun searchPackageIds(request: SearchPackagesRequest): List<String> =
-        searchPackages(request).map { it.id }
-
     override suspend fun searchProjects(request: SearchProjectRequest): List<ApiProject> =
         defaultRequest<_, SearchProjectResponse>(endpoints.searchPackages, request).projects
-
-    override suspend fun getMavenPackageInfoByFileHash(request: MavenHashLookupRequest): MavenHashLookupResponse =
-        defaultRequest(endpoints.mavenPackageInfoByFileHash, request)
 
 }
 
