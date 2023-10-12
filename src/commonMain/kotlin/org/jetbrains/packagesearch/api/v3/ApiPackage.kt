@@ -161,6 +161,7 @@ public data class ApiMavenPackage(
             public val attributes: Map<String, Attribute>
 
             @Serializable
+            @SerialName("withFiles")
             public data class WithFiles(
                 public override val name: String,
                 public override val attributes: Map<String, Attribute>,
@@ -169,6 +170,7 @@ public data class ApiMavenPackage(
             ) : ApiVariant
 
             @Serializable
+            @SerialName("withAvailableAt")
             public data class WithAvailableAt(
                 public override val name: String,
                 public override val attributes: Map<String, Attribute>,
