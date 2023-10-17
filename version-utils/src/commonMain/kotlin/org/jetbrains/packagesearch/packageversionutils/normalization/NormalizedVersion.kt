@@ -199,7 +199,8 @@ public sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
     @SerialName("missing")
     public data object Missing : NormalizedVersion {
 
-        public override val versionName: String = ""
+        public override val versionName: String
+            get() = error("There is no version!")
         public override val releasedAt: Instant? = null
         public override val isStable: Boolean = false
 

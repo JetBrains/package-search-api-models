@@ -2,8 +2,6 @@ package org.jetbrains.packagesearch.api.v3.http
 
 import io.ktor.http.URLProtocol
 import io.ktor.http.Url
-import io.ktor.http.encodedPath
-
 
 
 public class PackageSearchDefaultEndpoints(
@@ -38,6 +36,4 @@ public class PackageSearchDefaultEndpoints(
         get() = buildPkgsUrl("search-packages")
     override val searchProjects: Url
         get() = buildPkgsUrl("search-projects")
-    override val mavenPackageInfoByFileHash: Url
-        get() = buildPkgsUrl("maven-package-info-by-file-hash")
 }

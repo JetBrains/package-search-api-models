@@ -74,7 +74,7 @@ public class PomResolver(
      * @param version The version of the project.
      * @return The retrieved ProjectObjectModel or null if it doesn't exist.
      */
-    private suspend fun getPom(groupId: String, artifactId: String, version: String): ProjectObjectModel? =
+    public suspend fun getPom(groupId: String, artifactId: String, version: String): ProjectObjectModel? =
         pomProvider.getPomFromMultipleRepositories(groupId, artifactId, version)
             .firstOrNull()?.let { resolve(it) }
 
