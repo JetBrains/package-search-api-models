@@ -160,7 +160,7 @@ public class PomResolver(
         // Return the final mergedPom with all resolved properties, dependencies, and dependencyManagement.
         return mergedPom.copy(
             groupId = mergedPom.groupId?.resolve(mergedPom.properties, accessor),
-            artifactId = mergedPom.groupId?.resolve(mergedPom.properties, accessor),
+            artifactId = mergedPom.artifactId?.resolve(mergedPom.properties, accessor),
             dependencies = resolvedDependencies,
             dependencyManagement = resolvedDependencyManagement.values.toList(),
             properties = mergedPom.properties.mapValues {
