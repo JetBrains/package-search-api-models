@@ -23,6 +23,8 @@ public val Contributor.properties: Map<String, String>
     get() = propertiesContainer?.properties ?: emptyMap()
 
 public fun ProjectObjectModel.copy(
+    groupId: String? = this.groupId,
+    artifactId: String? = this.artifactId,
     parent: Parent? = this.parent,
     dependencies: List<Dependency> = this.dependencies,
     dependencyManagement: List<Dependency> = this.dependencyManagement,
@@ -30,6 +32,8 @@ public fun ProjectObjectModel.copy(
     name: String? = this.name,
     description: String? = this.description,
 ): ProjectObjectModel = copy (
+    groupId = groupId,
+    artifactId = artifactId,
     parent = parent,
     dependenciesContainer = Dependencies(dependencies),
     dependencyManagementContainer = DependencyManagement(Dependencies(dependencyManagement)),
@@ -66,20 +70,40 @@ public object GoogleMavenCentralMirror : MavenUrlBuilder {
 
 internal data class DependencyKey(val groupId: String, val artifactId: String)
 
+/**
+ * Evaluates the value of the provided project property within the given model accessor.
+ *
+ * @param projectProperty The project property to evaluate.
+ * @param modelAccessor The JSON object representing the model accessor.
+ * @return The evaluated value of the project property, or null if it cannot be evaluated.
+ */
 internal fun evaluateProjectProperty(projectProperty: String, modelAccessor: JsonObject): String? {
+    // Split the given project property string based on '.' and retrieve the first part.
+    // If it's null or doesn't exist, return null.
     val property = projectProperty.split('.').firstOrNull() ?: return null
+
+    // Use the extracted property to access the corresponding value from the modelAccessor.
+    // If the property isn't found in the modelAccessor, return null.
     val accessor = modelAccessor[property] ?: return null
+
     return when (accessor) {
+        // If the accessed value is a primitive (like a string or number), return its content directly.
         is JsonPrimitive -> accessor.content
+
+        // If the accessed value is another JsonObject, it indicates the property might have more nested parts.
+        // Recursively evaluate this nested property by removing the currently accessed part from the property string.
         is JsonObject -> evaluateProjectProperty(
             projectProperty = projectProperty.removePrefix("$property.")
                 .takeIf { it.isNotEmpty() }
                 ?: return null,
             modelAccessor = accessor
         )
+
+        // For other types of JSON elements (like arrays), return null as they aren't supported.
         else -> null
     }
 }
+
 
 internal expect fun getenv(it: String): String?
 internal expect fun getSystemProp(it: String): String?
