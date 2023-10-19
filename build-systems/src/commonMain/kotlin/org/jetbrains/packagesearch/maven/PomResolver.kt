@@ -127,6 +127,8 @@ public class PomResolver(
             // dependencyManagement, and properties.
             // Note: The 'distinct()' function ensures that there are no duplicate items.
             mergedPom = mergedPom.copy(
+                groupId = mergedPom.groupId ?: parentPom.groupId,
+                artifactId = mergedPom.artifactId ?: parentPom.artifactId,
                 dependencies = parentPom.dependencies.plus(mergedPom.dependencies).distinct(),
                 dependencyManagement = parentPom.dependencyManagement.plus(mergedPom.dependencyManagement).distinct(),
                 properties = parentPom.properties + mergedPom.properties,
