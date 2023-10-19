@@ -9,6 +9,7 @@ public annotation class SearchParametersBuilderDsl
 public class SearchParametersBuilder {
 
     public var searchQuery: String? = null
+    public var stableOnly: Boolean = true
     public var packagesType: List<PackagesType> = emptyList()
 
     public fun packagesType(block: PackagesTypeBuilder.() -> Unit) {
@@ -23,6 +24,7 @@ public class SearchParametersBuilder {
         return SearchPackagesRequest(
             packagesType = packagesType,
             searchQuery = query,
+//            stableOnly = stableOnly
         )
     }
 }

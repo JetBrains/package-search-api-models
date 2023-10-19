@@ -11,7 +11,8 @@ import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.serialization.kotlinx.protobuf.*
 import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
+import kotlinx.serialization.protobuf.ProtoBuf
 import org.jetbrains.packagesearch.api.v3.ApiPackage
 import org.jetbrains.packagesearch.api.v3.ApiProject
 import org.jetbrains.packagesearch.api.v3.ApiRepository
@@ -38,14 +39,14 @@ public class PackageSearchApiClient(
         public fun defaultHttpClient(protobuf: Boolean = true, additionalConfig: HttpClientConfig<*>.() -> Unit = {}): HttpClient =
             HttpClient(DefaultEngine) {
                 install(ContentNegotiation) {
-                    if (protobuf) protobuf()
+                    if (protobuf) protobuf(ProtoBuf { encodeDefaults = false })
                     json()
                 }
                 install(ContentEncoding) {
                     gzip()
                 }
                 install(HttpRequestRetry) {
-                    maxRetries = 5
+                    maxRetries = 3
                     constantDelay(
                         delay = 500.milliseconds,
                         randomization = 100.milliseconds,
@@ -53,7 +54,7 @@ public class PackageSearchApiClient(
                     )
                 }
                 install(HttpTimeout) {
-                    requestTimeout = 1.minutes
+                    requestTimeout = 10.seconds
                 }
                 additionalConfig()
             }
@@ -84,10 +85,10 @@ public class PackageSearchApiClient(
             .associateBy { it.id }
 
     override suspend fun searchPackages(request: SearchPackagesRequest): List<ApiPackage> =
-        defaultRequest<_, SearchPackagesResponse>(endpoints.searchPackages, request).packages
+        defaultRequest<_, List<ApiPackage>>(endpoints.searchPackages, request)
 
     override suspend fun searchProjects(request: SearchProjectRequest): List<ApiProject> =
-        defaultRequest<_, SearchProjectResponse>(endpoints.searchPackages, request).projects
+        defaultRequest<_, List<ApiProject>>(endpoints.searchPackages, request)
 
 }
 

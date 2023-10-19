@@ -23,19 +23,8 @@ public data class GetPackageInfoResponse(
 @Serializable
 public data class SearchPackagesRequest(
     public val packagesType: List<PackagesType> = emptyList(),
+//    public val stableOnly: Boolean = true,
     public val searchQuery: String,
-)
-
-@Serializable
-public data class SearchPackagesResponse(
-    public val request: SearchPackagesRequest,
-    public val packages: List<ApiPackage> = emptyList()
-)
-
-@Serializable
-public data class SearchProjectResponse(
-    public val request: SearchProjectRequest,
-    public val projects: List<ApiProject>
 )
 
 @Serializable
