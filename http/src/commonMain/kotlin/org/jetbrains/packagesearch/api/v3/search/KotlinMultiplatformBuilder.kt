@@ -3,6 +3,14 @@ package org.jetbrains.packagesearch.api.v3.search
 @SearchParametersBuilderDsl
 public class KotlinMultiplatformBuilder internal constructor(private val delegate: GradlePackagesBuilder) {
 
+    internal fun metadata() {
+        delegate.variant {
+            libraryCategory()
+            usage("kotlin-metadata")
+            kotlinPlatformType("common")
+        }
+    }
+
     public fun genericJvm(libraryElements: String? = null) {
         delegate.variant {
             jvm()
@@ -55,6 +63,8 @@ public class KotlinMultiplatformBuilder internal constructor(private val delegat
     }
 }
 
-public fun GradlePackagesBuilder.kotlinMultiplatform(builder: KotlinMultiplatformBuilder.() -> Unit) {
-    KotlinMultiplatformBuilder(this).apply(builder)
+public fun GradlePackagesBuilder.kotlinMultiplatform(builder: KotlinMultiplatformBuilder.() -> Unit = {}) {
+    KotlinMultiplatformBuilder(this)
+        .apply { metadata() }
+        .apply(builder)
 }
