@@ -75,13 +75,11 @@ public class PackageSearchApiClient(
         defaultRequest(endpoints.knownRepositories)
 
     override suspend fun getPackageInfoByIds(ids: Set<String>): Map<String, ApiPackage> =
-        defaultRequest<_, GetPackageInfoResponse>(endpoints.packageInfoByIds, GetPackageInfoRequest(ids))
-            .packages
+        defaultRequest<_, List<ApiPackage>>(endpoints.packageInfoByIds, GetPackageInfoRequest(ids))
             .associateBy { it.id }
 
     override suspend fun getPackageInfoByIdHashes(ids: Set<String>): Map<String, ApiPackage> =
-        defaultRequest<_, GetPackageInfoResponse>(endpoints.packageInfoByIdHashes, GetPackageInfoRequest(ids))
-            .packages
+        defaultRequest<_, List<ApiPackage>>(endpoints.packageInfoByIdHashes, GetPackageInfoRequest(ids))
             .associateBy { it.id }
 
     override suspend fun searchPackages(request: SearchPackagesRequest): List<ApiPackage> =
