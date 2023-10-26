@@ -62,7 +62,7 @@ public class PomResolver(
          *
          * Regex pattern: `\$\{(.*?)\}`
          */
-        private val PROPERTY_REFERENCE_REGEX = Regex("""\$\{(.*?)}""")
+        private val PROPERTY_REFERENCE_REGEX = Regex("""\$\{(.+?)}""")
         private const val UNRESOLVED = "UNRESOLVED"
     }
 
