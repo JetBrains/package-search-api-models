@@ -63,7 +63,6 @@ public class PomResolver(
          * Regex pattern: `\$\{(.*?)\}`
          */
         private val PROPERTY_REFERENCE_REGEX = Regex("""\$\{(.+?)}""")
-        private const val UNRESOLVED = "UNRESOLVED"
     }
 
     /**
@@ -165,9 +164,7 @@ public class PomResolver(
             artifactId = mergedPom.artifactId?.resolve(mergedPom.properties, accessor),
             dependencies = resolvedDependencies,
             dependencyManagement = resolvedDependencyManagement.values.toList(),
-            properties = mergedPom.properties.mapValues {
-                it.value.resolve(mergedPom.properties, accessor) ?: it.value
-            },
+            properties = mergedPom.properties.mapValues { it.value.resolve(mergedPom.properties, accessor) },
             name = mergedPom.name?.resolve(mergedPom.properties, accessor),
             description = mergedPom.description?.resolve(mergedPom.properties, accessor),
         )
@@ -185,54 +182,44 @@ public class PomResolver(
      * @param allProperties A map of all properties and their values.
      * @param modelAccessor The JSON object used to access values from the model.
      * @param currentDepth The current depth of recursion.
-     * @return The resolved string or null if it contains an unresolved placeholder.
+     * @return The resolved string or the original one if it contains an unresolved placeholder.
      */
     private fun String.resolve(
         allProperties: Map<String, String?>,
         modelAccessor: JsonObject,
         currentDepth: Int = 0,
-    ): String? = replaceProperty {
+    ): String = replaceProperty {
         when {
-            // If the recursion depth is greater than 10, just return the property key
-            // as we might be in a potential infinite loop.
-            currentDepth > 10 -> it
-
-            // If the property starts with "project.", it's referring to a field within the project's model.
-            it.startsWith("project.") -> {
-                val res = evaluateProjectProperty(
-                    projectProperty = it.removePrefix("project."),
-                    modelAccessor = modelAccessor
-                ) ?: UNRESOLVED
-                res
-            }
+            // If the recursion depth is greater than 10, just return null
+            currentDepth > 10 -> null
 
             // If the property starts with "settings.", it cannot be resolved with the current setup.
-            // Return UNRESOLVED.
-            it.startsWith("settings.") -> UNRESOLVED
+            it.startsWith("settings.") -> null
 
             // If the property starts with "env.", it refers to an environment variable.
-            // Retrieve the environment variable value or return UNRESOLVED if not found.
-            it.startsWith("env.") -> getenv(it.removePrefix("env.")) ?: UNRESOLVED
+            // It cannot be resolved with the current setup.
+            it.startsWith("env.") -> null
+
+            // If the property starts with "project.", it's referring to a field within the project's model.
+            it.startsWith("project.") -> evaluateProjectProperty(
+                projectProperty = it.removePrefix("project."),
+                modelAccessor = modelAccessor
+            )
 
             // Default case:
-            // 1. Try to resolve the property recursively if present in allProperties.
-            // 2. If not found, check for a system property with that key.
-            // 3. If still not found, return UNRESOLVED.
+            // Try to resolve the property recursively if present in allProperties.
             else -> allProperties[it]?.resolve(allProperties, modelAccessor, currentDepth + 1)
-                ?: getSystemProp(it)
-                ?: UNRESOLVED
         }
     }
 
     /**
      * This helper function uses [PROPERTY_REFERENCE_REGEX]
      * to identify and replace placeholders in the string with their corresponding values.
-     * If the result has any unresolved placeholders (indicated by the presence of UNRESOLVED),
-     * the function returns null.
+     * If a placeholder cannot be resolved, the placeholder is returned as is.
      */
-    private inline fun String.replaceProperty(noinline transform: (String) -> CharSequence): String? =
-        replace(PROPERTY_REFERENCE_REGEX) { transform(it.groupValues[1]) }
-            .takeIf { UNRESOLVED !in it }
+    private inline fun String.replaceProperty(noinline transform: (String) -> CharSequence?): String =
+        replace(PROPERTY_REFERENCE_REGEX) { transform(it.groupValues[1]) ?: it.groupValues.first() }
+
 
 
     override fun close() {

@@ -46,6 +46,7 @@ public const val POM_XML_NAMESPACE: String = "http://maven.apache.org/POM/4.0.0"
 
 public interface MavenUrlBuilder {
     public fun buildArtifactUrl(groupId: String, artifactId: String, version: String, artifactExtension: String): Url
+    public fun buildMetadataUrl(groupId: String, artifactId: String): Url
 }
 
 public object GoogleMavenCentralMirror : MavenUrlBuilder {
@@ -64,6 +65,18 @@ public object GoogleMavenCentralMirror : MavenUrlBuilder {
             add(artifactId)
             add(version)
             add("$artifactId-$version$artifactExtension")
+        }
+    }
+
+    override fun buildMetadataUrl(groupId: String, artifactId: String): Url = buildUrl {
+        protocol = URLProtocol.HTTPS
+        host = "maven-central.storage-download.googleapis.com"
+        port = protocol.defaultPort
+        pathSegments = buildList {
+            add("maven2")
+            addAll(groupId.split("."))
+            add(artifactId)
+            add("maven-metadata.xml")
         }
     }
 }
@@ -103,10 +116,6 @@ internal fun evaluateProjectProperty(projectProperty: String, modelAccessor: Jso
         else -> null
     }
 }
-
-
-internal expect fun getenv(it: String): String?
-internal expect fun getSystemProp(it: String): String?
 
 @Deprecated(
     "Use decodeFromString instead",
