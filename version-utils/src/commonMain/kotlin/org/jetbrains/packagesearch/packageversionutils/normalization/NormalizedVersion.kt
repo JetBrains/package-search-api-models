@@ -197,6 +197,7 @@ public sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
 
     @Serializable
     @SerialName("missing")
+    @Deprecated("It should be removed. Use `null` to express a missing version.")
     public data object Missing : NormalizedVersion {
 
         public override val versionName: String
