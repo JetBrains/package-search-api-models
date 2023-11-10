@@ -22,9 +22,12 @@ public sealed interface ApiScm {
     }
 }
 
+@Deprecated("Use ApiGitHub", ReplaceWith("ApiGitHub"))
+public typealias GitHub = ApiGitHub
+
 @Serializable
 @SerialName("github")
-public data class GitHub(
+public data class ApiGitHub(
     public override val url: String,
     public override val urlHash: String,
     public override val description: String? = null,
