@@ -25,18 +25,18 @@ public data class ApiMavenRepository(
     public val namedLinks: String? = null,
 ) : ApiRepository
 
-@Serializable
-@SerialName("cocoapods")
-public object ApiCocoapodsRepository : ApiRepository {
-
-    public override val id: String = "cocoapods"
-    public override val lastChecked: Instant? = null
-}
-
-@Serializable
-@SerialName("npm")
-public object ApiNpmRepository : ApiRepository {
-
-    public override val id: String = "npm"
-    public override val lastChecked: Instant? = null
-}
+//@Serializable
+//@SerialName("cocoapods")
+//public object ApiCocoapodsRepository : ApiRepository {
+//
+//    public override val id: String = "cocoapods"
+//    public override val lastChecked: Instant? = null
+//}
+//
+//@Serializable
+//@SerialName("npm")
+//public object ApiNpmRepository : ApiRepository {
+//
+//    public override val id: String = "npm"
+//    public override val lastChecked: Instant? = null
+//}

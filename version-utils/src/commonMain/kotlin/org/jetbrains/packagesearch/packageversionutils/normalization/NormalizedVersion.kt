@@ -11,8 +11,8 @@ public sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
 
     public companion object {
 
-        public fun from(versionName: String?, releasedAt: Instant? = null): NormalizedVersion {
-            if (versionName.isNullOrBlank()) return Missing
+        public fun from(versionName: String, releasedAt: Instant? = null): NormalizedVersion? {
+            if (versionName.isBlank()) return null
             return NormalizedVersionWeakCache.getOrPut(versionName, releasedAt) {
                 normalizePackageVersion(
                     versionName = versionName,
@@ -93,7 +93,7 @@ public sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
         public override fun compareTo(other: NormalizedVersion): Int =
             when (other) {
                 is Semantic -> compareByNameAndThenByTimestamp(other)
-                is TimestampLike, is Garbage, is Missing -> 1
+                is TimestampLike, is Garbage -> 1
             }
 
         private fun compareByNameAndThenByTimestamp(other: Semantic): Int {
@@ -153,7 +153,7 @@ public sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
             when (other) {
                 is TimestampLike -> compareByNameAndThenByTimestamp(other)
                 is Semantic -> -1
-                is Garbage, is Missing -> 1
+                is Garbage -> 1
             }
 
         private fun compareByNameAndThenByTimestamp(other: TimestampLike): Int {
@@ -180,7 +180,6 @@ public sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
 
         override fun compareTo(other: NormalizedVersion): Int =
             when (other) {
-                is Missing -> 1
                 is Garbage -> compareByNameAndThenByTimestamp(other)
                 is Semantic, is TimestampLike -> -1
             }
@@ -193,23 +192,6 @@ public sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
                 nameComparisonResult
             }
         }
-    }
-
-    @Serializable
-    @SerialName("missing")
-    @Deprecated("It should be removed. Use `null` to express a missing version.")
-    public data object Missing : NormalizedVersion {
-
-        public override val versionName: String
-            get() = error("There is no version!")
-        public override val releasedAt: Instant? = null
-        public override val isStable: Boolean = false
-
-        public override fun compareTo(other: NormalizedVersion): Int =
-            when (other) {
-                is Missing -> 0
-                else -> -1
-            }
     }
 
     public interface DecoratedVersion {

@@ -9,11 +9,11 @@ public sealed interface PackagesType {
 
     @Serializable
     @SerialName("maven")
-    public object Maven : PackagesType
+    public data object Maven : PackagesType
 
     @Serializable
     @SerialName("npm")
-    public object Npm : PackagesType
+    public data object Npm : PackagesType
 
     @Serializable
     @SerialName("gradle")
