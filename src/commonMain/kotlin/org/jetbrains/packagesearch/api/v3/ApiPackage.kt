@@ -19,7 +19,7 @@ public sealed interface ApiPackage {
     public val idHash: String
     public val rankingMetric: Double?
     public val versions: VersionsContainer<out ApiPackageVersion>
-    public val name: String?
+    public val name: String
     public val coordinates: String
     public val description: String?
     public val licenses: Licenses<out LicenseFile>?
@@ -84,8 +84,8 @@ public data class ApiMavenPackage(
 
     override val coordinates: String
         get() = "$groupId:$artifactId"
-    public override val name: String?
-        get() = versions.latest.name
+    public override val name: String
+        get() = versions.latest.name ?: artifactId
     public override val description: String?
         get() = versions.latest.description
     public override val authors: List<Author>
