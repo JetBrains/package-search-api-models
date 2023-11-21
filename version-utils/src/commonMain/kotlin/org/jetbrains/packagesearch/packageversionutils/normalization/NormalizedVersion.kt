@@ -11,8 +11,15 @@ public sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
 
     public companion object {
 
-        public fun from(versionName: String?, releasedAt: Instant? = null): NormalizedVersion {
-            if (versionName.isNullOrBlank()) return Missing
+        @Deprecated(
+            message = "It should be removed. Use `null` to express a missing version.",
+            replaceWith = ReplaceWith("fromStringOrNull(versionName, releasedAt)")
+        )
+        public fun from(versionName: String?, releasedAt: Instant? = null): NormalizedVersion =
+            fromStringOrNull(versionName, releasedAt) ?: Missing
+
+        public fun fromStringOrNull(versionName: String?, releasedAt: Instant? = null): NormalizedVersion? {
+            if (versionName.isNullOrBlank()) return null
             return NormalizedVersionWeakCache.getOrPut(versionName, releasedAt) {
                 normalizePackageVersion(
                     versionName = versionName,
