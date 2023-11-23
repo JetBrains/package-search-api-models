@@ -9,6 +9,8 @@ public sealed interface ApiRepository {
 
     public val id: String
     public val lastChecked: Instant?
+    public val name: String
+    public val url: String
 }
 
 @Serializable
@@ -16,14 +18,17 @@ public sealed interface ApiRepository {
 public data class ApiMavenRepository(
     public override val id: String,
     public override val lastChecked: Instant?,
-    public val url: String,
+    public override val url: String,
     public val alternateUrls: List<String>,
     public val friendlyName: String,
     public val userFacingUrl: String? = null,
     public val packageCount: Int? = null,
     public val artifactCount: Int? = null,
     public val namedLinks: String? = null,
-) : ApiRepository
+) : ApiRepository {
+    public override val name: String
+        get() = friendlyName
+}
 
 //@Serializable
 //@SerialName("cocoapods")
