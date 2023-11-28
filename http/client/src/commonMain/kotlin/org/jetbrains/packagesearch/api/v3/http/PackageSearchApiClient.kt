@@ -10,6 +10,9 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.serialization.kotlinx.protobuf.*
+import io.ktor.util.AttributeKey
+import io.ktor.util.Attributes
+import io.ktor.util.putAll
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
@@ -71,13 +74,22 @@ public class PackageSearchApiClient(
                 }
                 additionalConfig()
             }
+
     }
 
-    private suspend inline fun <reified T> defaultRawRequest(url: Url, body: T) =
-        httpClient.get(url) {
-            setBody(body)
-            header(HttpHeaders.ContentType, ContentType.Application.Json)
-        }
+    public object Attributes {
+        public val Cache: AttributeKey<Boolean> = AttributeKey("cache")
+    }
+
+    private suspend inline fun <reified T> defaultRawRequest(
+        url: Url,
+        body: T,
+        cache: Boolean = true,
+    ) = httpClient.get(url) {
+        setBody(body)
+        header(HttpHeaders.ContentType, ContentType.Application.Json)
+        attributes.put(Attributes.Cache, cache)
+    }
 
     private suspend inline fun <reified T, reified R> defaultRequest(url: Url, body: T) =
         defaultRawRequest<T>(url, body).body<R>()
@@ -107,7 +119,11 @@ public class PackageSearchApiClient(
     override val isOnlineFlow: StateFlow<Boolean> = flow {
         while (true) {
             val body = GetPackageInfoRequest(setOf(ApiPackage.hashPackageId("maven:io.ktor:ktor-client-core")))
-            val request = defaultRawRequest(endpoints.packageInfoByIdHashes, body)
+            val request = defaultRawRequest(
+                url = endpoints.packageInfoByIdHashes,
+                body = body,
+                cache = false
+            )
             val isOnline = request.status.isSuccess()
             emit(isOnline)
             delay(pollingInterval)
