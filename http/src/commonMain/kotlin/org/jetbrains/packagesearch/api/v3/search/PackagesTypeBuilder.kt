@@ -20,7 +20,7 @@ public class PackagesTypeBuilder {
         gradlePackages(
             buildGradlePackages {
                 variants(variants)
-                this.mustBeRootPublication = isRootPublication
+                this.isRootPublication = isRootPublication
             },
         )
     }
@@ -48,5 +48,47 @@ public class PackagesTypeBuilder {
     public fun build(): List<PackagesType> = packagesType.distinct()
 }
 
+@SearchParametersBuilderDsl
 public fun buildPackageTypes(block: PackagesTypeBuilder.() -> Unit): List<PackagesType> =
     PackagesTypeBuilder().apply(block).build()
+
+public fun PackagesTypeBuilder.jvmGradlePackages(packaging: String) {
+    mavenPackages()
+    gradlePackages {
+        isRootPublication = true
+        variant {
+            javaApi()
+            libraryElements(packaging)
+        }
+        variant {
+            javaRuntime()
+            libraryElements(packaging)
+        }
+    }
+}
+
+public fun PackagesTypeBuilder.androidPackages() {
+    jvmGradlePackages("aar")
+    jvmGradlePackages("jar")
+    gradlePackages {
+        isRootPublication = true
+        variant {
+            kotlinPlatformType("android")
+        }
+    }
+}
+
+public fun PackagesTypeBuilder.jvmMavenPackages() {
+    mavenPackages()
+    gradlePackages {
+        isRootPublication = false
+        variant {
+            haveFiles = true
+            javaApi()
+        }
+        variant {
+            haveFiles = true
+            javaRuntime()
+        }
+    }
+}

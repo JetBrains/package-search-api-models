@@ -5,7 +5,15 @@ import org.jetbrains.packagesearch.api.v3.ApiMavenPackage.GradleVersion.ApiVaria
 @SearchParametersBuilderDsl
 public class GradlePackagesBuilder internal constructor() {
     private val variants: MutableList<PackagesType.Gradle.Variant> = mutableListOf()
-    public var mustBeRootPublication: Boolean = true
+
+    @Deprecated("Use mustBeRootPublication instead", ReplaceWith("isRootPublication"))
+    public var mustBeRootPublication: Boolean
+        get() = isRootPublication
+        set(value) {
+            isRootPublication = value
+        }
+
+    public var isRootPublication: Boolean = true
 
     public fun variants(variants: List<PackagesType.Gradle.Variant>) {
         this.variants.addAll(variants)
@@ -14,7 +22,16 @@ public class GradlePackagesBuilder internal constructor() {
     @SearchParametersBuilderDsl
     public class VariantBuilder internal constructor() {
         private val attributes: MutableMap<String, ApiVariant.Attribute> = mutableMapOf()
-        public var mustHaveFilesAttribute: Boolean = false
+
+
+        public var haveFiles: Boolean = false
+
+        @Deprecated("Use mustBeWithFiles instead", ReplaceWith("mustBeWithFiles"))
+        public var mustHaveFilesAttribute: Boolean
+            get() = haveFiles
+            set(value) {
+                haveFiles = value
+            }
 
         public fun attribute(key: String, value: String) {
             attributes[key] = ApiVariant.Attribute.create(key, value)
@@ -25,16 +42,17 @@ public class GradlePackagesBuilder internal constructor() {
         }
 
         public fun build(): PackagesType.Gradle.Variant =
-            PackagesType.Gradle.Variant(attributes.toMap(), mustHaveFilesAttribute)
+            PackagesType.Gradle.Variant(attributes.toMap(), haveFiles)
     }
 
-    public fun buildVariant(block: VariantBuilder.() -> Unit): PackagesType.Gradle.Variant = VariantBuilder().apply(block).build()
+    public fun buildVariant(block: VariantBuilder.() -> Unit): PackagesType.Gradle.Variant =
+        VariantBuilder().apply(block).build()
 
     public fun variant(block: VariantBuilder.() -> Unit) {
         variants.add(buildVariant(block))
     }
 
-    internal fun build(): PackagesType.Gradle = PackagesType.Gradle(variants.toList(), mustBeRootPublication)
+    internal fun build(): PackagesType.Gradle = PackagesType.Gradle(variants.toList(), isRootPublication)
 }
 
 public fun buildGradlePackages(block: GradlePackagesBuilder.() -> Unit): PackagesType.Gradle =
@@ -42,29 +60,6 @@ public fun buildGradlePackages(block: GradlePackagesBuilder.() -> Unit): Package
 
 public fun GradlePackagesBuilder.VariantBuilder.kotlinPlatformType(platformType: String) {
     attribute("org.jetbrains.kotlin.platform.type", platformType)
-}
-
-public fun GradlePackagesBuilder.VariantBuilder.native(platform: String) {
-    kotlinPlatformType("native")
-    attribute("org.jetbrains.kotlin.native.target", platform)
-}
-
-public fun GradlePackagesBuilder.VariantBuilder.jvm() {
-    kotlinPlatformType("jvm")
-}
-
-public fun GradlePackagesBuilder.VariantBuilder.js(legacyCompiler: Boolean) {
-    kotlinPlatformType("js")
-    val compilerAttribute = if (legacyCompiler) "legacy" else "ir"
-    attribute("org.jetbrains.kotlin.js.compiler", compilerAttribute)
-}
-
-public fun GradlePackagesBuilder.VariantBuilder.jsLegacy() {
-    js(legacyCompiler = true)
-}
-
-public fun GradlePackagesBuilder.VariantBuilder.jsIr() {
-    js(legacyCompiler = false)
 }
 
 public fun GradlePackagesBuilder.VariantBuilder.category(category: String) {
@@ -91,8 +86,3 @@ public fun GradlePackagesBuilder.VariantBuilder.javaRuntime() {
     usage("java-runtime")
 }
 
-public fun GradlePackagesBuilder.VariantBuilder.kotlinMetadata() {
-    libraryCategory()
-    usage("kotlin-metadata")
-    kotlinPlatformType("common")
-}

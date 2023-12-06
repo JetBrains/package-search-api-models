@@ -5,47 +5,60 @@ public class KotlinMultiplatformBuilder internal constructor(private val delegat
 
     internal fun metadata() {
         delegate.variant {
+            kotlinPlatformType("common")
             libraryCategory()
             usage("kotlin-metadata")
             kotlinPlatformType("common")
         }
     }
 
-    public fun genericJvm(libraryElements: String? = null) {
+    public fun jvm() {
         delegate.variant {
-            jvm()
-            libraryCategory()
-            javaApi()
-            libraryElements?.let { libraryElements(it) }
-        }
-        delegate.variant {
-            jvm()
             libraryCategory()
             javaRuntime()
-            libraryElements?.let { libraryElements(it) }
+            libraryElements("jar")
+        }
+        delegate.variant {
+            libraryCategory()
+            javaApi()
+            libraryElements("jar")
         }
     }
 
-    public fun jvm() {
-        genericJvm("jar")
+    public fun wasm() {
+        delegate.variant {
+            kotlinPlatformType("wasm")
+            libraryCategory()
+            usage("kotlin-api")
+        }
     }
+
     public fun android() {
-        genericJvm("aar")
+        delegate.variant {
+            libraryCategory()
+            javaRuntime()
+        }
+        delegate.variant {
+            libraryCategory()
+            javaApi()
+        }
     }
 
     public fun jsLegacy() {
         delegate.variant {
+            kotlinPlatformType("js")
             libraryCategory()
             usage("kotlin-api")
-            jsLegacy()
+            attribute("org.jetbrains.kotlin.js.compiler", "legacy")
         }
     }
 
     public fun jsIr() {
         delegate.variant {
+            kotlinPlatformType("js")
             libraryCategory()
             usage("kotlin-api")
-            jsIr()
+            attribute("org.jetbrains.kotlin.js.compiler", "ir")
         }
     }
 
@@ -56,15 +69,15 @@ public class KotlinMultiplatformBuilder internal constructor(private val delegat
 
     public fun native(platform: String) {
         delegate.variant {
-            native(platform)
+            kotlinPlatformType("native")
+            attribute("org.jetbrains.kotlin.native.target", platform)
             libraryCategory()
             usage("kotlin-api")
         }
     }
 }
 
+@SearchParametersBuilderDsl
 public fun GradlePackagesBuilder.kotlinMultiplatform(builder: KotlinMultiplatformBuilder.() -> Unit = {}) {
-    KotlinMultiplatformBuilder(this)
-        .apply { metadata() }
-        .apply(builder)
+    KotlinMultiplatformBuilder(this).apply(builder)
 }
