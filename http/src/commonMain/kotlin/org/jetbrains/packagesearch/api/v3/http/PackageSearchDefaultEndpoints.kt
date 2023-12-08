@@ -9,7 +9,7 @@ public class PackageSearchDefaultEndpoints(
     public val port: Int = protocol.defaultPort
 ) : PackageSearchEndpoints {
 
-    private fun buildPkgsUrl(path: String) = buildUrl {
+    private fun buildUrl(vararg path: String) = buildUrl {
         protocol = this@PackageSearchDefaultEndpoints.protocol
         host = this@PackageSearchDefaultEndpoints.host
         pathSegments = pathSegmentsPrefix + path
@@ -17,15 +17,19 @@ public class PackageSearchDefaultEndpoints(
     }
 
     override val knownRepositories: Url
-        get() = buildPkgsUrl("known-repositories")
+        get() = buildUrl("known-repositories")
     override val packageInfoByIds: Url
-        get() = buildPkgsUrl("package-info-by-ids")
+        get() = buildUrl("package-info-by-ids")
     override val packageInfoByIdHashes: Url
-        get() = buildPkgsUrl("package-info-by-id-hashes")
+        get() = buildUrl("package-info-by-id-hashes")
     override val searchPackages: Url
-        get() = buildPkgsUrl("search-packages")
+        get() = buildUrl("search-packages")
+    override val startScroll: Url
+        get() = buildUrl("search-packages", "scroll", "start")
+    override val nextScroll: Url
+        get() = buildUrl("search-packages", "scroll", "next")
     override val searchProjects: Url
-        get() = buildPkgsUrl("search-projects")
+        get() = buildUrl("search-projects")
 }
 
 private fun buildUrl(action: URLBuilder.() -> Unit): Url = URLBuilder().apply(action).build()

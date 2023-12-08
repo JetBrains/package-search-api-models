@@ -14,11 +14,36 @@ public data class SearchProjectRequest(
     public val query: String
 )
 
+// Provide only 50 search results per batch by default
+public const val DEFAULT_BATCH_SIZE: Int = 50
+
 @Serializable
 public data class SearchPackagesRequest(
     public val packagesType: List<PackagesType> = emptyList(),
-//    public val stableOnly: Boolean = true,
     public val searchQuery: String,
+)
+
+// Keep the search context alive for 5 minutes (per batch)
+public const val DEFAULT_SCROLL_DURATION: String = "5m"
+
+@Serializable
+public data class SearchPackagesStartScrollRequest(
+    public val packagesType: List<PackagesType> = emptyList(),
+    public val searchQuery: String = "",
+    public val batchSize: Int = DEFAULT_BATCH_SIZE,
+    public val duration: String = DEFAULT_SCROLL_DURATION,
+)
+
+@Serializable
+public data class SearchPackagesNextScrollRequest(
+    public val scrollId: String,
+    public val duration: String = DEFAULT_SCROLL_DURATION
+)
+
+@Serializable
+public data class SearchPackagesScrollResponse(
+    val scrollId: String?,
+    val data: List<ApiPackage>
 )
 
 @Serializable

@@ -10,12 +10,7 @@ import io.ktor.client.request.*
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.serialization.kotlinx.protobuf.*
-import io.ktor.util.AttributeKey
-import io.ktor.util.Attributes
-import io.ktor.util.putAll
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.seconds
+import io.ktor.util.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.SharingStarted
@@ -26,8 +21,10 @@ import kotlinx.serialization.protobuf.ProtoBuf
 import org.jetbrains.packagesearch.api.v3.ApiPackage
 import org.jetbrains.packagesearch.api.v3.ApiProject
 import org.jetbrains.packagesearch.api.v3.ApiRepository
-import org.jetbrains.packagesearch.api.v3.search.SearchParametersBuilder
-import org.jetbrains.packagesearch.api.v3.search.buildSearchParameters
+import org.jetbrains.packagesearch.api.v3.search.*
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 
 public expect val DefaultEngine: HttpClientEngineFactory<HttpClientEngineConfig>
 
@@ -36,6 +33,8 @@ public interface PackageSearchApi {
     public suspend fun getPackageInfoByIds(ids: Set<String>): Map<String, ApiPackage>
     public suspend fun getPackageInfoByIdHashes(ids: Set<String>): Map<String, ApiPackage>
     public suspend fun searchPackages(request: SearchPackagesRequest): List<ApiPackage>
+    public suspend fun startScroll(request: SearchPackagesStartScrollRequest): SearchPackagesScrollResponse
+    public suspend fun nextScroll(request: SearchPackagesNextScrollRequest): SearchPackagesScrollResponse
     public suspend fun searchProjects(request: SearchProjectRequest): List<ApiProject>
     public val isOnlineFlow: StateFlow<Boolean>
 }
@@ -113,6 +112,12 @@ public class PackageSearchApiClient(
     override suspend fun searchPackages(request: SearchPackagesRequest): List<ApiPackage> =
         defaultRequest<_, List<ApiPackage>>(endpoints.searchPackages, request)
 
+    override suspend fun startScroll(request: SearchPackagesStartScrollRequest): SearchPackagesScrollResponse =
+        defaultRequest<_, SearchPackagesScrollResponse>(endpoints.startScroll, request)
+
+    override suspend fun nextScroll(request: SearchPackagesNextScrollRequest): SearchPackagesScrollResponse =
+        defaultRequest<_, SearchPackagesScrollResponse>(endpoints.nextScroll, request)
+
     override suspend fun searchProjects(request: SearchProjectRequest): List<ApiProject> =
         defaultRequest<_, List<ApiProject>>(endpoints.searchPackages, request)
 
@@ -134,3 +139,10 @@ public class PackageSearchApiClient(
 
 public suspend fun PackageSearchApiClient.searchPackages(builder: SearchParametersBuilder.() -> Unit): List<ApiPackage> =
     searchPackages(buildSearchParameters(builder))
+
+public suspend fun PackageSearchApiClient.startScroll(builder: StartScrollParametersBuilder.() -> Unit): SearchPackagesScrollResponse =
+    startScroll(buildStartScrollParameters(builder))
+
+public suspend fun PackageSearchApiClient.nextScroll(builder: NextScrollParametersBuilder.() -> Unit): SearchPackagesScrollResponse =
+    nextScroll(buildNextScrollParameters(builder))
+
