@@ -9,7 +9,6 @@ public annotation class SearchParametersBuilderDsl
 public class SearchParametersBuilder {
 
     public var searchQuery: String? = null
-    public var stableOnly: Boolean = true
     public var packagesType: List<PackagesType> = emptyList()
 
     public fun packagesType(block: PackagesTypeBuilder.() -> Unit) {
@@ -18,13 +17,13 @@ public class SearchParametersBuilder {
 
     internal fun build(): SearchPackagesRequest {
         val query = searchQuery
+
         val errorText = "Search query is null or blank."
-        requireNotNull(query) { errorText }
-        require(query.isNotBlank()) { errorText }
+        require(!query.isNullOrBlank()) { errorText }
+
         return SearchPackagesRequest(
             packagesType = packagesType,
             searchQuery = query,
-//            stableOnly = stableOnly
         )
     }
 }
