@@ -11,20 +11,18 @@ import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.serialization.kotlinx.protobuf.*
 import io.ktor.util.*
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.SharingStarted
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.stateIn
 import kotlinx.serialization.protobuf.ProtoBuf
 import org.jetbrains.packagesearch.api.v3.ApiPackage
 import org.jetbrains.packagesearch.api.v3.ApiProject
 import org.jetbrains.packagesearch.api.v3.ApiRepository
 import org.jetbrains.packagesearch.api.v3.search.*
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.seconds
 
 public expect val DefaultEngine: HttpClientEngineFactory<HttpClientEngineConfig>
 
@@ -36,15 +34,25 @@ public interface PackageSearchApi {
     public suspend fun startScroll(request: SearchPackagesStartScrollRequest): SearchPackagesScrollResponse
     public suspend fun nextScroll(request: SearchPackagesNextScrollRequest): SearchPackagesScrollResponse
     public suspend fun searchProjects(request: SearchProjectRequest): List<ApiProject>
-    public val isOnlineFlow: StateFlow<Boolean>
+    public fun isOnlineFlow(pollingInterval: Duration = 1.seconds): Flow<Boolean>
 }
 
 public class PackageSearchApiClient(
     public val endpoints: PackageSearchEndpoints,
     private val httpClient: HttpClient = defaultHttpClient(),
-    scope: CoroutineScope,
-    private val pollingInterval: Duration = 1.seconds,
 ) : PackageSearchApi {
+
+    @Suppress("UNUSED_PARAMETER")
+    @Deprecated(
+        message = "Use new constructor",
+        replaceWith = ReplaceWith("PackageSearchApiClient(endpoints, httpClient)")
+    )
+    public constructor(
+        endpoints: PackageSearchEndpoints,
+        httpClient: HttpClient = defaultHttpClient(),
+        scope: CoroutineScope,
+        pollingInterval: Duration = 1.seconds,
+    ) : this(endpoints, httpClient)
 
     public companion object {
 
@@ -121,7 +129,7 @@ public class PackageSearchApiClient(
     override suspend fun searchProjects(request: SearchProjectRequest): List<ApiProject> =
         defaultRequest<_, List<ApiProject>>(endpoints.searchPackages, request)
 
-    override val isOnlineFlow: StateFlow<Boolean> = flow {
+    override fun isOnlineFlow(pollingInterval: Duration): Flow<Boolean> = flow {
         while (true) {
             val body = GetPackageInfoRequest(setOf(ApiPackage.hashPackageId("maven:io.ktor:ktor-client-core")))
             val request = defaultRawRequest(
@@ -133,7 +141,7 @@ public class PackageSearchApiClient(
             emit(isOnline)
             delay(pollingInterval)
         }
-    }.stateIn(scope, SharingStarted.WhileSubscribed(), true)
+    }
 
 }
 
