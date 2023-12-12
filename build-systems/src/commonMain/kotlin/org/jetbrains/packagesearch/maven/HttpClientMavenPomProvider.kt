@@ -1,6 +1,7 @@
 package org.jetbrains.packagesearch.maven
 
 import io.ktor.client.HttpClient
+import io.ktor.client.HttpClientConfig
 import io.ktor.client.call.body
 import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
@@ -18,13 +19,20 @@ import kotlinx.coroutines.flow.map
 import nl.adaptivity.xmlutil.serialization.XML
 
 public class HttpClientMavenPomProvider(
-    public val repositories: List<MavenUrlBuilder>,
+    public val mirrors: List<MavenUrlBuilder>,
     public val httpClient: HttpClient,
     public val xml: XML = PomResolver.defaultXml(),
 ): MavenPomProvider, Closeable by httpClient {
 
+    @Deprecated("Use mirrors instead", ReplaceWith("mirrors"))
+    public val repositories: List<MavenUrlBuilder>
+        get() = mirrors
+
     public companion object {
-        public fun defaultHttpClient(xml: XML): HttpClient = HttpClient {
+        public fun defaultHttpClient(
+            xml: XML = PomResolver.defaultXml(),
+            configure: HttpClientConfig<*>.() -> Unit = {},
+        ): HttpClient = HttpClient {
             install(ContentNegotiation) {
                 val converter = KotlinxSerializationConverter(xml)
                 register(ContentType.Application.Xml, converter)
@@ -34,6 +42,7 @@ public class HttpClientMavenPomProvider(
                 retryOnExceptionOrServerErrors(10)
                 constantDelay(100, 50, false)
             }
+            configure()
         }
     }
 
@@ -46,8 +55,8 @@ public class HttpClientMavenPomProvider(
         artifactId: String,
         version: String
     ): Flow<ProjectObjectModel> {
-        return repositories.asFlow().map {
-            getPom(it, groupId, artifactId, version)
+        return mirrors.asFlow().map {
+            it.getPom(groupId, artifactId, version)
         }
     }
 
@@ -55,16 +64,14 @@ public class HttpClientMavenPomProvider(
         return httpClient.get(url).bodyAsPom(xml)
     }
 
-    private suspend fun getPom(repository: MavenUrlBuilder, groupId: String, artifactId: String, version: String): ProjectObjectModel {
-        val url = repository.buildPomUrl(groupId, artifactId, version)
-        return getPomByUrl(url)
-    }
+    private suspend fun MavenUrlBuilder.getPom(
+        groupId: String,
+        artifactId: String,
+        version: String,
+    ): ProjectObjectModel = getPomByUrl(buildPomUrl(groupId, artifactId, version))
 
     private suspend fun HttpResponse.bodyAsPom(xml: XML) =
         runCatching { body<ProjectObjectModel>() }.getOrNull()
             ?: xml.decodeFromString(POM_XML_NAMESPACE, bodyAsText())
-
-    private fun MavenUrlBuilder.buildPomUrl(groupId: String, artifactId: String, version: String): Url =
-        buildArtifactUrl(groupId, artifactId, version, ".pom")
 
 }

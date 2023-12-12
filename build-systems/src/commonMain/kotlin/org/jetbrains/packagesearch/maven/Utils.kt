@@ -49,6 +49,7 @@ public interface MavenUrlBuilder {
     public fun buildMetadataUrl(groupId: String, artifactId: String): Url
 }
 
+
 public class SimpleMavenUrlBuilder(
     rawBaseUrl: String,
 ): MavenUrlBuilder {
@@ -85,36 +86,61 @@ public class SimpleMavenUrlBuilder(
         }
 }
 
+public fun MavenUrlBuilder.buildPomUrl(groupId: String, artifactId: String, version: String): Url =
+    buildArtifactUrl(groupId, artifactId, version, ".pom")
+
+public fun MavenUrlBuilder.buildGradleMetadataUrl(groupId: String, artifactId: String, version: String): Url =
+    buildArtifactUrl(groupId, artifactId, version, ".module")
+
+public fun MavenUrlBuilder.buildJarUrl(groupId: String, artifactId: String, version: String): Url =
+    buildArtifactUrl(groupId, artifactId, version, ".jar")
+
+public fun MavenUrlBuilder.buildSourcesJarUrl(groupId: String, artifactId: String, version: String): Url =
+    buildArtifactUrl(groupId, artifactId, version, "-sources.jar")
+
+public fun MavenUrlBuilder.buildJavadocJarUrl(groupId: String, artifactId: String, version: String): Url =
+    buildArtifactUrl(groupId, artifactId, version, "-javadoc.jar")
+
+public fun buildMavenUrl(
+    groupId: String,
+    artifactId: String,
+    version: String?,
+    host: String,
+    artifactExtension: String,
+): Url = buildUrl {
+    protocol = URLProtocol.HTTPS
+    this.host = host
+    port = protocol.defaultPort
+    pathSegments = buildList {
+        add("maven2")
+        addAll(groupId.split("."))
+        add(artifactId)
+        version?.let { add(it) }
+        add("$artifactId-$version$artifactExtension")
+    }
+}
+
 public object GoogleMavenCentralMirror : MavenUrlBuilder {
     public override fun buildArtifactUrl(
         groupId: String,
         artifactId: String,
         version: String,
-        artifactExtension: String
-    ): Url = buildUrl {
-        protocol = URLProtocol.HTTPS
-        host = "maven-central.storage-download.googleapis.com"
-        port = protocol.defaultPort
-        pathSegments = buildList {
-            add("maven2")
-            addAll(groupId.split("."))
-            add(artifactId)
-            add(version)
-            add("$artifactId-$version$artifactExtension")
-        }
-    }
+        artifactExtension: String,
+    ): Url = buildMavenUrl(
+        groupId = groupId,
+        artifactId = artifactId,
+        version = version,
+        host = "maven-central.storage-download.googleapis.com",
+        artifactExtension = artifactExtension
+    )
 
-    override fun buildMetadataUrl(groupId: String, artifactId: String): Url = buildUrl {
-        protocol = URLProtocol.HTTPS
-        host = "maven-central.storage-download.googleapis.com"
-        port = protocol.defaultPort
-        pathSegments = buildList {
-            add("maven2")
-            addAll(groupId.split("."))
-            add(artifactId)
-            add("maven-metadata.xml")
-        }
-    }
+    override fun buildMetadataUrl(groupId: String, artifactId: String): Url = buildMavenUrl(
+        groupId = groupId,
+        artifactId = artifactId,
+        version = null,
+        host = "maven-central.storage-download.googleapis.com",
+        artifactExtension = "maven-metadata.xml"
+    )
 }
 
 internal data class DependencyKey(val groupId: String, val artifactId: String)

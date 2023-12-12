@@ -1,8 +1,8 @@
 package org.jetbrains.packagesearch.maven
 
-import io.ktor.client.*
-import io.ktor.http.*
-import io.ktor.utils.io.core.*
+import io.ktor.client.HttpClient
+import io.ktor.http.URLBuilder
+import io.ktor.utils.io.core.Closeable
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
@@ -46,14 +46,12 @@ public class PomResolver(
         public fun defaultPomProvider(
             repositories: List<MavenUrlBuilder> = listOf(GoogleMavenCentralMirror),
             xml: XML = defaultXml(),
-            httpClient: HttpClient = HttpClientMavenPomProvider.defaultHttpClient(xml)
-        ): MavenPomProvider {
-            return HttpClientMavenPomProvider(
-                repositories,
-                httpClient,
-                xml
-            )
-        }
+            httpClient: HttpClient = HttpClientMavenPomProvider.defaultHttpClient(xml),
+        ): MavenPomProvider = HttpClientMavenPomProvider(
+            mirrors = repositories,
+            httpClient = httpClient,
+            xml = xml
+        )
 
         /**
          * Regular expression used for pattern matching and extraction.
@@ -75,7 +73,8 @@ public class PomResolver(
      */
     public suspend fun getPom(groupId: String, artifactId: String, version: String): ProjectObjectModel? =
         pomProvider.getPomFromMultipleRepositories(groupId, artifactId, version)
-            .firstOrNull()?.let { resolve(it) }
+            .firstOrNull()
+            ?.let { resolve(it) }
 
     /**
      * Retrieves the Project Object Model (POM) for the specified parent.
@@ -228,6 +227,3 @@ public class PomResolver(
 }
 
 internal fun buildUrl(action: URLBuilder.() -> Unit) = URLBuilder().apply(action).build()
-
-public fun MavenUrlBuilder.buildGradleMetadataUrl(groupId: String, artifactId: String, version: String): Url =
-    buildArtifactUrl(groupId, artifactId, version, ".module")
