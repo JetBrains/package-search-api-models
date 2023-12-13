@@ -49,6 +49,43 @@ public interface MavenUrlBuilder {
     public fun buildMetadataUrl(groupId: String, artifactId: String): Url
 }
 
+
+public class SimpleMavenUrlBuilder(
+    rawBaseUrl: String,
+): MavenUrlBuilder {
+    private val baseUrl = rawBaseUrl.removePrefix("https://")
+    override fun buildArtifactUrl(
+        groupId: String,
+        artifactId: String,
+        version: String,
+        artifactExtension: String
+    ): Url = buildUrl {
+        protocol = URLProtocol.HTTPS
+        host = baseUrl
+        port = protocol.defaultPort
+        pathSegments = buildList {
+            add("maven2")
+            addAll(groupId.split("."))
+            add(artifactId)
+            add(version)
+            add("$artifactId-$version$artifactExtension")
+        }
+    }
+
+    override fun buildMetadataUrl(groupId: String, artifactId: String): Url =
+        buildUrl {
+            protocol = URLProtocol.HTTPS
+            host = baseUrl
+            port = protocol.defaultPort
+            pathSegments = buildList {
+                add("maven2")
+                addAll(groupId.split("."))
+                add(artifactId)
+                add("maven-metadata.xml")
+            }
+        }
+}
+
 public fun MavenUrlBuilder.buildPomUrl(groupId: String, artifactId: String, version: String): Url =
     buildArtifactUrl(groupId, artifactId, version, ".pom")
 
