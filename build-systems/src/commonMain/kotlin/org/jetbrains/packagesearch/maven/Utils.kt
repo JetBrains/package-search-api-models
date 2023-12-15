@@ -53,7 +53,10 @@ public interface MavenUrlBuilder {
 public class SimpleMavenUrlBuilder(
     rawBaseUrl: String,
 ): MavenUrlBuilder {
-    private val baseUrl = rawBaseUrl.removePrefix("https://").removeSuffix("/")
+    private val baseUrl = Url(
+        rawBaseUrl.removeSuffix("/")
+    )
+
     override fun buildArtifactUrl(
         groupId: String,
         artifactId: String,
@@ -61,9 +64,10 @@ public class SimpleMavenUrlBuilder(
         artifactExtension: String
     ): Url = buildUrl {
         protocol = URLProtocol.HTTPS
-        host = baseUrl
+        host = baseUrl.host
         port = protocol.defaultPort
         pathSegments = buildList {
+            addAll(baseUrl.pathSegments)
             addAll(groupId.split("."))
             add(artifactId)
             add(version)
@@ -74,9 +78,10 @@ public class SimpleMavenUrlBuilder(
     override fun buildMetadataUrl(groupId: String, artifactId: String): Url =
         buildUrl {
             protocol = URLProtocol.HTTPS
-            host = baseUrl
+            host = baseUrl.host
             port = protocol.defaultPort
             pathSegments = buildList {
+                addAll(baseUrl.pathSegments)
                 addAll(groupId.split("."))
                 add(artifactId)
                 add("maven-metadata.xml")
