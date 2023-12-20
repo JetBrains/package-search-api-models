@@ -117,7 +117,11 @@ public class PackageSearchApiClient(
             .associateBy { it.id }
 
     override suspend fun getPackageInfoByIdHashes(ids: Set<String>): Map<String, ApiPackage> =
-        defaultRequest<_, List<ApiPackage>>(HttpMethod.Post, endpoints.packageInfoByIdHashes, GetPackageInfoRequest(ids))
+        defaultRequest<_, List<ApiPackage>>(
+            HttpMethod.Post,
+            endpoints.packageInfoByIdHashes,
+            GetPackageInfoRequest(ids)
+        )
             .associateBy { it.id }
 
     override suspend fun searchPackages(request: SearchPackagesRequest): List<ApiPackage> =
@@ -127,10 +131,10 @@ public class PackageSearchApiClient(
         defaultRequest<_, SearchPackagesScrollResponse>(HttpMethod.Post, endpoints.startScroll, request)
 
     override suspend fun nextScroll(request: SearchPackagesNextScrollRequest): SearchPackagesScrollResponse =
-        defaultRequest<_, SearchPackagesScrollResponse>(HttpMethod.Post,endpoints.nextScroll, request)
+        defaultRequest<_, SearchPackagesScrollResponse>(HttpMethod.Post, endpoints.nextScroll, request)
 
     override suspend fun searchProjects(request: SearchProjectRequest): List<ApiProject> =
-        defaultRequest<_, List<ApiProject>>(HttpMethod.Post,endpoints.searchPackages, request)
+        defaultRequest<_, List<ApiProject>>(HttpMethod.Post, endpoints.searchPackages, request)
 
     override fun isOnlineFlow(pollingInterval: Duration): Flow<Boolean> = flow {
         while (true) {
