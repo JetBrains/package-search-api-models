@@ -16,5 +16,10 @@ public interface PackageSearchEndpoints {
             protocol = URLProtocol.HTTPS,
             host = "api.dev.package-search.services.jetbrains.com",
         )
+
+        public val PROD: PackageSearchDefaultEndpoints = PackageSearchDefaultEndpoints(
+            protocol = URLProtocol.HTTPS,
+            host = "package-search.services.jetbrains.com",
+        )
     }
 }
