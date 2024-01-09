@@ -1,12 +1,14 @@
 package org.jetbrains.packagesearch.api.v3.http
 
-import io.ktor.http.*
+import io.ktor.http.URLBuilder
+import io.ktor.http.URLProtocol
+import io.ktor.http.Url
 
 public class PackageSearchDefaultEndpoints(
-    public val protocol: URLProtocol,
     public val host: String,
+    public val protocol: URLProtocol = URLProtocol.HTTPS,
     public val pathSegmentsPrefix: List<String> = emptyList(),
-    public val port: Int = protocol.defaultPort
+    public val port: Int = protocol.defaultPort,
 ) : PackageSearchEndpoints {
 
     private fun buildUrl(vararg path: String) = buildUrl {

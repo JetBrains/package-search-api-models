@@ -1,6 +1,6 @@
 package org.jetbrains.packagesearch.api.v3.http
 
-import io.ktor.http.*
+import io.ktor.http.Url
 
 public interface PackageSearchEndpoints {
     public val knownRepositories: Url
@@ -12,14 +12,17 @@ public interface PackageSearchEndpoints {
     public val searchProjects: Url
 
     public companion object {
+
+        public val DEFAULT: PackageSearchEndpoints = PackageSearchDefaultEndpoints(
+            host = "package-search.services.jetbrains.com",
+        )
+
         public val DEV: PackageSearchDefaultEndpoints = PackageSearchDefaultEndpoints(
-            protocol = URLProtocol.HTTPS,
             host = "api.dev.package-search.services.jetbrains.com",
         )
 
         public val PROD: PackageSearchDefaultEndpoints = PackageSearchDefaultEndpoints(
-            protocol = URLProtocol.HTTPS,
-            host = "package-search.services.jetbrains.com",
+            host = "api.prod.package-search.services.jetbrains.com",
         )
     }
 }
