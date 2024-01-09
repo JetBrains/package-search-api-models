@@ -166,6 +166,12 @@ public class PomResolver(
             properties = mergedPom.properties.mapValues { it.value.resolve(mergedPom.properties, accessor) },
             name = mergedPom.name?.resolve(mergedPom.properties, accessor),
             description = mergedPom.description?.resolve(mergedPom.properties, accessor),
+            scm = mergedPom.scm?.copy(
+                connection = mergedPom.scm?.connection?.resolve(mergedPom.properties, accessor),
+                developerConnection = mergedPom.scm?.developerConnection?.resolve(mergedPom.properties, accessor),
+                url = mergedPom.scm?.url?.resolve(mergedPom.properties, accessor),
+                tag = mergedPom.scm?.tag?.resolve(mergedPom.properties, accessor),
+            ),
         )
 
     }
@@ -218,8 +224,6 @@ public class PomResolver(
      */
     private inline fun String.replaceProperty(noinline transform: (String) -> CharSequence?): String =
         replace(PROPERTY_REFERENCE_REGEX) { transform(it.groupValues[1]) ?: it.groupValues.first() }
-
-
 
     override fun close() {
         if (pomProvider is Closeable) pomProvider.close()

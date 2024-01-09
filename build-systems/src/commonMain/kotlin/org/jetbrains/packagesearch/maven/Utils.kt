@@ -31,7 +31,8 @@ public fun ProjectObjectModel.copy(
     properties: Map<String, String> = this.properties,
     name: String? = this.name,
     description: String? = this.description,
-): ProjectObjectModel = copy (
+    scm: Scm? = this.scm,
+): ProjectObjectModel = copy(
     groupId = groupId,
     artifactId = artifactId,
     parent = parent,
@@ -39,7 +40,8 @@ public fun ProjectObjectModel.copy(
     dependencyManagementContainer = DependencyManagement(Dependencies(dependencyManagement)),
     propertiesContainer = Properties(properties),
     name = name,
-    description = description
+    description = description,
+    scm = scm
 )
 
 public const val POM_XML_NAMESPACE: String = "http://maven.apache.org/POM/4.0.0"
@@ -52,7 +54,7 @@ public interface MavenUrlBuilder {
 
 public class SimpleMavenUrlBuilder(
     rawBaseUrl: String,
-): MavenUrlBuilder {
+) : MavenUrlBuilder {
     private val baseUrl = Url(
         rawBaseUrl.removeSuffix("/")
     )
@@ -61,7 +63,7 @@ public class SimpleMavenUrlBuilder(
         groupId: String,
         artifactId: String,
         version: String,
-        artifactExtension: String
+        artifactExtension: String,
     ): Url = buildUrl {
         protocol = URLProtocol.HTTPS
         host = baseUrl.host
