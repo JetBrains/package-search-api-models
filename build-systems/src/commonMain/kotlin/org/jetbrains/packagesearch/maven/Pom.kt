@@ -146,7 +146,7 @@ public data class Exclusion(
     namespace = POM_XML_NAMESPACE,
 )
 public data class DependencyManagement(
-    public val dependencies: Dependencies
+    public val dependencies: Dependencies? = null
 )
 
 @Serializable
