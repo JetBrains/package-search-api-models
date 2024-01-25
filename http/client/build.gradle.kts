@@ -23,20 +23,9 @@ kotlin {
                 api(packageSearchApiModelsVersions.kotlinx.serialization.json)
             }
         }
-        jsMain {
-            dependencies {
-                api(packageSearchApiModelsVersions.ktor.client.js)
-            }
-        }
         jvmMain {
             dependencies {
-                api(packageSearchApiModelsVersions.ktor.client.cio)
                 api(packageSearchApiModelsVersions.logback.classic)
-            }
-        }
-        appleMain {
-            dependencies {
-                api(packageSearchApiModelsVersions.ktor.client.darwin)
             }
         }
     }

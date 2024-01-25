@@ -24,8 +24,6 @@ import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
 
-public expect val DefaultEngine: HttpClientEngineFactory<HttpClientEngineConfig>
-
 public interface PackageSearchApi {
     public suspend fun getKnownRepositories(): List<ApiRepository>
     public suspend fun getPackageInfoByIds(ids: Set<String>): Map<String, ApiPackage>
@@ -56,31 +54,52 @@ public class PackageSearchApiClient(
 
     public companion object {
 
+        private fun HttpClientConfig<*>.defaultEngineConfig(protobuf: Boolean = true) {
+            install(ContentNegotiation) {
+                if (protobuf) protobuf(ProtoBuf { encodeDefaults = false })
+                json()
+            }
+            install(ContentEncoding) {
+                gzip()
+            }
+            install(HttpRequestRetry) {
+                maxRetries = 3
+                constantDelay(
+                    delay = 500.milliseconds,
+                    randomization = 100.milliseconds,
+                    respectRetryAfterHeader = false
+                )
+            }
+            install(HttpTimeout) {
+                requestTimeout = 10.seconds
+            }
+        }
+
         public fun defaultHttpClient(
             protobuf: Boolean = true,
             additionalConfig: HttpClientConfig<*>.() -> Unit = {},
-        ): HttpClient =
-            HttpClient(DefaultEngine) {
-                install(ContentNegotiation) {
-                    if (protobuf) protobuf(ProtoBuf { encodeDefaults = false })
-                    json()
-                }
-                install(ContentEncoding) {
-                    gzip()
-                }
-                install(HttpRequestRetry) {
-                    maxRetries = 3
-                    constantDelay(
-                        delay = 500.milliseconds,
-                        randomization = 100.milliseconds,
-                        respectRetryAfterHeader = false
-                    )
-                }
-                install(HttpTimeout) {
-                    requestTimeout = 10.seconds
-                }
-                additionalConfig()
-            }
+        ): HttpClient = HttpClient {
+            defaultEngineConfig(protobuf)
+            additionalConfig()
+        }
+
+        public fun <T : HttpClientEngineConfig> defaultHttpClient(
+            engine: HttpClientEngineFactory<T>,
+            protobuf: Boolean = true,
+            additionalConfig: HttpClientConfig<T>.() -> Unit = {},
+        ): HttpClient = HttpClient(engine) {
+            defaultEngineConfig(protobuf)
+            additionalConfig()
+        }
+
+        public fun defaultHttpClient(
+            engine: HttpClientEngine,
+            protobuf: Boolean = true,
+            additionalConfig: HttpClientConfig<*>.() -> Unit = {},
+        ): HttpClient = HttpClient(engine) {
+            defaultEngineConfig(protobuf)
+            additionalConfig()
+        }
 
     }
 
