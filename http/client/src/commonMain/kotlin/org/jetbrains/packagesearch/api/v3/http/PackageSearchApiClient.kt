@@ -158,13 +158,17 @@ public class PackageSearchApiClient(
     override fun isOnlineFlow(pollingInterval: Duration): Flow<Boolean> = flow {
         while (true) {
             val body = GetPackageInfoRequest(setOf(ApiPackage.hashPackageId("maven:io.ktor:ktor-client-core")))
-            val request = defaultRawRequest(
-                method = HttpMethod.Post,
-                url = endpoints.packageInfoByIdHashes,
-                body = body,
-                cache = false
-            )
-            val isOnline = request.status.isSuccess()
+            val request = kotlin.runCatching {
+                defaultRawRequest(
+                    method = HttpMethod.Post,
+                    url = endpoints.packageInfoByIdHashes,
+                    body = body,
+                    cache = false
+                )
+            }
+            val isOnline = request
+                .map { it.status.isSuccess() }
+                .getOrDefault(false)
             emit(isOnline)
             delay(pollingInterval)
         }
