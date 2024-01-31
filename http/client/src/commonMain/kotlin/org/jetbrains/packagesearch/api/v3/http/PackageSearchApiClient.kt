@@ -69,6 +69,7 @@ public class PackageSearchApiClient(
                     randomization = 100.milliseconds,
                     respectRetryAfterHeader = false
                 )
+                retryOnServerErrors()
             }
             install(HttpTimeout) {
                 requestTimeout = 10.seconds
