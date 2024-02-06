@@ -26,7 +26,7 @@ public class GradlePackagesBuilder internal constructor() {
 
         public var haveFiles: Boolean = false
 
-        @Deprecated("Use mustBeWithFiles instead", ReplaceWith("mustBeWithFiles"))
+        @Deprecated("Use mustBeWithFiles instead", ReplaceWith("haveFiles"))
         public var mustHaveFilesAttribute: Boolean
             get() = haveFiles
             set(value) {
