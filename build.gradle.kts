@@ -12,22 +12,22 @@ buildscript {
 }
 
 plugins {
-    val kotlinVersion = "1.7.10"
+    val kotlinVersion = "1.9.22"
     kotlin("jvm") version kotlinVersion
     kotlin("plugin.serialization") version kotlinVersion
     `maven-publish`
-    id("io.gitlab.arturbosch.detekt") version "1.20.0"
-    id("org.jmailen.kotlinter") version "3.10.0"
-    id("org.openapi.generator") version "6.0.0"
+    id("io.gitlab.arturbosch.detekt") version "1.23.5"
+    id("org.jmailen.kotlinter") version "4.2.0"
+    id("org.openapi.generator") version "7.3.0"
 }
 
 group = "org.jetbrains.packagesearch"
 version = System.getenv("GITHUB_REF")?.substringAfterLast("/") ?: "2.5.0"
 
 dependencies {
-    detektPlugins("ch.qos.logback:logback-classic:1.2.11")
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.20.0")
-    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
+    detektPlugins("ch.qos.logback:logback-classic:1.4.14")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.23.4")
+    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.2")
 }
 
 kotlin {
@@ -48,8 +48,8 @@ java {
 detekt {
     toolVersion = "1.20.0"
     autoCorrect = !isCi
-    source = files("src/main/java", "src/main/kotlin")
-    config = files("detekt.yml")
+    source.from(files("src/main/java", "src/main/kotlin"))
+    config.from(files("detekt.yml"))
     buildUponDefaultConfig = true
 }
 
@@ -60,8 +60,8 @@ kotlinter {
 val sourcesJar by tasks.registering(Jar::class) {
     group = "publishing"
     from(kotlin.sourceSets.main.get().kotlin.sourceDirectories)
-    archiveClassifier.set("sources")
-    destinationDirectory.set(buildDir.resolve("artifacts"))
+    archiveClassifier = "sources"
+    destinationDirectory = layout.buildDirectory.dir("artifacts")
 }
 
 publishing {
@@ -75,13 +75,13 @@ publishing {
             artifactId = project.name
 
             pom {
-                name.set("Package Search - API models")
-                description.set("API models for Package Search")
-                url.set("https://package-search.jetbrains.com/")
+                name = "Package Search - API models"
+                description = "API models for Package Search"
+                url = "https://package-search.jetbrains.com/"
                 scm {
-                    connection.set("scm:https://github.com/JetBrains/package-search-api-models.git")
-                    developerConnection.set("scm:https://github.com/JetBrains/package-search-api-models.git")
-                    url.set("https://github.com/JetBrains/package-search-api-models.git")
+                    connection = "scm:https://github.com/JetBrains/package-search-api-models.git"
+                    developerConnection = "scm:https://github.com/JetBrains/package-search-api-models.git"
+                    url = "https://github.com/JetBrains/package-search-api-models.git"
                 }
             }
         }
@@ -104,22 +104,22 @@ openApiGenerate {
         ?.filter { it.extension.contains("yaml") }
         ?.mapNotNull { file -> SemVer.parse(file.nameWithoutExtension)?.let { semver -> semver to file } }
         ?.maxByOrNull { it.first }
-        ?.let { inputSpec.set(it.second.absolutePath) }
+        ?.let { inputSpec = it.second.absolutePath }
+    outputDir = layout.buildDirectory.dir("generated/src/kotlin")
+        .map { it.asFile.absolutePath }
+    ignoreFileOverride = "$projectDir/.openapi-generator-ignore"
 
-    outputDir.set("$buildDir/generates/src/kotlin")
-    ignoreFileOverride.set("$projectDir/.openapi-generator-ignore")
+    generatorName = "kotlin"
+    library = "multiplatform"
+    generateApiDocumentation = false
+    generateApiTests = false
+    generateModelDocumentation = false
+    generateModelTests = false
 
-    generatorName.set("kotlin")
-    library.set("multiplatform")
-    generateApiDocumentation.set(false)
-    generateApiTests.set(false)
-    generateModelDocumentation.set(false)
-    generateModelTests.set(false)
-
-    packageName.set("org.jetbrains.packagesearch")
-    apiPackage.set("org.jetbrains.packagesearch.api")
-    invokerPackage.set("org.jetbrains.packagesearch.invoker")
-    modelPackage.set("org.jetbrains.packagesearch.model")
+    packageName = "org.jetbrains.packagesearch"
+    apiPackage = "org.jetbrains.packagesearch.api"
+    invokerPackage = "org.jetbrains.packagesearch.invoker"
+    modelPackage = "org.jetbrains.packagesearch.model"
 
     configOptions.set(
         mapOf(
@@ -142,7 +142,7 @@ tasks {
             include("**/model/**")
             includeEmptyDirs = false
         }
-        into("$buildDir/generated/apiModels")
+        into(layout.buildDirectory.dir("generated/apiModels"))
     }
 }
 
