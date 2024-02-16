@@ -1,16 +1,30 @@
 package org.jetbrains.packagesearch.api.v3.http
 
-import io.ktor.client.*
-import io.ktor.client.call.*
-import io.ktor.client.engine.*
-import io.ktor.client.plugins.*
-import io.ktor.client.plugins.compression.*
-import io.ktor.client.plugins.contentnegotiation.*
-import io.ktor.client.request.*
-import io.ktor.http.*
-import io.ktor.serialization.kotlinx.json.*
-import io.ktor.serialization.kotlinx.protobuf.*
-import io.ktor.util.*
+import io.ktor.client.HttpClient
+import io.ktor.client.HttpClientConfig
+import io.ktor.client.call.body
+import io.ktor.client.engine.HttpClientEngine
+import io.ktor.client.engine.HttpClientEngineConfig
+import io.ktor.client.engine.HttpClientEngineFactory
+import io.ktor.client.plugins.HttpRequestRetry
+import io.ktor.client.plugins.HttpTimeout
+import io.ktor.client.plugins.compression.ContentEncoding
+import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.HttpRequest
+import io.ktor.client.request.request
+import io.ktor.client.request.setBody
+import io.ktor.client.statement.HttpResponse
+import io.ktor.http.ContentType
+import io.ktor.http.HttpHeaders
+import io.ktor.http.HttpMethod
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.Url
+import io.ktor.http.isSuccess
+import io.ktor.serialization.kotlinx.json.json
+import io.ktor.serialization.kotlinx.protobuf.protobuf
+import io.ktor.util.AttributeKey
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -19,21 +33,12 @@ import kotlinx.serialization.protobuf.ProtoBuf
 import org.jetbrains.packagesearch.api.v3.ApiPackage
 import org.jetbrains.packagesearch.api.v3.ApiProject
 import org.jetbrains.packagesearch.api.v3.ApiRepository
-import org.jetbrains.packagesearch.api.v3.search.*
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.milliseconds
-import kotlin.time.Duration.Companion.seconds
-
-public interface PackageSearchApi {
-    public suspend fun getKnownRepositories(): List<ApiRepository>
-    public suspend fun getPackageInfoByIds(ids: Set<String>): Map<String, ApiPackage>
-    public suspend fun getPackageInfoByIdHashes(ids: Set<String>): Map<String, ApiPackage>
-    public suspend fun searchPackages(request: SearchPackagesRequest): List<ApiPackage>
-    public suspend fun startScroll(request: SearchPackagesStartScrollRequest): SearchPackagesScrollResponse
-    public suspend fun nextScroll(request: SearchPackagesNextScrollRequest): SearchPackagesScrollResponse
-    public suspend fun searchProjects(request: SearchProjectRequest): List<ApiProject>
-    public fun isOnlineFlow(pollingInterval: Duration = 1.seconds): Flow<Boolean>
-}
+import org.jetbrains.packagesearch.api.v3.search.NextScrollParametersBuilder
+import org.jetbrains.packagesearch.api.v3.search.SearchParametersBuilder
+import org.jetbrains.packagesearch.api.v3.search.StartScrollParametersBuilder
+import org.jetbrains.packagesearch.api.v3.search.buildNextScrollParameters
+import org.jetbrains.packagesearch.api.v3.search.buildSearchParameters
+import org.jetbrains.packagesearch.api.v3.search.buildStartScrollParameters
 
 public class PackageSearchApiClient(
     public val endpoints: PackageSearchEndpoints,
@@ -64,12 +69,11 @@ public class PackageSearchApiClient(
             }
             install(HttpRequestRetry) {
                 maxRetries = 3
-                constantDelay(
-                    delay = 500.milliseconds,
-                    randomization = 100.milliseconds,
-                    respectRetryAfterHeader = false
-                )
-                retryOnServerErrors()
+                exponentialDelay()
+                retryIfNot { _, httpResponse ->
+                    // should NOT retry on server timeouts or 5xx
+                    httpResponse.status.value in 500..599 || httpResponse.status == HttpStatusCode.RequestTimeout
+                }
             }
             install(HttpTimeout) {
                 requestTimeout = 10.seconds
@@ -177,12 +181,4 @@ public class PackageSearchApiClient(
 
 }
 
-public suspend fun PackageSearchApiClient.searchPackages(builder: SearchParametersBuilder.() -> Unit): List<ApiPackage> =
-    searchPackages(buildSearchParameters(builder))
-
-public suspend fun PackageSearchApiClient.startScroll(builder: StartScrollParametersBuilder.() -> Unit): SearchPackagesScrollResponse =
-    startScroll(buildStartScrollParameters(builder))
-
-public suspend fun PackageSearchApiClient.nextScroll(builder: NextScrollParametersBuilder.() -> Unit): SearchPackagesScrollResponse =
-    nextScroll(buildNextScrollParameters(builder))
 
