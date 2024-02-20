@@ -10,10 +10,8 @@ import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.compression.ContentEncoding
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
-import io.ktor.client.request.HttpRequest
 import io.ktor.client.request.request
 import io.ktor.client.request.setBody
-import io.ktor.client.statement.HttpResponse
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
@@ -33,12 +31,6 @@ import kotlinx.serialization.protobuf.ProtoBuf
 import org.jetbrains.packagesearch.api.v3.ApiPackage
 import org.jetbrains.packagesearch.api.v3.ApiProject
 import org.jetbrains.packagesearch.api.v3.ApiRepository
-import org.jetbrains.packagesearch.api.v3.search.NextScrollParametersBuilder
-import org.jetbrains.packagesearch.api.v3.search.SearchParametersBuilder
-import org.jetbrains.packagesearch.api.v3.search.StartScrollParametersBuilder
-import org.jetbrains.packagesearch.api.v3.search.buildNextScrollParameters
-import org.jetbrains.packagesearch.api.v3.search.buildSearchParameters
-import org.jetbrains.packagesearch.api.v3.search.buildStartScrollParameters
 
 public class PackageSearchApiClient(
     public val endpoints: PackageSearchEndpoints,
@@ -76,7 +68,7 @@ public class PackageSearchApiClient(
                 }
             }
             install(HttpTimeout) {
-                requestTimeout = 10.seconds
+                requestTimeout = 30.seconds
             }
         }
 
