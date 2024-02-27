@@ -62,8 +62,7 @@ public class PackageSearchApiClient(
             install(HttpRequestRetry) {
                 maxRetries = 3
                 exponentialDelay()
-                retryIfNot { _, httpResponse ->
-                    // should NOT retry on server timeouts or 5xx
+                retryIf(3) { _, httpResponse ->
                     httpResponse.status.value in 500..599 || httpResponse.status == HttpStatusCode.RequestTimeout
                 }
             }

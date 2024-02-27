@@ -33,13 +33,6 @@ internal fun HttpRequestRetry.Configuration.constantDelay(
     constantDelay(delay.inWholeMilliseconds, randomization.inWholeMilliseconds, respectRetryAfterHeader)
 }
 
-public fun HttpRequestRetry.Configuration.retryIfNot(
-    maxRetries: Int = -1,
-    block: HttpRequestRetry.ShouldRetryContext.(HttpRequest, HttpResponse) -> Boolean,
-) {
-    retryIf(maxRetries) { request, response -> !block(request, response) }
-}
-
 public suspend fun PackageSearchApiClient.searchPackages(builder: SearchParametersBuilder.() -> Unit): List<ApiPackage> =
     searchPackages(buildSearchParameters(builder))
 
