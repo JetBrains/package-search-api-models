@@ -10,6 +10,7 @@ import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.compression.ContentEncoding
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.request
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
@@ -107,49 +108,91 @@ public class PackageSearchApiClient(
         method: HttpMethod,
         url: Url,
         body: T,
+        noinline requestBuilder: (HttpRequestBuilder.() -> Unit)?,
         cache: Boolean = true,
     ) = httpClient.request(url) {
         this@request.method = method
         setBody(body)
         header(HttpHeaders.ContentType, ContentType.Application.Json)
         attributes.put(Attributes.Cache, cache)
+        requestBuilder?.invoke(this)
     }
 
-    private suspend inline fun <reified T, reified R> defaultRequest(method: HttpMethod, url: Url, body: T) =
-        defaultRawRequest<T>(method, url, body).body<R>()
+    private suspend inline fun <reified T, reified R> defaultRequest(
+        method: HttpMethod,
+        url: Url,
+        body: T,
+        noinline requestBuilder: (HttpRequestBuilder.() -> Unit)?,
+        cache: Boolean = true,
+    ) = defaultRawRequest<T>(method, url, body, requestBuilder, cache).body<R>()
 
-    private suspend inline fun <reified R> defaultRequest(method: HttpMethod, url: Url) =
-        httpClient.request(url) {
-            this@request.method = method
+    override suspend fun getKnownRepositories(requestBuilder: (HttpRequestBuilder.() -> Unit)?): List<ApiRepository> =
+        httpClient.request(endpoints.knownRepositories) {
+            method = HttpMethod.Get
             header(HttpHeaders.Accept, ContentType.Application.Json)
-        }.body<R>()
+            requestBuilder?.invoke(this)
+        }.body<List<ApiRepository>>()
 
-    override suspend fun getKnownRepositories(): List<ApiRepository> =
-        defaultRequest(HttpMethod.Get, endpoints.knownRepositories)
+    override suspend fun getPackageInfoByIds(
+        ids: Set<String>,
+        requestBuilder: (HttpRequestBuilder.() -> Unit)?
+    ): Map<String, ApiPackage> = defaultRequest<_, List<ApiPackage>>(
+        method = HttpMethod.Post,
+        url = endpoints.packageInfoByIds,
+        body = GetPackageInfoRequest(ids),
+        requestBuilder = requestBuilder
+    ).associateBy { it.id }
 
-    override suspend fun getPackageInfoByIds(ids: Set<String>): Map<String, ApiPackage> =
-        defaultRequest<_, List<ApiPackage>>(HttpMethod.Post, endpoints.packageInfoByIds, GetPackageInfoRequest(ids))
-            .associateBy { it.id }
+    override suspend fun getPackageInfoByIdHashes(
+        ids: Set<String>,
+        requestBuilder: (HttpRequestBuilder.() -> Unit)?
+    ): Map<String, ApiPackage> = defaultRequest<_, List<ApiPackage>>(
+        method = HttpMethod.Post,
+        url = endpoints.packageInfoByIdHashes,
+        body = GetPackageInfoRequest(ids),
+        requestBuilder = requestBuilder
+    ).associateBy { it.id }
 
-    override suspend fun getPackageInfoByIdHashes(ids: Set<String>): Map<String, ApiPackage> =
-        defaultRequest<_, List<ApiPackage>>(
-            HttpMethod.Post,
-            endpoints.packageInfoByIdHashes,
-            GetPackageInfoRequest(ids)
+    override suspend fun searchPackages(
+        request: SearchPackagesRequest,
+        requestBuilder: (HttpRequestBuilder.() -> Unit)?
+    ): List<ApiPackage> = defaultRequest<_, List<ApiPackage>>(
+        method = HttpMethod.Post,
+        url = endpoints.searchPackages,
+        body = request,
+        requestBuilder = requestBuilder
+    )
+
+    override suspend fun startScroll(
+        request: SearchPackagesStartScrollRequest,
+        requestBuilder: (HttpRequestBuilder.() -> Unit)?
+    ): SearchPackagesScrollResponse = defaultRequest<_, SearchPackagesScrollResponse>(
+        method = HttpMethod.Post,
+        url = endpoints.startScroll,
+        body = request,
+        requestBuilder = requestBuilder
+    )
+
+    override suspend fun nextScroll(
+        request: SearchPackagesNextScrollRequest,
+        requestBuilder: (HttpRequestBuilder.() -> Unit)?
+    ): SearchPackagesScrollResponse = defaultRequest<_, SearchPackagesScrollResponse>(
+        method = HttpMethod.Post,
+        url = endpoints.nextScroll,
+        body = request,
+        requestBuilder = requestBuilder
+    )
+
+    override suspend fun searchProjects(
+        request: SearchProjectRequest,
+        requestBuilder: (HttpRequestBuilder.() -> Unit)?
+    ): List<ApiProject> =
+        defaultRequest<_, List<ApiProject>>(
+            method = HttpMethod.Post,
+            url = endpoints.searchPackages,
+            body = request,
+            requestBuilder = requestBuilder
         )
-            .associateBy { it.id }
-
-    override suspend fun searchPackages(request: SearchPackagesRequest): List<ApiPackage> =
-        defaultRequest<_, List<ApiPackage>>(HttpMethod.Post, endpoints.searchPackages, request)
-
-    override suspend fun startScroll(request: SearchPackagesStartScrollRequest): SearchPackagesScrollResponse =
-        defaultRequest<_, SearchPackagesScrollResponse>(HttpMethod.Post, endpoints.startScroll, request)
-
-    override suspend fun nextScroll(request: SearchPackagesNextScrollRequest): SearchPackagesScrollResponse =
-        defaultRequest<_, SearchPackagesScrollResponse>(HttpMethod.Post, endpoints.nextScroll, request)
-
-    override suspend fun searchProjects(request: SearchProjectRequest): List<ApiProject> =
-        defaultRequest<_, List<ApiProject>>(HttpMethod.Post, endpoints.searchPackages, request)
 
     override fun isOnlineFlow(pollingInterval: Duration): Flow<Boolean> = flow {
         while (true) {
@@ -159,7 +202,8 @@ public class PackageSearchApiClient(
                     method = HttpMethod.Post,
                     url = endpoints.packageInfoByIdHashes,
                     body = body,
-                    cache = false
+                    requestBuilder = null,
+                    cache = false,
                 )
             }
             val isOnline = request
