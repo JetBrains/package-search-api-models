@@ -11,6 +11,7 @@ import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.compression.ContentEncoding
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.request.HttpRequestBuilder
+import io.ktor.client.request.get
 import io.ktor.client.request.request
 import io.ktor.client.request.setBody
 import io.ktor.http.ContentType
@@ -196,15 +197,10 @@ public class PackageSearchApiClient(
 
     override fun isOnlineFlow(pollingInterval: Duration): Flow<Boolean> = flow {
         while (true) {
-            val body = GetPackageInfoRequest(setOf(ApiPackage.hashPackageId("maven:io.ktor:ktor-client-core")))
             val request = kotlin.runCatching {
-                defaultRawRequest(
-                    method = HttpMethod.Post,
-                    url = endpoints.packageInfoByIdHashes,
-                    body = body,
-                    requestBuilder = null,
-                    cache = false,
-                )
+                httpClient.get(endpoints.health) {
+                    header(HttpHeaders.Accept, ContentType.Text.Plain)
+                }
             }
             val isOnline = request
                 .map { it.status.isSuccess() }

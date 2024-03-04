@@ -32,6 +32,8 @@ public class PackageSearchDefaultEndpoints(
         get() = buildUrl("search-packages", "scroll", "next")
     override val searchProjects: Url
         get() = buildUrl("search-projects")
+    override val health: Url
+        get() = buildUrl("health")
 }
 
 private fun buildUrl(action: URLBuilder.() -> Unit): Url = URLBuilder().apply(action).build()

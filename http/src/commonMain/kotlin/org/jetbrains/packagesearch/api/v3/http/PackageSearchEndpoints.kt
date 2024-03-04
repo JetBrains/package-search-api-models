@@ -10,6 +10,7 @@ public interface PackageSearchEndpoints {
     public val startScroll: Url
     public val nextScroll: Url
     public val searchProjects: Url
+    public val health: Url
 
     public companion object {
 
