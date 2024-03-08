@@ -1,10 +1,13 @@
 package org.jetbrains.packagesearch.packageversionutils.normalization
 
+import kotlinx.datetime.Instant
+import kotlinx.datetime.toInstant
+
 public fun NormalizedVersion.nonSemanticSuffixOrNull(): String? =
     when (this) {
         is NormalizedVersion.Semantic -> nonSemanticSuffix
         is NormalizedVersion.TimestampLike -> nonSemanticSuffix
-        is NormalizedVersion.Garbage, is NormalizedVersion.Missing -> null
+        is NormalizedVersion.Garbage -> null
     }
 
 // If only one of them has a releasedAt, it wins. If neither does, they're equal.
@@ -103,5 +106,44 @@ public fun semanticVersionPrefixOrNull(versionName: String): String? {
     return groupValues[1]
 }
 
-internal val NormalizedVersion.key
-    get() = NormalizedVersionWeakCache.Key(versionName, releasedAt)
+internal fun String.normalize(
+    isStable: Boolean,
+    releasedAt: Instant?,
+    garbage: () -> NormalizedVersion.Garbage,
+): NormalizedVersion {
+    if (looksLikeGitCommitOrOtherHash(this) || isOneBigHexadecimalBlob(this)) {
+        return garbage()
+    }
+
+    val timestampPrefix = VeryLenientDateTimeExtractor.extractTimestampLookingPrefixOrNull(this)
+    if (timestampPrefix != null) {
+        return NormalizedVersion.TimestampLike(
+            versionName = this,
+            isStable = isStable,
+            releasedAt = VeryLenientDateTimeExtractor
+                .extractTimestampLookingPrefixOrNull(timestampPrefix)
+                ?.toInstant()
+                ?: releasedAt,
+            timestampPrefix = timestampPrefix,
+            stabilityMarker = stabilitySuffixComponentOrNull(this, timestampPrefix),
+            nonSemanticSuffix = nonSemanticSuffix(this, timestampPrefix),
+        )
+    }
+
+    val semanticPart = semanticVersionPrefixOrNull(this)
+    if (semanticPart != null) {
+        return NormalizedVersion.Semantic(
+            versionName = this,
+            isStable = isStable,
+            releasedAt = VeryLenientDateTimeExtractor
+                .extractTimestampLookingPrefixOrNull(semanticPart)
+                ?.toInstant()
+                ?: releasedAt,
+            semanticPart = semanticPart,
+            stabilityMarker = stabilitySuffixComponentOrNull(this, semanticPart),
+            nonSemanticSuffix = nonSemanticSuffix(this, semanticPart),
+        )
+    }
+
+    return garbage()
+}

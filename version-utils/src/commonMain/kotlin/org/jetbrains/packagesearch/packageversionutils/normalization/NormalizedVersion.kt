@@ -1,82 +1,27 @@
 package org.jetbrains.packagesearch.packageversionutils.normalization
 
 import kotlinx.datetime.Instant
-import kotlinx.datetime.toInstant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.jetbrains.packagesearch.packageversionutils.PackageVersionUtils
 
 @Serializable
-public sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
+public sealed interface NormalizedVersion : Comparable<NormalizedVersion?> {
 
     public companion object {
 
-        @Deprecated(
-            message = "It should be removed. Use `null` to express a missing version.",
-            replaceWith = ReplaceWith("fromStringOrNull(versionName, releasedAt)")
-        )
-        public fun from(versionName: String?, releasedAt: Instant? = null): NormalizedVersion =
-            fromStringOrNull(versionName, releasedAt) ?: Missing
-
-        public fun fromStringOrNull(versionName: String?, releasedAt: Instant? = null): NormalizedVersion? {
-            if (versionName.isNullOrBlank()) return null
-            return NormalizedVersionWeakCache.getOrPut(versionName, releasedAt) {
-                normalizePackageVersion(
+        public fun fromString(versionName: String, releasedAt: Instant? = null): NormalizedVersion =
+            versionName.normalize(
+                isStable = PackageVersionUtils.evaluateStability(versionName),
+                releasedAt = releasedAt,
+            ) {
+                Garbage(
                     versionName = versionName,
                     isStable = PackageVersionUtils.evaluateStability(versionName),
                     releasedAt = releasedAt,
-                ) {
-                    Garbage(
-                        versionName = versionName,
-                        isStable = PackageVersionUtils.evaluateStability(versionName),
-                        releasedAt = releasedAt,
-                    )
-                }
-            }
-        }
-
-        private fun normalizePackageVersion(
-            versionName: String,
-            isStable: Boolean,
-            releasedAt: Instant?,
-            garbage: () -> Garbage,
-        ): NormalizedVersion {
-            if (looksLikeGitCommitOrOtherHash(versionName) || isOneBigHexadecimalBlob(versionName)) {
-                return garbage()
-            }
-
-            val timestampPrefix = VeryLenientDateTimeExtractor.extractTimestampLookingPrefixOrNull(versionName)
-            if (timestampPrefix != null) {
-                return TimestampLike(
-                    versionName = versionName,
-                    isStable = isStable,
-                    releasedAt = VeryLenientDateTimeExtractor
-                        .extractTimestampLookingPrefixOrNull(timestampPrefix)
-                        ?.toInstant()
-                        ?: releasedAt,
-                    timestampPrefix = timestampPrefix,
-                    stabilityMarker = stabilitySuffixComponentOrNull(versionName, timestampPrefix),
-                    nonSemanticSuffix = nonSemanticSuffix(versionName, timestampPrefix),
                 )
             }
 
-            val semanticPart = semanticVersionPrefixOrNull(versionName)
-            if (semanticPart != null) {
-                return Semantic(
-                    versionName = versionName,
-                    isStable = isStable,
-                    releasedAt = VeryLenientDateTimeExtractor
-                        .extractTimestampLookingPrefixOrNull(semanticPart)
-                        ?.toInstant()
-                        ?: releasedAt,
-                    semanticPart = semanticPart,
-                    stabilityMarker = stabilitySuffixComponentOrNull(versionName, semanticPart),
-                    nonSemanticSuffix = nonSemanticSuffix(versionName, semanticPart),
-                )
-            }
-
-            return garbage()
-        }
     }
 
     public val versionName: String
@@ -97,10 +42,10 @@ public sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
         public val semanticPartWithStabilityMarker: String
             get() = semanticPart + (stabilityMarker ?: "")
 
-        public override fun compareTo(other: NormalizedVersion): Int =
+        public override fun compareTo(other: NormalizedVersion?): Int =
             when (other) {
                 is Semantic -> compareByNameAndThenByTimestamp(other)
-                is TimestampLike, is Garbage, is Missing -> 1
+                is TimestampLike, is Garbage, null -> 1
             }
 
         private fun compareByNameAndThenByTimestamp(other: Semantic): Int {
@@ -156,11 +101,11 @@ public sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
         private val timestampPrefixWithStabilityMarker
             get() = timestampPrefix + (stabilityMarker ?: "")
 
-        override fun compareTo(other: NormalizedVersion): Int =
+        override fun compareTo(other: NormalizedVersion?): Int =
             when (other) {
                 is TimestampLike -> compareByNameAndThenByTimestamp(other)
                 is Semantic -> -1
-                is Garbage, is Missing -> 1
+                is Garbage, null -> 1
             }
 
         private fun compareByNameAndThenByTimestamp(other: TimestampLike): Int {
@@ -185,11 +130,10 @@ public sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
         public override val releasedAt: Instant? = null,
     ) : NormalizedVersion {
 
-        override fun compareTo(other: NormalizedVersion): Int =
+        override fun compareTo(other: NormalizedVersion?): Int =
             when (other) {
-                is Missing -> 1
                 is Garbage -> compareByNameAndThenByTimestamp(other)
-                is Semantic, is TimestampLike -> -1
+                is Semantic, is TimestampLike, null -> -1
             }
 
         private fun compareByNameAndThenByTimestamp(other: Garbage): Int {
@@ -200,23 +144,6 @@ public sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
                 nameComparisonResult
             }
         }
-    }
-
-    @Serializable
-    @SerialName("missing")
-    @Deprecated("It should be removed. Use `null` to express a missing version.")
-    public data object Missing : NormalizedVersion {
-
-        public override val versionName: String
-            get() = error("There is no version!")
-        public override val releasedAt: Instant? = null
-        public override val isStable: Boolean = false
-
-        public override fun compareTo(other: NormalizedVersion): Int =
-            when (other) {
-                is Missing -> 0
-                else -> -1
-            }
     }
 
     public interface DecoratedVersion {
