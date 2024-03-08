@@ -75,9 +75,4 @@ public object VeryLenientDateTimeExtractor {
         .firstOrNull()
 }
 
-public expect fun DateTimeFormatter(pattern: String): DateTimeFormatter
 
-public expect class DateTimeFormatter {
-    public fun parse(dateTimeString: String): LocalDateTime
-    public fun parseOrNull(dateTimeString: String): LocalDateTime?
-}
