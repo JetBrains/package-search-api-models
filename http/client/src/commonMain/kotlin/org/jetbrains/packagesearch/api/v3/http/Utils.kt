@@ -1,12 +1,17 @@
 package org.jetbrains.packagesearch.api.v3.http
 
-import io.ktor.client.plugins.*
+import io.ktor.client.plugins.HttpRequestRetry
+import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.request.HttpRequest
-import io.ktor.client.statement.HttpResponse
-import io.ktor.http.*
+import io.ktor.http.HttpMessageBuilder
+import io.ktor.http.HttpStatusCode
+import io.ktor.http.URLBuilder
+import io.ktor.http.Url
+import io.ktor.util.toMap
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.milliseconds
 import kotlin.time.Duration.Companion.seconds
+import kotlinx.serialization.Serializable
 import org.jetbrains.packagesearch.api.v3.ApiPackage
 import org.jetbrains.packagesearch.api.v3.search.NextScrollParametersBuilder
 import org.jetbrains.packagesearch.api.v3.search.SearchParametersBuilder
@@ -23,12 +28,14 @@ internal fun HttpMessageBuilder.header(key: String, vararg values: Any?) {
 
 internal var HttpTimeout.HttpTimeoutCapabilityConfiguration.requestTimeout: Duration?
     get() = requestTimeoutMillis?.milliseconds
-    set(value) { requestTimeoutMillis = value?.inWholeMilliseconds }
+    set(value) {
+        requestTimeoutMillis = value?.inWholeMilliseconds
+    }
 
 internal fun HttpRequestRetry.Configuration.constantDelay(
     delay: Duration = 1.seconds,
     randomization: Duration = 1.seconds,
-    respectRetryAfterHeader: Boolean = true
+    respectRetryAfterHeader: Boolean = true,
 ) {
     constantDelay(delay.inWholeMilliseconds, randomization.inWholeMilliseconds, respectRetryAfterHeader)
 }
@@ -41,3 +48,19 @@ public suspend fun PackageSearchApiClient.startScroll(builder: StartScrollParame
 
 public suspend fun PackageSearchApiClient.nextScroll(builder: NextScrollParametersBuilder.() -> Unit): SearchPackagesScrollResponse =
     nextScroll(buildNextScrollParameters(builder))
+
+@Serializable
+public data class SerializableHttpStatusCode(val value: Int, val description: String)
+
+public fun HttpStatusCode.toSerializable(): SerializableHttpStatusCode =
+    SerializableHttpStatusCode(value, description)
+
+@Serializable
+public data class SerializableHttpRequest(
+    val url: String,
+    val method: String,
+    val headers: Map<String, List<String>>,
+)
+
+public fun HttpRequest.toSerializable(): SerializableHttpRequest =
+    SerializableHttpRequest(url.toString(), method.value, headers.toMap())

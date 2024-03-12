@@ -6,6 +6,7 @@ import io.ktor.client.call.body
 import io.ktor.client.engine.HttpClientEngine
 import io.ktor.client.engine.HttpClientEngineConfig
 import io.ktor.client.engine.HttpClientEngineFactory
+import io.ktor.client.plugins.HttpCallValidator
 import io.ktor.client.plugins.HttpRequestRetry
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.compression.ContentEncoding
@@ -14,11 +15,15 @@ import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.get
 import io.ktor.client.request.request
 import io.ktor.client.request.setBody
+import io.ktor.client.statement.HttpResponse
+import io.ktor.client.statement.bodyAsText
+import io.ktor.client.statement.request
 import io.ktor.http.ContentType
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.Url
+import io.ktor.http.fullPath
 import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.serialization.kotlinx.protobuf.protobuf
@@ -29,6 +34,8 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
+import kotlinx.serialization.Serializable
+import kotlinx.serialization.json.Json
 import kotlinx.serialization.protobuf.ProtoBuf
 import org.jetbrains.packagesearch.api.v3.ApiPackage
 import org.jetbrains.packagesearch.api.v3.ApiProject
@@ -51,12 +58,27 @@ public class PackageSearchApiClient(
         pollingInterval: Duration = 1.seconds,
     ) : this(endpoints, httpClient)
 
+    @Serializable
+    private data class Error(val error: Inner) {
+        @Serializable
+        data class Inner(val message: String, val stackTrace: List<String>)
+    }
+
     public companion object {
 
         private fun HttpClientConfig<*>.defaultEngineConfig(protobuf: Boolean = true) {
             install(ContentNegotiation) {
                 if (protobuf) protobuf(ProtoBuf { encodeDefaults = false })
                 json()
+            }
+            install(HttpCallValidator) {
+                validateResponse { response ->
+                    if (!response.status.isSuccess()) {
+                        response.bodyAsText()
+                            .runCatching { Json.decodeFromString<Error>(this) }
+                            .onSuccess { throw it.toException(response) }
+                    }
+                }
             }
             install(ContentEncoding) {
                 gzip()
@@ -72,6 +94,13 @@ public class PackageSearchApiClient(
                 requestTimeout = 30.seconds
             }
         }
+
+        private fun Error.toException(response: HttpResponse) = PackageSearchApiException(
+            serverMessage = error.message,
+            request = response.request.toSerializable(),
+            statusCode = response.status.toSerializable(),
+            remoteStackTrace = error.stackTrace
+        )
 
         public fun defaultHttpClient(
             protobuf: Boolean = true,
@@ -136,7 +165,7 @@ public class PackageSearchApiClient(
 
     override suspend fun getPackageInfoByIds(
         ids: Set<String>,
-        requestBuilder: (HttpRequestBuilder.() -> Unit)?
+        requestBuilder: (HttpRequestBuilder.() -> Unit)?,
     ): Map<String, ApiPackage> = defaultRequest<_, List<ApiPackage>>(
         method = HttpMethod.Post,
         url = endpoints.packageInfoByIds,
@@ -146,7 +175,7 @@ public class PackageSearchApiClient(
 
     override suspend fun getPackageInfoByIdHashes(
         ids: Set<String>,
-        requestBuilder: (HttpRequestBuilder.() -> Unit)?
+        requestBuilder: (HttpRequestBuilder.() -> Unit)?,
     ): Map<String, ApiPackage> = defaultRequest<_, List<ApiPackage>>(
         method = HttpMethod.Post,
         url = endpoints.packageInfoByIdHashes,
@@ -156,7 +185,7 @@ public class PackageSearchApiClient(
 
     override suspend fun searchPackages(
         request: SearchPackagesRequest,
-        requestBuilder: (HttpRequestBuilder.() -> Unit)?
+        requestBuilder: (HttpRequestBuilder.() -> Unit)?,
     ): List<ApiPackage> = defaultRequest<_, List<ApiPackage>>(
         method = HttpMethod.Post,
         url = endpoints.searchPackages,
@@ -166,7 +195,7 @@ public class PackageSearchApiClient(
 
     override suspend fun startScroll(
         request: SearchPackagesStartScrollRequest,
-        requestBuilder: (HttpRequestBuilder.() -> Unit)?
+        requestBuilder: (HttpRequestBuilder.() -> Unit)?,
     ): SearchPackagesScrollResponse = defaultRequest<_, SearchPackagesScrollResponse>(
         method = HttpMethod.Post,
         url = endpoints.startScroll,
@@ -176,7 +205,7 @@ public class PackageSearchApiClient(
 
     override suspend fun nextScroll(
         request: SearchPackagesNextScrollRequest,
-        requestBuilder: (HttpRequestBuilder.() -> Unit)?
+        requestBuilder: (HttpRequestBuilder.() -> Unit)?,
     ): SearchPackagesScrollResponse = defaultRequest<_, SearchPackagesScrollResponse>(
         method = HttpMethod.Post,
         url = endpoints.nextScroll,
@@ -186,7 +215,7 @@ public class PackageSearchApiClient(
 
     override suspend fun searchProjects(
         request: SearchProjectRequest,
-        requestBuilder: (HttpRequestBuilder.() -> Unit)?
+        requestBuilder: (HttpRequestBuilder.() -> Unit)?,
     ): List<ApiProject> =
         defaultRequest<_, List<ApiProject>>(
             method = HttpMethod.Post,
