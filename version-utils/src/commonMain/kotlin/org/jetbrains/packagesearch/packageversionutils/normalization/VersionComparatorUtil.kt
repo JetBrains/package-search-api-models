@@ -20,8 +20,11 @@ public object VersionComparatorUtil {
         v2: String,
         tokenPriorityProvider: (String) -> Int = DEFAULT_TOKEN_PRIORITY_PROVIDER,
     ): Int = v1.splitVersionString()
-        .zip(v2.splitVersionString())
+        .zipWithValueOrNull(v2.splitVersionString())
         .map { (e1, e2) ->
+            if (e1 == null) return@map 1
+            if (e2 == null) return@map -1
+
             val t1 = VersionTokenType.lookup(e1)
             val res = tokenPriorityProvider(e1) - tokenPriorityProvider(e2)
             when {
@@ -39,6 +42,17 @@ public object VersionComparatorUtil {
         if (num1.isEmpty()) return if (num2.isEmpty()) 0 else -1
         if (num2.isEmpty()) return 1
         return compareBy<String> { it.length }.thenBy { it }.compare(num1, num2)
+    }
+
+    private fun <T> Sequence<T>.zipWithValueOrNull(other: Sequence<T>): Sequence<Pair<T?, T?>> {
+        val otherIterator = other.iterator()
+        return map { t ->
+            t to if (otherIterator.hasNext()) {
+                otherIterator.next()
+            } else {
+                null
+            }
+        }
     }
 
     public enum class VersionTokenType(public val priority: Int) {
