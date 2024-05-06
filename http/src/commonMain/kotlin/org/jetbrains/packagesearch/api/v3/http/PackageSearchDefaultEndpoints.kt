@@ -34,6 +34,8 @@ public class PackageSearchDefaultEndpoints(
         get() = buildUrl("search-projects")
     override val health: Url
         get() = buildUrl("health")
+    override val refreshPackagesInfo: Url
+        get() = buildUrl("refresh-packages-info")
 }
 
 private fun buildUrl(action: URLBuilder.() -> Unit): Url = URLBuilder().apply(action).build()

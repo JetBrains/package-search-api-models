@@ -23,6 +23,17 @@ public data class SearchPackagesRequest(
     public val searchQuery: String,
 )
 
+@Serializable
+public data class RefreshPackagesInfoRequest(
+    public val packages: List<CacheRequest>
+) {
+    @Serializable
+    public data class CacheRequest(
+        public val packageId: String,
+        public val latestKnownVersion: String,
+    )
+}
+
 // Keep the search context alive for 5 minutes (per batch)
 public const val DEFAULT_SCROLL_DURATION: String = "5m"
 
