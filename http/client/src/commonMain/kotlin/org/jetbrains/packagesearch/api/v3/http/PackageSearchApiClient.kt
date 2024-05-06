@@ -23,7 +23,6 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpMethod
 import io.ktor.http.HttpStatusCode
 import io.ktor.http.Url
-import io.ktor.http.fullPath
 import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.serialization.kotlinx.protobuf.protobuf
@@ -223,6 +222,16 @@ public class PackageSearchApiClient(
             body = request,
             requestBuilder = requestBuilder
         )
+
+    override suspend fun refreshPackagesInfo(
+        ids: Set<String>,
+        requestBuilder: (HttpRequestBuilder.() -> Unit)?,
+    ): List<ApiPackage> = defaultRequest<_, List<ApiPackage>>(
+        method = HttpMethod.Post,
+        url = endpoints.refreshPackagesInfo,
+        body = GetPackageInfoRequest(ids),
+        requestBuilder = requestBuilder
+    )
 
     override fun isOnlineFlow(pollingInterval: Duration): Flow<Boolean> = flow {
         while (true) {

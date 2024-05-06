@@ -43,5 +43,10 @@ public interface PackageSearchApi {
         requestBuilder: (HttpRequestBuilder.() -> Unit)? = null
     ): List<ApiProject>
 
+    public suspend fun refreshPackagesInfo(
+        ids: Set<String>,
+        requestBuilder: (HttpRequestBuilder.() -> Unit)? = null
+    ): List<ApiPackage>
+
     public fun isOnlineFlow(pollingInterval: Duration = 30.seconds): Flow<Boolean>
 }
