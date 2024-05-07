@@ -4,7 +4,10 @@ package org.jetbrains.packagesearch.api.v3.search
 public class CocoapodsPackagesBuilder internal constructor() {
     private val platformMinTypeMap: MutableMap<PackagesType.Cocoapods.Platform, String> = mutableMapOf()
 
-    public fun platform(platform: PackagesType.Cocoapods.Platform, minType: String) {
+    public fun platform(
+        platform: PackagesType.Cocoapods.Platform,
+        minType: String,
+    ) {
         platformMinTypeMap[platform] = minType
     }
 

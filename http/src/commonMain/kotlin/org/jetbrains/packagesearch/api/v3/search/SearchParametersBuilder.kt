@@ -7,7 +7,6 @@ public annotation class SearchParametersBuilderDsl
 
 @SearchParametersBuilderDsl
 public class SearchParametersBuilder {
-
     public var searchQuery: String? = null
     public var packagesType: List<PackagesType> = emptyList()
 

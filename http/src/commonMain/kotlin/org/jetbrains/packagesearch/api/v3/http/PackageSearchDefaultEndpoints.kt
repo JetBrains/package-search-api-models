@@ -10,13 +10,13 @@ public class PackageSearchDefaultEndpoints(
     public val pathSegmentsPrefix: List<String> = emptyList(),
     public val port: Int = protocol.defaultPort,
 ) : PackageSearchEndpoints {
-
-    private fun buildUrl(vararg path: String) = buildUrl {
-        protocol = this@PackageSearchDefaultEndpoints.protocol
-        host = this@PackageSearchDefaultEndpoints.host
-        pathSegments = pathSegmentsPrefix + path
-        port = this@PackageSearchDefaultEndpoints.port
-    }
+    private fun buildUrl(vararg path: String) =
+        buildUrl {
+            protocol = this@PackageSearchDefaultEndpoints.protocol
+            host = this@PackageSearchDefaultEndpoints.host
+            pathSegments = pathSegmentsPrefix + path
+            port = this@PackageSearchDefaultEndpoints.port
+        }
 
     override val knownRepositories: Url
         get() = buildUrl("known-repositories")

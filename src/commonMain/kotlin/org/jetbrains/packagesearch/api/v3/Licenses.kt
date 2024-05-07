@@ -3,7 +3,7 @@ package org.jetbrains.packagesearch.api.v3
 import kotlinx.serialization.Serializable
 
 @Serializable
-public data class Licenses<T: LicenseFile>(
+public data class Licenses<T : LicenseFile>(
     public val mainLicense: T,
     public val otherLicenses: List<T> = emptyList(),
 )

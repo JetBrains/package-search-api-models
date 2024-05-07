@@ -2,7 +2,6 @@ package org.jetbrains.packagesearch.api.v3.search
 
 @SearchParametersBuilderDsl
 public class KotlinMultiplatformBuilder internal constructor(private val delegate: GradlePackagesBuilder) {
-
     internal fun metadata() {
         delegate.variant {
             kotlinPlatformType("common")

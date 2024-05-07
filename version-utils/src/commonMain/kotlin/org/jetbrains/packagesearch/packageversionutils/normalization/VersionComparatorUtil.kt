@@ -9,35 +9,45 @@ public object VersionComparatorUtil {
     private val DEFAULT_TOKEN_PRIORITY_PROVIDER: (String) -> Int =
         { param -> VersionTokenType.lookup(param).priority }
 
-    public fun max(v1: String, v2: String): String = if (compare(v1, v2) > 0) v1 else v2
-    public fun min(v1: String, v2: String): String = if (compare(v1, v2) < 0) v1 else v2
+    public fun max(
+        v1: String,
+        v2: String,
+    ): String = if (compare(v1, v2) > 0) v1 else v2
 
-    private fun String.splitVersionString(): Sequence<String> =
-        VERSION_SPLITTER.findAll(this).map { it.value }
+    public fun min(
+        v1: String,
+        v2: String,
+    ): String = if (compare(v1, v2) < 0) v1 else v2
+
+    private fun String.splitVersionString(): Sequence<String> = VERSION_SPLITTER.findAll(this).map { it.value }
 
     public fun compare(
         v1: String,
         v2: String,
         tokenPriorityProvider: (String) -> Int = DEFAULT_TOKEN_PRIORITY_PROVIDER,
-    ): Int = v1.splitVersionString()
-        .zipWithValueOrNull(v2.splitVersionString())
-        .map { (e1, e2) ->
-            if (e1 == null) return@map 1
-            if (e2 == null) return@map -1
+    ): Int =
+        v1.splitVersionString()
+            .zipWithValueOrNull(v2.splitVersionString())
+            .map { (e1, e2) ->
+                if (e1 == null) return@map 1
+                if (e2 == null) return@map -1
 
-            val t1 = VersionTokenType.lookup(e1)
-            val res = tokenPriorityProvider(e1) - tokenPriorityProvider(e2)
-            when {
-                res.sign != 0 -> res
-                t1 == VersionTokenType.WORD -> e1.compareTo(e2)
-                t1 == VersionTokenType.DIGITS -> compareNumbers(e1, e2)
-                else -> 0
+                val t1 = VersionTokenType.lookup(e1)
+                val res = tokenPriorityProvider(e1) - tokenPriorityProvider(e2)
+                when {
+                    res.sign != 0 -> res
+                    t1 == VersionTokenType.WORD -> e1.compareTo(e2)
+                    t1 == VersionTokenType.DIGITS -> compareNumbers(e1, e2)
+                    else -> 0
+                }
             }
-        }
-        .firstOrNull { it != 0 }
-        ?: 0
+            .firstOrNull { it != 0 }
+            ?: 0
 
-    private fun compareNumbers(n1: String, n2: String): Int {
+    private fun compareNumbers(
+        n1: String,
+        n2: String,
+    ): Int {
         val (num1, num2) = Pair(n1.trimStart('0'), n2.trimStart('0'))
         if (num1.isEmpty()) return if (num2.isEmpty()) 0 else -1
         if (num2.isEmpty()) return 1
@@ -47,11 +57,12 @@ public object VersionComparatorUtil {
     private fun <T> Sequence<T>.zipWithValueOrNull(other: Sequence<T>): Sequence<Pair<T?, T?>> {
         val otherIterator = other.iterator()
         return map { t ->
-            t to if (otherIterator.hasNext()) {
-                otherIterator.next()
-            } else {
-                null
-            }
+            t to
+                if (otherIterator.hasNext()) {
+                    otherIterator.next()
+                } else {
+                    null
+                }
         }
     }
 
@@ -84,13 +95,14 @@ public object VersionComparatorUtil {
         WORD(90),
         DIGITS(100),
         BUNDLED(666),
-        SNAPSHOTS(10);
+        SNAPSHOTS(10),
+        ;
 
         public companion object {
             public fun lookup(str: String): VersionTokenType {
                 val trimmedStr = str.trim()
                 if (trimmedStr.isEmpty()) return WS
-                for (token in values()) {
+                for (token in entries) {
                     if (token.name[0] != '_' && token.name.equals(trimmedStr, ignoreCase = true)) {
                         return token
                     }

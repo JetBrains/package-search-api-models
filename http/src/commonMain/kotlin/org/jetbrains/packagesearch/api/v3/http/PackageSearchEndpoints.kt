@@ -14,17 +14,19 @@ public interface PackageSearchEndpoints {
     public val health: Url
 
     public companion object {
+        public val DEFAULT: PackageSearchEndpoints =
+            PackageSearchDefaultEndpoints(
+                host = "package-search.services.jetbrains.com",
+            )
 
-        public val DEFAULT: PackageSearchEndpoints = PackageSearchDefaultEndpoints(
-            host = "package-search.services.jetbrains.com",
-        )
+        public val DEV: PackageSearchDefaultEndpoints =
+            PackageSearchDefaultEndpoints(
+                host = "api.dev.package-search.services.jetbrains.com",
+            )
 
-        public val DEV: PackageSearchDefaultEndpoints = PackageSearchDefaultEndpoints(
-            host = "api.dev.package-search.services.jetbrains.com",
-        )
-
-        public val PROD: PackageSearchDefaultEndpoints = PackageSearchDefaultEndpoints(
-            host = "api.prod.package-search.services.jetbrains.com",
-        )
+        public val PROD: PackageSearchDefaultEndpoints =
+            PackageSearchDefaultEndpoints(
+                host = "api.prod.package-search.services.jetbrains.com",
+            )
     }
 }

@@ -27,8 +27,6 @@ import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.json.json
 import io.ktor.serialization.kotlinx.protobuf.protobuf
 import io.ktor.util.AttributeKey
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
@@ -39,16 +37,17 @@ import kotlinx.serialization.protobuf.ProtoBuf
 import org.jetbrains.packagesearch.api.v3.ApiPackage
 import org.jetbrains.packagesearch.api.v3.ApiProject
 import org.jetbrains.packagesearch.api.v3.ApiRepository
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.seconds
 
 public class PackageSearchApiClient(
     public val endpoints: PackageSearchEndpoints,
     private val httpClient: HttpClient = defaultHttpClient(),
 ) : PackageSearchApi {
-
     @Suppress("UNUSED_PARAMETER")
     @Deprecated(
         message = "Use new constructor",
-        replaceWith = ReplaceWith("PackageSearchApiClient(endpoints, httpClient)")
+        replaceWith = ReplaceWith("PackageSearchApiClient(endpoints, httpClient)"),
     )
     public constructor(
         endpoints: PackageSearchEndpoints,
@@ -64,7 +63,6 @@ public class PackageSearchApiClient(
     }
 
     public companion object {
-
         private fun HttpClientConfig<*>.defaultEngineConfig(protobuf: Boolean = true) {
             install(ContentNegotiation) {
                 if (protobuf) protobuf(ProtoBuf { encodeDefaults = false })
@@ -94,39 +92,42 @@ public class PackageSearchApiClient(
             }
         }
 
-        private fun Error.toException(response: HttpResponse) = PackageSearchApiException(
-            serverMessage = error.message,
-            request = response.request.toSerializable(),
-            statusCode = response.status.toSerializable(),
-            remoteStackTrace = error.stackTrace
-        )
+        private fun Error.toException(response: HttpResponse) =
+            PackageSearchApiException(
+                serverMessage = error.message,
+                request = response.request.toSerializable(),
+                statusCode = response.status.toSerializable(),
+                remoteStackTrace = error.stackTrace,
+            )
 
         public fun defaultHttpClient(
             protobuf: Boolean = true,
             additionalConfig: HttpClientConfig<*>.() -> Unit = {},
-        ): HttpClient = HttpClient {
-            defaultEngineConfig(protobuf)
-            additionalConfig()
-        }
+        ): HttpClient =
+            HttpClient {
+                defaultEngineConfig(protobuf)
+                additionalConfig()
+            }
 
         public fun <T : HttpClientEngineConfig> defaultHttpClient(
             engine: HttpClientEngineFactory<T>,
             protobuf: Boolean = true,
             additionalConfig: HttpClientConfig<T>.() -> Unit = {},
-        ): HttpClient = HttpClient(engine) {
-            defaultEngineConfig(protobuf)
-            additionalConfig()
-        }
+        ): HttpClient =
+            HttpClient(engine) {
+                defaultEngineConfig(protobuf)
+                additionalConfig()
+            }
 
         public fun defaultHttpClient(
             engine: HttpClientEngine,
             protobuf: Boolean = true,
             additionalConfig: HttpClientConfig<*>.() -> Unit = {},
-        ): HttpClient = HttpClient(engine) {
-            defaultEngineConfig(protobuf)
-            additionalConfig()
-        }
-
+        ): HttpClient =
+            HttpClient(engine) {
+                defaultEngineConfig(protobuf)
+                additionalConfig()
+            }
     }
 
     public object Attributes {
@@ -165,52 +166,57 @@ public class PackageSearchApiClient(
     override suspend fun getPackageInfoByIds(
         ids: Set<String>,
         requestBuilder: (HttpRequestBuilder.() -> Unit)?,
-    ): Map<String, ApiPackage> = defaultRequest<_, List<ApiPackage>>(
-        method = HttpMethod.Post,
-        url = endpoints.packageInfoByIds,
-        body = GetPackageInfoRequest(ids),
-        requestBuilder = requestBuilder
-    ).associateBy { it.id }
+    ): Map<String, ApiPackage> =
+        defaultRequest<_, List<ApiPackage>>(
+            method = HttpMethod.Post,
+            url = endpoints.packageInfoByIds,
+            body = GetPackageInfoRequest(ids),
+            requestBuilder = requestBuilder,
+        ).associateBy { it.id }
 
     override suspend fun getPackageInfoByIdHashes(
         ids: Set<String>,
         requestBuilder: (HttpRequestBuilder.() -> Unit)?,
-    ): Map<String, ApiPackage> = defaultRequest<_, List<ApiPackage>>(
-        method = HttpMethod.Post,
-        url = endpoints.packageInfoByIdHashes,
-        body = GetPackageInfoRequest(ids),
-        requestBuilder = requestBuilder
-    ).associateBy { it.id }
+    ): Map<String, ApiPackage> =
+        defaultRequest<_, List<ApiPackage>>(
+            method = HttpMethod.Post,
+            url = endpoints.packageInfoByIdHashes,
+            body = GetPackageInfoRequest(ids),
+            requestBuilder = requestBuilder,
+        ).associateBy { it.id }
 
     override suspend fun searchPackages(
         request: SearchPackagesRequest,
         requestBuilder: (HttpRequestBuilder.() -> Unit)?,
-    ): List<ApiPackage> = defaultRequest<_, List<ApiPackage>>(
-        method = HttpMethod.Post,
-        url = endpoints.searchPackages,
-        body = request,
-        requestBuilder = requestBuilder
-    )
+    ): List<ApiPackage> =
+        defaultRequest<_, List<ApiPackage>>(
+            method = HttpMethod.Post,
+            url = endpoints.searchPackages,
+            body = request,
+            requestBuilder = requestBuilder,
+        )
 
     override suspend fun startScroll(
         request: SearchPackagesStartScrollRequest,
         requestBuilder: (HttpRequestBuilder.() -> Unit)?,
-    ): SearchPackagesScrollResponse = defaultRequest<_, SearchPackagesScrollResponse>(
-        method = HttpMethod.Post,
-        url = endpoints.startScroll,
-        body = request,
-        requestBuilder = requestBuilder
-    )
+    ): SearchPackagesScrollResponse =
+        defaultRequest<_, SearchPackagesScrollResponse>(
+            method = HttpMethod.Post,
+            url = endpoints.startScroll,
+            body = request,
+            requestBuilder = requestBuilder,
+        )
 
     override suspend fun nextScroll(
         request: SearchPackagesNextScrollRequest,
         requestBuilder: (HttpRequestBuilder.() -> Unit)?,
-    ): SearchPackagesScrollResponse = defaultRequest<_, SearchPackagesScrollResponse>(
-        method = HttpMethod.Post,
-        url = endpoints.nextScroll,
-        body = request,
-        requestBuilder = requestBuilder
-    )
+    ): SearchPackagesScrollResponse =
+        defaultRequest<_, SearchPackagesScrollResponse>(
+            method = HttpMethod.Post,
+            url = endpoints.nextScroll,
+            body = request,
+            requestBuilder = requestBuilder,
+        )
 
     override suspend fun searchProjects(
         request: SearchProjectRequest,
@@ -220,34 +226,35 @@ public class PackageSearchApiClient(
             method = HttpMethod.Post,
             url = endpoints.searchPackages,
             body = request,
-            requestBuilder = requestBuilder
+            requestBuilder = requestBuilder,
         )
 
     override suspend fun refreshPackagesInfo(
         ids: Set<String>,
         requestBuilder: (HttpRequestBuilder.() -> Unit)?,
-    ): List<ApiPackage> = defaultRequest<_, List<ApiPackage>>(
-        method = HttpMethod.Post,
-        url = endpoints.refreshPackagesInfo,
-        body = GetPackageInfoRequest(ids),
-        requestBuilder = requestBuilder
-    )
+    ): List<ApiPackage> =
+        defaultRequest<_, List<ApiPackage>>(
+            method = HttpMethod.Post,
+            url = endpoints.refreshPackagesInfo,
+            body = GetPackageInfoRequest(ids),
+            requestBuilder = requestBuilder,
+        )
 
-    override fun isOnlineFlow(pollingInterval: Duration): Flow<Boolean> = flow {
-        while (true) {
-            val request = kotlin.runCatching {
-                httpClient.get(endpoints.health) {
-                    header(HttpHeaders.Accept, ContentType.Text.Plain)
-                }
+    override fun isOnlineFlow(pollingInterval: Duration): Flow<Boolean> =
+        flow {
+            while (true) {
+                val request =
+                    kotlin.runCatching {
+                        httpClient.get(endpoints.health) {
+                            header(HttpHeaders.Accept, ContentType.Text.Plain)
+                        }
+                    }
+                val isOnline =
+                    request
+                        .map { it.status.isSuccess() }
+                        .getOrDefault(false)
+                emit(isOnline)
+                delay(pollingInterval)
             }
-            val isOnline = request
-                .map { it.status.isSuccess() }
-                .getOrDefault(false)
-            emit(isOnline)
-            delay(pollingInterval)
         }
-    }
-
 }
-
-

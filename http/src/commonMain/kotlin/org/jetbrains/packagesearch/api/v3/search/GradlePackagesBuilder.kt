@@ -23,7 +23,6 @@ public class GradlePackagesBuilder internal constructor() {
     public class VariantBuilder internal constructor() {
         private val attributes: MutableMap<String, ApiVariant.Attribute> = mutableMapOf()
 
-
         public var haveFiles: Boolean = false
 
         @Deprecated("Use mustBeWithFiles instead", ReplaceWith("haveFiles"))
@@ -33,20 +32,24 @@ public class GradlePackagesBuilder internal constructor() {
                 haveFiles = value
             }
 
-        public fun attribute(key: String, value: String) {
+        public fun attribute(
+            key: String,
+            value: String,
+        ) {
             attributes[key] = ApiVariant.Attribute.create(key, value)
         }
 
-        public fun attribute(key: String, value: ApiVariant.Attribute) {
+        public fun attribute(
+            key: String,
+            value: ApiVariant.Attribute,
+        ) {
             attributes[key] = value
         }
 
-        public fun build(): PackagesType.Gradle.Variant =
-            PackagesType.Gradle.Variant(attributes.toMap(), haveFiles)
+        public fun build(): PackagesType.Gradle.Variant = PackagesType.Gradle.Variant(attributes.toMap(), haveFiles)
     }
 
-    public fun buildVariant(block: VariantBuilder.() -> Unit): PackagesType.Gradle.Variant =
-        VariantBuilder().apply(block).build()
+    public fun buildVariant(block: VariantBuilder.() -> Unit): PackagesType.Gradle.Variant = VariantBuilder().apply(block).build()
 
     public fun variant(block: VariantBuilder.() -> Unit) {
         variants.add(buildVariant(block))
@@ -55,8 +58,7 @@ public class GradlePackagesBuilder internal constructor() {
     internal fun build(): PackagesType.Gradle = PackagesType.Gradle(variants.toList(), isRootPublication)
 }
 
-public fun buildGradlePackages(block: GradlePackagesBuilder.() -> Unit): PackagesType.Gradle =
-    GradlePackagesBuilder().apply(block).build()
+public fun buildGradlePackages(block: GradlePackagesBuilder.() -> Unit): PackagesType.Gradle = GradlePackagesBuilder().apply(block).build()
 
 public fun GradlePackagesBuilder.VariantBuilder.kotlinPlatformType(platformType: String) {
     attribute("org.jetbrains.kotlin.platform.type", platformType)
@@ -85,4 +87,3 @@ public fun GradlePackagesBuilder.VariantBuilder.javaApi() {
 public fun GradlePackagesBuilder.VariantBuilder.javaRuntime() {
     usage("java-runtime")
 }
-

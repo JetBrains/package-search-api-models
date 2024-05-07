@@ -1,4 +1,4 @@
-package org.jetbrains.packagesearch.maven
+package org.jetbrains.packagesearch.tests.maven
 
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.cio.CIO
@@ -10,30 +10,34 @@ import io.ktor.serialization.kotlinx.serialization
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.encodeToString
 import nl.adaptivity.xmlutil.serialization.XML
-import org.jetbrains.packagesearch.BuildSystemsTestBase
+import org.jetbrains.packagesearch.maven.POM_XML_NAMESPACE
+import org.jetbrains.packagesearch.maven.PomResolver
 import org.jetbrains.packagesearch.maven.PomResolver.Companion.defaultPomProvider
+import org.jetbrains.packagesearch.maven.ProjectObjectModel
+import org.jetbrains.packagesearch.maven.decodeFromString
+import org.jetbrains.packagesearch.tests.BuildSystemsTestBase
 import org.junit.jupiter.params.ParameterizedTest
 import org.junit.jupiter.params.provider.ValueSource
 
-
 class Pom8Test : BuildSystemsTestBase() {
+    val xml =
+        XML {
+            indentString = "    "
+            defaultPolicy {
+                ignoreUnknownChildren()
+            }
+        }
 
-    val xml = XML {
-        indentString = "    "
-        defaultPolicy {
-            ignoreUnknownChildren()
+    val httpClient =
+        HttpClient(CIO) {
+            install(ContentNegotiation) {
+                serialization(ContentType.Application.Xml, xml)
+                serialization(ContentType.Text.Xml, xml)
+            }
+            install(Logging) {
+                level = LogLevel.HEADERS
+            }
         }
-    }
-
-    val httpClient = HttpClient(CIO) {
-        install(ContentNegotiation) {
-            serialization(ContentType.Application.Xml, xml)
-            serialization(ContentType.Text.Xml, xml)
-        }
-        install(Logging) {
-            level = LogLevel.HEADERS
-        }
-    }
 
     @ParameterizedTest
     @ValueSource(
@@ -41,13 +45,14 @@ class Pom8Test : BuildSystemsTestBase() {
             "maven/maven.xml",
             "maven/spring-core.xml",
             "maven/maven-core.xml",
-            "maven/abbot.xml"
-        ]
+            "maven/abbot.xml",
+        ],
     )
-    fun `parse pom from resources`(path: String) = runTest {
-        val pom = xml.decodeFromString<ProjectObjectModel>(POM_XML_NAMESPACE, readResourceAsText(path))
-        println(xml.encodeToString(pom))
-    }
+    fun `parse pom from resources`(path: String) =
+        runTest {
+            val pom = xml.decodeFromString<ProjectObjectModel>(POM_XML_NAMESPACE, readResourceAsText(path))
+            println(xml.encodeToString(pom))
+        }
 
     @ParameterizedTest
     @ValueSource(
@@ -63,14 +68,14 @@ class Pom8Test : BuildSystemsTestBase() {
             "org.junit.jupiter:junit-jupiter-params:5.9.1",
             "org.junit.platform:junit-platform-suite:1.9.1",
             "org.mockito:mockito-all:1.9.5",
-            "org.mockito:mockito-core:3.12.4"
-        ]
+            "org.mockito:mockito-core:3.12.4",
+        ],
     )
-    fun testSolver(coordinates: String) = runTest {
-        val (groupId, artifactId, version) = coordinates.split(':')
-        val pom =
-            PomResolver(pomProvider = defaultPomProvider(httpClient = httpClient)).getPom(groupId, artifactId, version)
-        println(xml.encodeToString(pom))
-    }
-
+    fun testSolver(coordinates: String) =
+        runTest {
+            val (groupId, artifactId, version) = coordinates.split(':')
+            val pom =
+                PomResolver(pomProvider = defaultPomProvider(httpClient = httpClient)).getPom(groupId, artifactId, version)
+            println(xml.encodeToString(pom))
+        }
 }

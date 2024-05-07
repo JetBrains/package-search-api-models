@@ -5,7 +5,6 @@ import org.jetbrains.packagesearch.api.v3.http.SearchPackagesNextScrollRequest
 
 @SearchParametersBuilderDsl
 public class NextScrollParametersBuilder {
-
     public var scrollId: String? = null
     public var duration: String? = null
 
@@ -15,7 +14,7 @@ public class NextScrollParametersBuilder {
 
         return SearchPackagesNextScrollRequest(
             scrollId = scrollIdCopy,
-            duration = duration ?: DEFAULT_SCROLL_DURATION
+            duration = duration ?: DEFAULT_SCROLL_DURATION,
         )
     }
 }

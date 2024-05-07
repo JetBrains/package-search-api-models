@@ -14,7 +14,7 @@ public data class GradleMetadata(
     val formatVersion: String? = null,
     val component: Component? = null,
     val createdBy: CreatedBy? = null,
-    val variants: List<Variant>? = null
+    val variants: List<Variant>? = null,
 )
 
 @Serializable
@@ -28,13 +28,13 @@ public data class Component(
 
 @Serializable
 public data class CreatedBy(
-    val gradle: Gradle? = null
+    val gradle: Gradle? = null,
 )
 
 @Serializable
 public data class Gradle(
     val version: String,
-    val buildId: String? = null
+    val buildId: String? = null,
 )
 
 @Serializable
@@ -45,7 +45,7 @@ public data class Variant(
     val dependencies: List<Dependency>? = null,
     val dependencyConstraints: List<DependencyConstraint>? = null,
     val files: List<File>? = null,
-    val capabilities: List<Capability>? = null
+    val capabilities: List<Capability>? = null,
 )
 
 @Serializable
@@ -53,7 +53,7 @@ public data class AvailableAt(
     val url: String,
     val group: String,
     val module: String,
-    val version: String
+    val version: String,
 )
 
 @Serializable
@@ -65,7 +65,7 @@ public data class Dependency(
     val reason: String? = null,
     val attributes: Attributes? = null,
     val requestedCapabilities: List<Capability>? = null,
-    val endorseStrictVersions: Boolean? = null
+    val endorseStrictVersions: Boolean? = null,
 )
 
 @Serializable
@@ -82,7 +82,7 @@ public data class DependencyConstraint(
     val module: String,
     val version: Version? = null,
     val reason: String? = null,
-    val attributes: Attributes? = null
+    val attributes: Attributes? = null,
 )
 
 @Serializable
@@ -93,7 +93,7 @@ public data class File(
     val sha1: String? = null,
     val md5: String? = null,
     val sha256: String? = null,
-    val sha512: String? = null
+    val sha512: String? = null,
 )
 
 public typealias Attributes = Map<String, JsonPrimitive>
@@ -108,5 +108,5 @@ public data class Capability(
 @Serializable
 public data class Exclude(
     val group: String,
-    val module: String
+    val module: String,
 )

@@ -14,7 +14,6 @@ import org.jetbrains.packagesearch.packageversionutils.normalization.NormalizedV
  */
 @Serializable
 public sealed interface ApiPackage {
-
     public val id: String
     public val idHash: String
     public val rankingMetric: Double?
@@ -81,7 +80,6 @@ public data class ApiMavenPackage(
     public val artifactId: String,
     override val scm: ApiScm? = null,
 ) : ApiPackage {
-
     override val coordinates: String
         get() = "$groupId:$artifactId"
     public override val name: String
@@ -122,15 +120,17 @@ public data class ApiMavenPackage(
     ) : ApiMavenVersion {
         @Serializable
         public sealed interface ApiVariant {
-
             @Serializable
             public sealed interface Attribute {
-
                 public companion object {
-                    public fun create(name: String, value: String): Attribute = when {
-                        name == "org.gradle.jvm.version" -> ComparableInteger(value.toInt())
-                        else -> ExactMatch(value)
-                    }
+                    public fun create(
+                        name: String,
+                        value: String,
+                    ): Attribute =
+                        when {
+                            name == "org.gradle.jvm.version" -> ComparableInteger(value.toInt())
+                            else -> ExactMatch(value)
+                        }
                 }
 
                 public fun isCompatible(other: Attribute): Boolean
@@ -140,20 +140,21 @@ public data class ApiMavenPackage(
                 public data class ExactMatch internal constructor(
                     public val value: String,
                 ) : Attribute {
-
-                    public override fun isCompatible(other: Attribute): Boolean = when (other) {
-                        is ComparableInteger -> false
-                        is ExactMatch -> value == other.value
-                    }
+                    public override fun isCompatible(other: Attribute): Boolean =
+                        when (other) {
+                            is ComparableInteger -> false
+                            is ExactMatch -> value == other.value
+                        }
                 }
 
                 @Serializable
                 @SerialName("comparableInteger")
                 public data class ComparableInteger internal constructor(public val value: Int) : Attribute {
-                    public override fun isCompatible(other: Attribute): Boolean = when (other) {
-                        is ComparableInteger -> value <= other.value
-                        is ExactMatch -> false
-                    }
+                    public override fun isCompatible(other: Attribute): Boolean =
+                        when (other) {
+                            is ComparableInteger -> value <= other.value
+                            is ExactMatch -> false
+                        }
                 }
             }
 
@@ -176,7 +177,6 @@ public data class ApiMavenPackage(
                 public override val attributes: Map<String, Attribute>,
                 @SerialName("available-at") public val availableAt: AvailableAt,
             ) : ApiVariant {
-
                 @Serializable
                 public data class AvailableAt(
                     public val url: String,

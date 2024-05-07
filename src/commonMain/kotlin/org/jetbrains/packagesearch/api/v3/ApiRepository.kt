@@ -6,7 +6,6 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 public sealed interface ApiRepository {
-
     public val id: String
     public val lastChecked: Instant?
     public val name: String
@@ -30,18 +29,18 @@ public data class ApiMavenRepository(
         get() = friendlyName
 }
 
-//@Serializable
-//@SerialName("cocoapods")
-//public object ApiCocoapodsRepository : ApiRepository {
+// @Serializable
+// @SerialName("cocoapods")
+// public object ApiCocoapodsRepository : ApiRepository {
 //
 //    public override val id: String = "cocoapods"
 //    public override val lastChecked: Instant? = null
-//}
+// }
 //
-//@Serializable
-//@SerialName("npm")
-//public object ApiNpmRepository : ApiRepository {
+// @Serializable
+// @SerialName("npm")
+// public object ApiNpmRepository : ApiRepository {
 //
 //    public override val id: String = "npm"
 //    public override val lastChecked: Instant? = null
-//}
+// }

@@ -6,7 +6,6 @@ import org.jetbrains.packagesearch.api.v3.http.SearchPackagesStartScrollRequest
 
 @SearchParametersBuilderDsl
 public class StartScrollParametersBuilder {
-
     public var searchQuery: String? = null
     public var packagesType: List<PackagesType> = emptyList()
     public var batchSize: Int? = null
@@ -21,7 +20,7 @@ public class StartScrollParametersBuilder {
             packagesType = packagesType,
             searchQuery = searchQuery ?: "",
             batchSize = batchSize ?: DEFAULT_BATCH_SIZE,
-            duration = duration ?: DEFAULT_SCROLL_DURATION
+            duration = duration ?: DEFAULT_SCROLL_DURATION,
         )
     }
 }

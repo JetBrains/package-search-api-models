@@ -6,7 +6,6 @@ import org.jetbrains.packagesearch.api.v3.ApiMavenPackage.GradleVersion.ApiVaria
 
 @Serializable
 public sealed interface PackagesType {
-
     @Serializable
     @SerialName("maven")
     public data object Maven : PackagesType
@@ -21,13 +20,11 @@ public sealed interface PackagesType {
         public val variants: List<Variant> = emptyList(),
         public val mustBeRootPublication: Boolean = true,
     ) : PackagesType {
-
         @Serializable
         public data class Variant(
             public val attributes: Map<String, ApiVariant.Attribute>,
             public val mustBeWithFiles: Boolean,
         )
-
     }
 
     @Serializable
@@ -36,7 +33,10 @@ public sealed interface PackagesType {
         public val platformMinType: Map<Platform, String>,
     ) : PackagesType {
         public enum class Platform(public val platformName: String) {
-            IOS("ios"), MACOS("osx"), TVOS("tvos"), WATCHOS("watchos")
+            IOS("ios"),
+            MACOS("osx"),
+            TVOS("tvos"),
+            WATCHOS("watchos"),
         }
     }
 }

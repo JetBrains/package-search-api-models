@@ -11,7 +11,7 @@ public data class GetPackageInfoRequest(
 
 @Serializable
 public data class SearchProjectRequest(
-    public val query: String
+    public val query: String,
 )
 
 // Provide only 50 search results per batch by default
@@ -25,7 +25,7 @@ public data class SearchPackagesRequest(
 
 @Serializable
 public data class RefreshPackagesInfoRequest(
-    public val packages: List<CacheRequest>
+    public val packages: List<CacheRequest>,
 ) {
     @Serializable
     public data class CacheRequest(
@@ -48,19 +48,19 @@ public data class SearchPackagesStartScrollRequest(
 @Serializable
 public data class SearchPackagesNextScrollRequest(
     public val scrollId: String,
-    public val duration: String = DEFAULT_SCROLL_DURATION
+    public val duration: String = DEFAULT_SCROLL_DURATION,
 )
 
 @Serializable
 public data class SearchPackagesScrollResponse(
     val scrollId: String?,
-    val data: List<ApiPackage>
+    val data: List<ApiPackage>,
 )
 
 @Serializable
 public data class SearchProjectsResponse(
     public val query: Query,
-    public val packages: List<ApiPackage> = emptyList()
+    public val packages: List<ApiPackage> = emptyList(),
 ) {
     @Serializable
     public data class Query(

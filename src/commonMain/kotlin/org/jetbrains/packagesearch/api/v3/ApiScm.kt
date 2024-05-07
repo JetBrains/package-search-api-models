@@ -32,7 +32,7 @@ public typealias GitHub = ApiGitHub
 @Serializable
 public data class Readme(
     val rawUrl: String? = null,
-    val htmlUrl: String? = null
+    val htmlUrl: String? = null,
 )
 
 @Serializable

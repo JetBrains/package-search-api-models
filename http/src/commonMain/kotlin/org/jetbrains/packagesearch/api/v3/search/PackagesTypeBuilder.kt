@@ -16,7 +16,10 @@ public class PackagesTypeBuilder {
         packagesType.add(gradlePackages)
     }
 
-    public fun gradlePackages(variants: List<PackagesType.Gradle.Variant>, isRootPublication: Boolean = true) {
+    public fun gradlePackages(
+        variants: List<PackagesType.Gradle.Variant>,
+        isRootPublication: Boolean = true,
+    ) {
         gradlePackages(
             buildGradlePackages {
                 variants(variants)
@@ -49,8 +52,7 @@ public class PackagesTypeBuilder {
 }
 
 @SearchParametersBuilderDsl
-public fun buildPackageTypes(block: PackagesTypeBuilder.() -> Unit): List<PackagesType> =
-    PackagesTypeBuilder().apply(block).build()
+public fun buildPackageTypes(block: PackagesTypeBuilder.() -> Unit): List<PackagesType> = PackagesTypeBuilder().apply(block).build()
 
 public fun PackagesTypeBuilder.jvmGradlePackages(packaging: String) {
     mavenPackages()

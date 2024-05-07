@@ -6,7 +6,6 @@ import kotlinx.serialization.Serializable
 public data class ErrorResponse(
     public val error: Error,
 ) {
-
     @Serializable
     public data class Error(
         public val message: String,
@@ -14,8 +13,9 @@ public data class ErrorResponse(
     )
 
     public companion object {
-
-        public fun with(message: String, stackTrace: List<String> = emptyList()): ErrorResponse =
-            ErrorResponse(Error(message, stackTrace))
+        public fun with(
+            message: String,
+            stackTrace: List<String> = emptyList(),
+        ): ErrorResponse = ErrorResponse(Error(message, stackTrace))
     }
 }
