@@ -22,7 +22,8 @@ public class HttpClientMavenPomProvider(
     public val mirrors: List<MavenUrlBuilder>,
     public val httpClient: HttpClient,
     public val xml: XML = PomResolver.defaultXml(),
-) : MavenPomProvider, Closeable by httpClient {
+): MavenPomProvider, Closeable by httpClient {
+
     @Deprecated("Use mirrors instead", ReplaceWith("mirrors"))
     public val repositories: List<MavenUrlBuilder>
         get() = mirrors
@@ -31,33 +32,28 @@ public class HttpClientMavenPomProvider(
         public fun defaultHttpClient(
             xml: XML = PomResolver.defaultXml(),
             configure: HttpClientConfig<*>.() -> Unit = {},
-        ): HttpClient =
-            HttpClient {
-                install(ContentNegotiation) {
-                    val converter = KotlinxSerializationConverter(xml)
-                    register(ContentType.Application.Xml, converter)
-                    register(ContentType.Text.Xml, converter)
-                }
-                install(HttpRequestRetry) {
-                    retryOnExceptionOrServerErrors(10)
-                    constantDelay(100, 50, false)
-                }
-                configure()
+        ): HttpClient = HttpClient {
+            install(ContentNegotiation) {
+                val converter = KotlinxSerializationConverter(xml)
+                register(ContentType.Application.Xml, converter)
+                register(ContentType.Text.Xml, converter)
             }
+            install(HttpRequestRetry) {
+                retryOnExceptionOrServerErrors(10)
+                constantDelay(100, 50, false)
+            }
+            configure()
+        }
     }
 
-    override suspend fun getPom(
-        groupId: String,
-        artifactId: String,
-        version: String,
-    ): ProjectObjectModel {
+    override suspend fun getPom(groupId: String, artifactId: String, version: String): ProjectObjectModel {
         return getPomFromMultipleRepositories(groupId, artifactId, version).first()
     }
 
     override suspend fun getPomFromMultipleRepositories(
         groupId: String,
         artifactId: String,
-        version: String,
+        version: String
     ): Flow<ProjectObjectModel> {
         return mirrors.asFlow().map {
             it.getPom(groupId, artifactId, version)
@@ -77,4 +73,5 @@ public class HttpClientMavenPomProvider(
     private suspend fun HttpResponse.bodyAsPom(xml: XML) =
         runCatching { body<ProjectObjectModel>() }.getOrNull()
             ?: xml.decodeFromString(POM_XML_NAMESPACE, bodyAsText())
+
 }

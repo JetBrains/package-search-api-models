@@ -11,7 +11,7 @@ public data class MavenMetadata(
     @XmlElement val groupId: String? = null,
     @XmlElement val artifactId: String? = null,
     @XmlElement val version: String? = null,
-    @XmlElement val versioning: Versioning? = null,
+    @XmlElement val versioning: Versioning? = null
 )
 
 @Serializable
@@ -19,17 +19,17 @@ public data class MavenMetadata(
 public data class Versioning(
     @XmlElement val latest: String? = null,
     @XmlElement val release: String? = null,
-    val versions: Versions? = null,
+    val versions: Versions? = null
 )
 
 @Serializable
 @XmlSerialName("versions")
 public data class Versions(
-    val version: List<Version>? = null,
+    val version: List<Version>? = null
 )
 
 @Serializable
 @XmlSerialName("version")
 public data class Version(
-    @XmlValue val content: String,
+    @XmlValue val content: String
 )

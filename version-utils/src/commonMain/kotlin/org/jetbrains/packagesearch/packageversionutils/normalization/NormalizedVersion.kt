@@ -7,11 +7,10 @@ import org.jetbrains.packagesearch.packageversionutils.PackageVersionUtils
 
 @Serializable
 public sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
+
     public companion object {
-        public fun from(
-            versionName: String,
-            releasedAt: Instant? = null,
-        ): NormalizedVersion =
+
+        public fun from(versionName: String, releasedAt: Instant? = null): NormalizedVersion =
             versionName.normalizedVersion(
                 isStable = PackageVersionUtils.evaluateStability(versionName),
                 releasedAt = releasedAt,
@@ -38,6 +37,7 @@ public sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
         public override val stabilityMarker: String? = null,
         public override val nonSemanticSuffix: String? = null,
     ) : NormalizedVersion, DecoratedVersion {
+
         public val semanticPartWithStabilityMarker: String
             get() = semanticPart + (stabilityMarker ?: "")
 
@@ -49,11 +49,10 @@ public sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
 
         private fun compareByNameAndThenByTimestamp(other: Semantic): Int {
             // First, compare semantic parts and stability markers only
-            val nameComparisonResult =
-                VersionComparatorUtil.compare(
-                    semanticPartWithStabilityMarker,
-                    other.semanticPartWithStabilityMarker,
-                )
+            val nameComparisonResult = VersionComparatorUtil.compare(
+                semanticPartWithStabilityMarker,
+                other.semanticPartWithStabilityMarker,
+            )
             if (nameComparisonResult != 0) return nameComparisonResult
 
             // If they're identical, but only one has a non-semantic suffix, that's the larger one.
@@ -82,6 +81,7 @@ public sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
         }
 
         public companion object {
+
             private val HEX_CHARS: CharRange = 'a'..'f'
         }
     }
@@ -96,6 +96,7 @@ public sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
         public override val stabilityMarker: String? = null,
         public override val nonSemanticSuffix: String? = null,
     ) : NormalizedVersion, DecoratedVersion {
+
         private val timestampPrefixWithStabilityMarker
             get() = timestampPrefix + (stabilityMarker ?: "")
 
@@ -107,11 +108,10 @@ public sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
             }
 
         private fun compareByNameAndThenByTimestamp(other: TimestampLike): Int {
-            val nameComparisonResult =
-                VersionComparatorUtil.compare(
-                    timestampPrefixWithStabilityMarker,
-                    other.timestampPrefixWithStabilityMarker,
-                )
+            val nameComparisonResult = VersionComparatorUtil.compare(
+                timestampPrefixWithStabilityMarker,
+                other.timestampPrefixWithStabilityMarker,
+            )
 
             return if (nameComparisonResult == 0) {
                 compareByTimestamp(other)
@@ -128,6 +128,7 @@ public sealed interface NormalizedVersion : Comparable<NormalizedVersion> {
         public override val isStable: Boolean,
         public override val releasedAt: Instant? = null,
     ) : NormalizedVersion {
+
         override fun compareTo(other: NormalizedVersion): Int =
             when (other) {
                 is Garbage -> compareByNameAndThenByTimestamp(other)

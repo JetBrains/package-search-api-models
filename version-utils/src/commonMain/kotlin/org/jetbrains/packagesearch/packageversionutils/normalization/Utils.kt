@@ -30,7 +30,7 @@ private val HEX_STRING_LETTER_CHARS: CharRange = 'a'..'f'
  * optional separator (one of: . _ -), AND [0, 5] numeric digits. After the digits, there must be a word boundary (most punctuation, except for
  * underscores, qualifies as such).
  *
- * We only support up to two stability markers (arguably, but we have well-known libraries
+ * We only support up to two stability markers (arguably, having two already qualifies for the [Garbage] tier, but we have well-known libraries
  * out there that do the two-markers game, now and then, and we need to support those shenanigans).
  *
  * ### Stability tokens
@@ -45,16 +45,15 @@ private val HEX_STRING_LETTER_CHARS: CharRange = 'a'..'f'
  * * `sp`
  * * `release`, `final`, `stable`*, `rel`, `r`
  *
- * Tokens denoted by a `*` are considered as meaningless words by [VersionComparatorUtil] when comparing without a custom
+ * Tokens denoted by a `*` are considered as meaningless words by [com.intellij.util.text.VersionComparatorUtil] when comparing without a custom
  * token priority provider, so sorting may be funky when they appear.
  */
 private val STABILITY_MARKER_REGEX =
     (
         "^((?:[._\\-+]" +
-            "(?:snapshots?|preview|milestone|candidate|release|develop|stable|build|alpha|betta|final|snap" +
-            "|beta|dev|pre|eap|rel|sp|rc|m|r|b|a|p)" +
+            "(?:snapshots?|preview|milestone|candidate|release|develop|stable|build|alpha|betta|final|snap|beta|dev|pre|eap|rel|sp|rc|m|r|b|a|p)" +
             "(?:[._\\-]?\\d{1,5})?){1,2})(?:\\b|_)"
-    )
+        )
         .toRegex(option = RegexOption.IGNORE_CASE)
 
 /**
@@ -77,24 +76,16 @@ public fun looksLikeGitCommitOrOtherHash(versionName: String): Boolean {
     }
 }
 
-public fun stabilitySuffixComponentOrNull(
-    versionName: String,
-    ignoredPrefix: String,
-): String? {
-    val groupValues =
-        STABILITY_MARKER_REGEX.find(versionName.substringAfter(ignoredPrefix))
-            ?.groupValues ?: return null
+public fun stabilitySuffixComponentOrNull(versionName: String, ignoredPrefix: String): String? {
+    val groupValues = STABILITY_MARKER_REGEX.find(versionName.substringAfter(ignoredPrefix))
+        ?.groupValues ?: return null
     if (groupValues.size <= 1) return null
     return groupValues[1].takeIf { it.isNotBlank() }
 }
 
-public fun nonSemanticSuffix(
-    versionName: String,
-    ignoredPrefix: String?,
-): String? {
-    val semanticPart =
-        stabilitySuffixComponentOrNull(versionName, ignoredPrefix ?: return null)
-            ?: ignoredPrefix
+public fun nonSemanticSuffix(versionName: String, ignoredPrefix: String?): String? {
+    val semanticPart = stabilitySuffixComponentOrNull(versionName, ignoredPrefix ?: return null)
+        ?: ignoredPrefix
     return versionName.substringAfter(semanticPart).takeIf { it.isNotBlank() }
 }
 
@@ -129,11 +120,10 @@ internal fun String.normalizedVersion(
         return NormalizedVersion.TimestampLike(
             versionName = this,
             isStable = isStable,
-            releasedAt =
-                VeryLenientDateTimeExtractor
-                    .extractTimestampLookingPrefixOrNull(timestampPrefix)
-                    ?.toInstant()
-                    ?: releasedAt,
+            releasedAt = VeryLenientDateTimeExtractor
+                .extractTimestampLookingPrefixOrNull(timestampPrefix)
+                ?.toInstant()
+                ?: releasedAt,
             timestampPrefix = timestampPrefix,
             stabilityMarker = stabilitySuffixComponentOrNull(this, timestampPrefix),
             nonSemanticSuffix = nonSemanticSuffix(this, timestampPrefix),
@@ -145,11 +135,10 @@ internal fun String.normalizedVersion(
         return NormalizedVersion.Semantic(
             versionName = this,
             isStable = isStable,
-            releasedAt =
-                VeryLenientDateTimeExtractor
-                    .extractTimestampLookingPrefixOrNull(semanticPart)
-                    ?.toInstant()
-                    ?: releasedAt,
+            releasedAt = VeryLenientDateTimeExtractor
+                .extractTimestampLookingPrefixOrNull(semanticPart)
+                ?.toInstant()
+                ?: releasedAt,
             semanticPart = semanticPart,
             stabilityMarker = stabilitySuffixComponentOrNull(this, semanticPart),
             nonSemanticSuffix = nonSemanticSuffix(this, semanticPart),

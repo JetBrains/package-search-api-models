@@ -8,6 +8,7 @@ import kotlinx.serialization.encoding.Decoder
 import kotlinx.serialization.encoding.Encoder
 
 public object CompactNormalizedVersionSerializer : KSerializer<NormalizedVersion> {
+
     @Serializable
     private data class CompactNormalizedVersion(
         val versionName: String,
@@ -22,11 +23,9 @@ public object CompactNormalizedVersionSerializer : KSerializer<NormalizedVersion
         return NormalizedVersion.from(compactVersion.versionName, compactVersion.releasedAt)
     }
 
-    override fun serialize(
-        encoder: Encoder,
-        value: NormalizedVersion,
-    ) {
+    override fun serialize(encoder: Encoder, value: NormalizedVersion) {
         val compactVersion = CompactNormalizedVersion(value.versionName, value.releasedAt)
         CompactNormalizedVersion.serializer().serialize(encoder, compactVersion)
     }
+
 }

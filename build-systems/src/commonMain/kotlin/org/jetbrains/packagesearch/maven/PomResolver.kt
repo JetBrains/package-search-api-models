@@ -19,20 +19,21 @@ import nl.adaptivity.xmlutil.serialization.XML
  */
 public class PomResolver(
     public val pomProvider: MavenPomProvider,
-    public val xml: XML = defaultXml(),
+    public val xml: XML = defaultXml()
 ) : Closeable {
+
     public companion object {
+
         /**
          * Generates a default XML configuration for the PomResolver class.
          *
          * @return the default XML configuration
          */
-        public fun defaultXml(): XML =
-            XML {
-                defaultPolicy {
-                    ignoreUnknownChildren()
-                }
+        public fun defaultXml(): XML = XML {
+            defaultPolicy {
+                ignoreUnknownChildren()
             }
+        }
 
         /**
          * Returns the default MavenPomProvider instance with the provided optional parameters.
@@ -46,12 +47,11 @@ public class PomResolver(
             repositories: List<MavenUrlBuilder> = listOf(GoogleMavenCentralMirror),
             xml: XML = defaultXml(),
             httpClient: HttpClient = HttpClientMavenPomProvider.defaultHttpClient(xml),
-        ): MavenPomProvider =
-            HttpClientMavenPomProvider(
-                mirrors = repositories,
-                httpClient = httpClient,
-                xml = xml,
-            )
+        ): MavenPomProvider = HttpClientMavenPomProvider(
+            mirrors = repositories,
+            httpClient = httpClient,
+            xml = xml
+        )
 
         /**
          * Regular expression used for pattern matching and extraction.
@@ -71,11 +71,7 @@ public class PomResolver(
      * @param version The version of the project.
      * @return The retrieved ProjectObjectModel or null if it doesn't exist.
      */
-    public suspend fun getPom(
-        groupId: String,
-        artifactId: String,
-        version: String,
-    ): ProjectObjectModel? =
+    public suspend fun getPom(groupId: String, artifactId: String, version: String): ProjectObjectModel? =
         pomProvider.getPomFromMultipleRepositories(groupId, artifactId, version)
             .firstOrNull()
             ?.let { resolve(it) }
@@ -86,7 +82,8 @@ public class PomResolver(
      * @param parent The Parent object containing the groupId, artifactId, version, and optional relativePath.
      * @return The retrieved ProjectObjectModel or null if it doesn't exist.
      */
-    private suspend fun getPom(parent: Parent) = getPom(parent.groupId, parent.artifactId, parent.version)
+    private suspend fun getPom(parent: Parent) =
+        getPom(parent.groupId, parent.artifactId, parent.version)
 
     /**
      * Resolves the Project Object Model (POM) using the provided POM text.
@@ -96,6 +93,7 @@ public class PomResolver(
      */
     public suspend fun resolve(pomText: String): ProjectObjectModel =
         resolve(xml.decodeFromString<ProjectObjectModel>(POM_XML_NAMESPACE, pomText))
+
 
     /**
      * Resolves the provided Project Object Model (POM) by merging it with its parent POMs and resolving the property values.
@@ -126,14 +124,13 @@ public class PomResolver(
             // Merge the current mergedPom with its parent. This includes merging the dependencies,
             // dependencyManagement, and properties.
             // Note: The 'distinct()' function ensures that there are no duplicate items.
-            mergedPom =
-                mergedPom.copy(
-                    groupId = mergedPom.groupId ?: parentPom.groupId,
-                    artifactId = mergedPom.artifactId ?: parentPom.artifactId,
-                    dependencies = parentPom.dependencies.plus(mergedPom.dependencies).distinct(),
-                    dependencyManagement = parentPom.dependencyManagement.plus(mergedPom.dependencyManagement).distinct(),
-                    properties = parentPom.properties + mergedPom.properties,
-                )
+            mergedPom = mergedPom.copy(
+                groupId = mergedPom.groupId ?: parentPom.groupId,
+                artifactId = mergedPom.artifactId ?: parentPom.artifactId,
+                dependencies = parentPom.dependencies.plus(mergedPom.dependencies).distinct(),
+                dependencyManagement = parentPom.dependencyManagement.plus(mergedPom.dependencyManagement).distinct(),
+                properties = parentPom.properties + mergedPom.properties,
+            )
 
             // Update the currentParent for the next iteration.
             currentParent = parentPom.parent
@@ -144,24 +141,21 @@ public class PomResolver(
 
         // Resolve the versions in the dependencyManagement section of the mergedPom.
         // This creates a map with keys as DependencyKey and values as the corresponding dependency with resolved version.
-        val resolvedDependencyManagement =
-            mergedPom.dependencyManagement
-                .map { it.copy(version = it.version?.resolve(mergedPom.properties, accessor)) }
-                .associateBy { DependencyKey(it.groupId, it.artifactId) }
+        val resolvedDependencyManagement = mergedPom.dependencyManagement
+            .map { it.copy(version = it.version?.resolve(mergedPom.properties, accessor)) }
+            .associateBy { DependencyKey(it.groupId, it.artifactId) }
 
         // Resolve the versions in the dependencies section of the mergedPom.
         // If the version is present in resolvedDependencyManagement, use that. Otherwise, resolve it using properties.
-        val resolvedDependencies =
-            mergedPom.dependencies
-                .map {
-                    it.copy(
-                        version =
-                            resolvedDependencyManagement[DependencyKey(it.groupId, it.artifactId)]
-                                ?.takeIf { it.version != null }
-                                ?.version
-                                ?: it.version?.resolve(mergedPom.properties, accessor),
-                    )
-                }
+        val resolvedDependencies = mergedPom.dependencies
+            .map {
+                it.copy(
+                    version = resolvedDependencyManagement[DependencyKey(it.groupId, it.artifactId)]
+                        ?.takeIf { it.version != null }
+                        ?.version
+                        ?: it.version?.resolve(mergedPom.properties, accessor)
+                )
+            }
 
         // Return the final mergedPom with all resolved properties, dependencies, and dependencyManagement.
         return mergedPom.copy(
@@ -172,14 +166,14 @@ public class PomResolver(
             properties = mergedPom.properties.mapValues { it.value.resolve(mergedPom.properties, accessor) },
             name = mergedPom.name?.resolve(mergedPom.properties, accessor),
             description = mergedPom.description?.resolve(mergedPom.properties, accessor),
-            scm =
-                mergedPom.scm?.copy(
-                    connection = mergedPom.scm?.connection?.resolve(mergedPom.properties, accessor),
-                    developerConnection = mergedPom.scm?.developerConnection?.resolve(mergedPom.properties, accessor),
-                    url = mergedPom.scm?.url?.resolve(mergedPom.properties, accessor),
-                    tag = mergedPom.scm?.tag?.resolve(mergedPom.properties, accessor),
-                ),
+            scm = mergedPom.scm?.copy(
+                connection = mergedPom.scm?.connection?.resolve(mergedPom.properties, accessor),
+                developerConnection = mergedPom.scm?.developerConnection?.resolve(mergedPom.properties, accessor),
+                url = mergedPom.scm?.url?.resolve(mergedPom.properties, accessor),
+                tag = mergedPom.scm?.tag?.resolve(mergedPom.properties, accessor),
+            ),
         )
+
     }
 
     /**
@@ -199,38 +193,36 @@ public class PomResolver(
         allProperties: Map<String, String?>,
         modelAccessor: JsonObject,
         currentDepth: Int = 0,
-    ): String =
-        replaceProperty {
-            when {
-                // If the recursion depth is greater than 10, just return null
-                currentDepth > 10 -> null
+    ): String = replaceProperty {
+        when {
+            // If the recursion depth is greater than 10, just return null
+            currentDepth > 10 -> null
 
-                // If the property starts with "settings.", it cannot be resolved with the current setup.
-                it.startsWith("settings.") -> null
+            // If the property starts with "settings.", it cannot be resolved with the current setup.
+            it.startsWith("settings.") -> null
 
-                // If the property starts with "env.", it refers to an environment variable.
-                // It cannot be resolved with the current setup.
-                it.startsWith("env.") -> null
+            // If the property starts with "env.", it refers to an environment variable.
+            // It cannot be resolved with the current setup.
+            it.startsWith("env.") -> null
 
-                // If the property starts with "project.", it's referring to a field within the project's model.
-                it.startsWith("project.") ->
-                    evaluateProjectProperty(
-                        projectProperty = it.removePrefix("project."),
-                        modelAccessor = modelAccessor,
-                    )
+            // If the property starts with "project.", it's referring to a field within the project's model.
+            it.startsWith("project.") -> evaluateProjectProperty(
+                projectProperty = it.removePrefix("project."),
+                modelAccessor = modelAccessor
+            )
 
-                // Default case:
-                // Try to resolve the property recursively if present in allProperties.
-                else -> allProperties[it]?.resolve(allProperties, modelAccessor, currentDepth + 1)
-            }
+            // Default case:
+            // Try to resolve the property recursively if present in allProperties.
+            else -> allProperties[it]?.resolve(allProperties, modelAccessor, currentDepth + 1)
         }
+    }
 
     /**
      * This helper function uses [PROPERTY_REFERENCE_REGEX]
      * to identify and replace placeholders in the string with their corresponding values.
      * If a placeholder cannot be resolved, the placeholder is returned as is.
      */
-    private fun String.replaceProperty(transform: (String) -> CharSequence?): String =
+    private inline fun String.replaceProperty(noinline transform: (String) -> CharSequence?): String =
         replace(PROPERTY_REFERENCE_REGEX) { transform(it.groupValues[1]) ?: it.groupValues.first() }
 
     override fun close() {
