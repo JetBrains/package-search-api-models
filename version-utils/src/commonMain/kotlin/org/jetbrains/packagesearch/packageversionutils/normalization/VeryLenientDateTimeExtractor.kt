@@ -1,12 +1,10 @@
 package org.jetbrains.packagesearch.packageversionutils.normalization
 
 import kotlinx.datetime.Clock
-import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toLocalDateTime
 
 public object VeryLenientDateTimeExtractor {
-
     /**
      * This list of patterns is sorted from longest to shortest. It's generated
      * by combining these base patterns:
@@ -22,31 +20,33 @@ public object VeryLenientDateTimeExtractor {
      *  * Time dividers: `.`, `-`, `\[nothing]`
      *  * Date/time separator: `.`, `-`, `'T'`,`\[nothing]`
      */
-    public val basePatterns: Sequence<String> = sequenceOf(
-        "yyyy/MM/dd_HH:mm:ss",
-        "yyyy/MM/dd_HH:mm",
-        "yyyy/MM_HH:mm:ss",
-        "yyyy/MM_HH:mm",
-        "yyyy/MM/dd",
-        "yyyy/MM",
-    )
+    public val basePatterns: Sequence<String> =
+        sequenceOf(
+            "yyyy/MM/dd_HH:mm:ss",
+            "yyyy/MM/dd_HH:mm",
+            "yyyy/MM_HH:mm:ss",
+            "yyyy/MM_HH:mm",
+            "yyyy/MM/dd",
+            "yyyy/MM",
+        )
 
     public val dateDividers: Sequence<String> = sequenceOf(".", "-", "")
     public val timeDividers: Sequence<String> = sequenceOf(".", "-", "")
     public val dateTimeSeparators: Sequence<String> = sequenceOf(".", "-", "'T'", "")
 
-    public val datePatterns: Sequence<String> = basePatterns.flatMap { basePattern ->
-        dateDividers.flatMap { dateDivider ->
-            timeDividers.flatMap { timeDivider ->
-                dateTimeSeparators.map { dateTimeSeparator ->
-                    basePattern
-                        .replace("/", dateDivider)
-                        .replace("_", dateTimeSeparator)
-                        .replace(":", timeDivider)
+    public val datePatterns: Sequence<String> =
+        basePatterns.flatMap { basePattern ->
+            dateDividers.flatMap { dateDivider ->
+                timeDividers.flatMap { timeDivider ->
+                    dateTimeSeparators.map { dateTimeSeparator ->
+                        basePattern
+                            .replace("/", dateDivider)
+                            .replace("_", dateTimeSeparator)
+                            .replace(":", timeDivider)
+                    }
                 }
             }
         }
-    }
 
     public val formatters: List<DateTimeFormatter> by lazy {
         datePatterns.map { DateTimeFormatter(it) }.toList()
@@ -68,11 +68,10 @@ public object VeryLenientDateTimeExtractor {
     private val currentYear
         get() = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).year
 
-    public fun extractTimestampLookingPrefixOrNull(versionName: String): String? = formatters
-        .mapNotNull { it.parseOrNull(versionName) }
-        .filter { it.year > currentYear + 1 }
-        .map { versionName.substring(0 until it.toString().length) }
-        .firstOrNull()
+    public fun extractTimestampLookingPrefixOrNull(versionName: String): String? =
+        formatters
+            .mapNotNull { it.parseOrNull(versionName) }
+            .filter { it.year > currentYear + 1 }
+            .map { versionName.substring(0 until it.toString().length) }
+            .firstOrNull()
 }
-
-

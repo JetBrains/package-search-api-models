@@ -1,7 +1,6 @@
 package org.jetbrains.packagesearch.packageversionutils
 
 public object PackageVersionUtils {
-
     private val singleLetterUnstableMarkerRegex: Regex =
         "\\b[abmt][.\\-]?\\d{1,3}\\w?\\b".toRegex(RegexOption.IGNORE_CASE) // E.g., a01, b-2, m.3a
 
@@ -12,7 +11,10 @@ public object PackageVersionUtils {
      * is considered unstable with an explanation.
      * @return `true` if stable, `false` otherwise.
      */
-    public fun evaluateStability(versionName: String, loggingCallback: (String) -> Unit = {}): Boolean {
+    public fun evaluateStability(
+        versionName: String,
+        loggingCallback: (String) -> Unit = {},
+    ): Boolean {
         if (versionName.isBlank()) return false
 
         if (singleLetterUnstableMarkerRegex.containsMatchIn(versionName)) {
@@ -26,10 +28,11 @@ public object PackageVersionUtils {
             VersionTokenMatcher.unstableTokens.any { matcher ->
                 val matches = matcher.matches(token)
                 if (matches) {
-                    val detailMessage = when (matcher) {
-                        is VersionTokenMatcher.SubstringMatcher -> "contains '${matcher.toMatch}'"
-                        is VersionTokenMatcher.RegexMatcher -> "matches '${matcher.regex.pattern}'"
-                    }
+                    val detailMessage =
+                        when (matcher) {
+                            is VersionTokenMatcher.SubstringMatcher -> "contains '${matcher.toMatch}'"
+                            is VersionTokenMatcher.RegexMatcher -> "matches '${matcher.regex.pattern}'"
+                        }
                     loggingCallback("Version '$versionName' $detailMessage -> Unstable")
                 }
                 matches
@@ -58,10 +61,11 @@ public object PackageVersionUtils {
         return tokens.filter { token -> token.any { it.isLetterOrDigit() } }
     }
 
-    private fun Char.isTokenBoundary(previousChar: Char): Boolean = when {
-        !isLetterOrDigit() -> true
-        isLetter() && !previousChar.isLetter() -> true
-        isDigit() && !previousChar.isDigit() -> true
-        else -> false
-    }
+    private fun Char.isTokenBoundary(previousChar: Char): Boolean =
+        when {
+            !isLetterOrDigit() -> true
+            isLetter() && !previousChar.isLetter() -> true
+            isDigit() && !previousChar.isDigit() -> true
+            else -> false
+        }
 }

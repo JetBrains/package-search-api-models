@@ -1,304 +1,2117 @@
-{"type":"semantic","versionName":"1.4.0","isStable":true,"semanticPart":"1.4.0"}
-{"type":"semantic","versionName":"1.4.1","isStable":true,"semanticPart":"1.4.1"}
-{"type":"semantic","versionName":"1.4.3","isStable":true,"semanticPart":"1.4.3"}
-{"type":"semantic","versionName":"1.5.0-beta01","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-beta01"}
-{"type":"semantic","versionName":"1.5.0-beta02","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-beta02"}
-{"type":"semantic","versionName":"1.5.0","isStable":true,"semanticPart":"1.5.0"}
-{"type":"semantic","versionName":"1.5.1","isStable":true,"semanticPart":"1.5.1"}
-{"type":"semantic","versionName":"1.5.2","isStable":true,"semanticPart":"1.5.2"}
-{"type":"semantic","versionName":"1.5.3","isStable":true,"semanticPart":"1.5.3"}
-{"type":"semantic","versionName":"1.5.10-beta01","isStable":false,"semanticPart":"1.5.10","stabilityMarker":"-beta01"}
-{"type":"semantic","versionName":"1.5.10-beta02","isStable":false,"semanticPart":"1.5.10","stabilityMarker":"-beta02"}
-{"type":"semantic","versionName":"1.5.10-rc01","isStable":false,"semanticPart":"1.5.10","stabilityMarker":"-rc01"}
-{"type":"semantic","versionName":"1.5.10-rc02","isStable":false,"semanticPart":"1.5.10","stabilityMarker":"-rc02"}
-{"type":"semantic","versionName":"1.5.10","isStable":true,"semanticPart":"1.5.10"}
-{"type":"semantic","versionName":"1.5.11","isStable":true,"semanticPart":"1.5.11"}
-{"type":"semantic","versionName":"1.6.0-alpha01","isStable":false,"semanticPart":"1.6.0","stabilityMarker":"-alpha01"}
-{"type":"semantic","versionName":"0.0.0-igor.demin-rename-web-to-html-dev1014","isStable":false,"semanticPart":"0.0.0","nonSemanticSuffix":"-igor.demin-rename-web-to-html-dev1014"}
-{"type":"semantic","versionName":"1.4.0-rc02","isStable":false,"semanticPart":"1.4.0","stabilityMarker":"-rc02"}
-{"type":"semantic","versionName":"0.0.0-master-dev1017","isStable":false,"semanticPart":"0.0.0","nonSemanticSuffix":"-master-dev1017"}
-{"type":"semantic","versionName":"1.4.0-rc03","isStable":false,"semanticPart":"1.4.0","stabilityMarker":"-rc03"}
-{"type":"semantic","versionName":"0.0.0-master-dev1020","isStable":false,"semanticPart":"0.0.0","nonSemanticSuffix":"-master-dev1020"}
-{"type":"semantic","versionName":"0.0.0-master-dev1021","isStable":false,"semanticPart":"0.0.0","nonSemanticSuffix":"-master-dev1021"}
-{"type":"semantic","versionName":"0.0.0-master-dev1022","isStable":false,"semanticPart":"0.0.0","nonSemanticSuffix":"-master-dev1022"}
-{"type":"semantic","versionName":"0.0.0-master-dev1024","isStable":false,"semanticPart":"0.0.0","nonSemanticSuffix":"-master-dev1024"}
-{"type":"semantic","versionName":"0.0.0-master-dev1026","isStable":false,"semanticPart":"0.0.0","nonSemanticSuffix":"-master-dev1026"}
-{"type":"semantic","versionName":"0.0.0-master-dev1027","isStable":false,"semanticPart":"0.0.0","nonSemanticSuffix":"-master-dev1027"}
-{"type":"semantic","versionName":"0.0.0-master-dev1028","isStable":false,"semanticPart":"0.0.0","nonSemanticSuffix":"-master-dev1028"}
-{"type":"semantic","versionName":"0.0.0-master-dev1029","isStable":false,"semanticPart":"0.0.0","nonSemanticSuffix":"-master-dev1029"}
-{"type":"semantic","versionName":"1.5.0-dev1030","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-dev1030"}
-{"type":"semantic","versionName":"0.0.0-master-dev1031","isStable":false,"semanticPart":"0.0.0","nonSemanticSuffix":"-master-dev1031"}
-{"type":"semantic","versionName":"0.0.0-dev1034","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1034"}
-{"type":"semantic","versionName":"1.5.0-dev1035","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-dev1035"}
-{"type":"semantic","versionName":"1.5.0-dev1036","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-dev1036"}
-{"type":"semantic","versionName":"0.0.0-dev1037","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1037"}
-{"type":"semantic","versionName":"0.0.0-dev1039","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1039"}
-{"type":"semantic","versionName":"0.0.0-dev1040","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1040"}
-{"type":"semantic","versionName":"0.0.0-dev1041","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1041"}
-{"type":"semantic","versionName":"0.0.0-dev1042","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1042"}
-{"type":"semantic","versionName":"1.5.0-dev1043","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-dev1043"}
-{"type":"semantic","versionName":"0.0.0-dev1044","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1044"}
-{"type":"semantic","versionName":"0.0.0-dev1045","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1045"}
-{"type":"semantic","versionName":"0.0.0-dev1046","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1046"}
-{"type":"semantic","versionName":"0.0.0-dev1047","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1047"}
-{"type":"semantic","versionName":"0.0.0-dev1048","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1048"}
-{"type":"semantic","versionName":"1.5.0-dev1049","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-dev1049"}
-{"type":"semantic","versionName":"0.0.0-dev1050","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1050"}
-{"type":"semantic","versionName":"0.0.0-dev1051","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1051"}
-{"type":"semantic","versionName":"0.0.0-dev1054","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1054"}
-{"type":"semantic","versionName":"0.0.0-dev1055","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1055"}
-{"type":"semantic","versionName":"0.0.0-dev1056","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1056"}
-{"type":"semantic","versionName":"1.5.0-dev1057","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-dev1057"}
-{"type":"semantic","versionName":"0.0.0-dev1058","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1058"}
-{"type":"semantic","versionName":"1.5.0-dev1059","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-dev1059"}
-{"type":"semantic","versionName":"0.0.0-dev1060","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1060"}
-{"type":"semantic","versionName":"0.0.0-dev1061","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1061"}
-{"type":"semantic","versionName":"0.0.0-dev1062","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1062"}
-{"type":"semantic","versionName":"1.5.0-dev1063","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-dev1063"}
-{"type":"semantic","versionName":"0.0.0-dev1064","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1064"}
-{"type":"semantic","versionName":"0.0.0-dev1065","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1065"}
-{"type":"semantic","versionName":"0.0.0-dev1068","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1068"}
-{"type":"semantic","versionName":"0.0.0-dev1069","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1069"}
-{"type":"semantic","versionName":"0.0.0-dev1070","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1070"}
-{"type":"semantic","versionName":"1.5.0-dev1071","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-dev1071"}
-{"type":"semantic","versionName":"0.0.0-dev1072","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1072"}
-{"type":"semantic","versionName":"0.0.0-dev1073","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1073"}
-{"type":"semantic","versionName":"1.5.0-dev1074","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-dev1074"}
-{"type":"semantic","versionName":"0.0.0-dev1075","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1075"}
-{"type":"semantic","versionName":"0.0.0-dev1076","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1076"}
-{"type":"semantic","versionName":"1.4.1-rc01","isStable":false,"semanticPart":"1.4.1","stabilityMarker":"-rc01"}
-{"type":"semantic","versionName":"0.0.0-dev1079","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1079"}
-{"type":"semantic","versionName":"1.5.0-dev1080","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-dev1080"}
-{"type":"semantic","versionName":"1.5.0-dev1082","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-dev1082"}
-{"type":"semantic","versionName":"0.0.0-dev1083","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1083"}
-{"type":"semantic","versionName":"1.5.0-dev1084","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-dev1084"}
-{"type":"semantic","versionName":"0.0.0-dev1085","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1085"}
-{"type":"semantic","versionName":"0.0.0-dev1086","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1086"}
-{"type":"semantic","versionName":"0.0.0-dev1087","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1087"}
-{"type":"semantic","versionName":"0.0.0-dev1093","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1093"}
-{"type":"semantic","versionName":"1.5.0-dev1094","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-dev1094"}
-{"type":"semantic","versionName":"0.0.0-dev1095","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1095"}
-{"type":"semantic","versionName":"0.0.0-dev1096","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1096"}
-{"type":"semantic","versionName":"0.0.0-dev1097","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1097"}
-{"type":"semantic","versionName":"0.0.0-dev1098","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1098"}
-{"type":"semantic","versionName":"0.0.0-dev1099","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1099"}
-{"type":"semantic","versionName":"0.0.0-dev1100","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1100"}
-{"type":"semantic","versionName":"0.0.0-dev1101","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1101"}
-{"type":"semantic","versionName":"1.5.0-dev1103","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-dev1103"}
-{"type":"semantic","versionName":"1.5.0-dev1104","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-dev1104"}
-{"type":"semantic","versionName":"0.0.0-dev1105","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1105"}
-{"type":"semantic","versionName":"1.5.0-dev1108","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-dev1108"}
-{"type":"semantic","versionName":"1.5.0-dev1109","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-dev1109"}
-{"type":"semantic","versionName":"0.0.0-dev1110","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1110"}
-{"type":"semantic","versionName":"1.5.0-dev1111","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-dev1111"}
-{"type":"semantic","versionName":"1.5.0-dev1112","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-dev1112"}
-{"type":"semantic","versionName":"1.5.0-dev1113","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-dev1113"}
-{"type":"semantic","versionName":"1.5.0-dev1114","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-dev1114"}
-{"type":"semantic","versionName":"0.0.0-dev1115","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1115"}
-{"type":"semantic","versionName":"0.0.0-components-kotlin-1.8","isStable":true,"semanticPart":"0.0.0","nonSemanticSuffix":"-components-kotlin-1.8"}
-{"type":"semantic","versionName":"0.0.0-components-kotlin-1.8-2","isStable":true,"semanticPart":"0.0.0","nonSemanticSuffix":"-components-kotlin-1.8-2"}
-{"type":"semantic","versionName":"0.0.0-components-kotlin-1.8-3","isStable":true,"semanticPart":"0.0.0","nonSemanticSuffix":"-components-kotlin-1.8-3"}
-{"type":"semantic","versionName":"0.0.0-components-kotlin-1.8-4","isStable":true,"semanticPart":"0.0.0","nonSemanticSuffix":"-components-kotlin-1.8-4"}
-{"type":"semantic","versionName":"0.0.0-dev1121","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1121"}
-{"type":"semantic","versionName":"1.5.0-dev1122","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-dev1122"}
-{"type":"semantic","versionName":"1.4.2","isStable":true,"semanticPart":"1.4.2"}
-{"type":"semantic","versionName":"0.0.0-dev1124","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1124"}
-{"type":"semantic","versionName":"0.0.0-dev1125","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1125"}
-{"type":"semantic","versionName":"0.0.0-dev1127","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1127"}
-{"type":"semantic","versionName":"1.5.0-dev1128","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-dev1128"}
-{"type":"semantic","versionName":"0.0.0-dev1132","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1132"}
-{"type":"semantic","versionName":"0.0.0-dev1133","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1133"}
-{"type":"semantic","versionName":"1.5.0-dev1136","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-dev1136"}
-{"type":"semantic","versionName":"0.0.0-dev1137","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1137"}
-{"type":"semantic","versionName":"0.0.0-dev1138","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1138"}
-{"type":"semantic","versionName":"0.0.0-dev1139","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1139"}
-{"type":"semantic","versionName":"0.0.0-dev1140","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1140"}
-{"type":"semantic","versionName":"0.0.0-dev1141","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1141"}
-{"type":"semantic","versionName":"0.0.0-dev1142","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1142"}
-{"type":"semantic","versionName":"0.0.0-dev1144","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1144"}
-{"type":"semantic","versionName":"0.0.0-dev1145","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1145"}
-{"type":"semantic","versionName":"0.0.0-dev1146","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1146"}
-{"type":"semantic","versionName":"1.5.0-dev1147","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-dev1147"}
-{"type":"semantic","versionName":"0.0.0-dev1149","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1149"}
-{"type":"semantic","versionName":"0.0.0-dev1150","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1150"}
-{"type":"semantic","versionName":"0.0.0-dev1151","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1151"}
-{"type":"semantic","versionName":"1.5.0-dev1152","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-dev1152"}
-{"type":"semantic","versionName":"0.0.0-dev1153","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1153"}
-{"type":"semantic","versionName":"0.0.0-dev1154","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1154"}
-{"type":"semantic","versionName":"0.0.0-dev1155","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1155"}
-{"type":"semantic","versionName":"1.5.0-rc01","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-rc01"}
-{"type":"semantic","versionName":"0.0.0-dev1157","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1157"}
-{"type":"semantic","versionName":"0.0.0-dev1158","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1158"}
-{"type":"semantic","versionName":"0.0.0-dev1159","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1159"}
-{"type":"semantic","versionName":"1.5.0-rc02","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-rc02"}
-{"type":"semantic","versionName":"0.0.0-dev1161","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1161"}
-{"type":"semantic","versionName":"1.5.0-dev1162","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-dev1162"}
-{"type":"semantic","versionName":"1.5.0-rc03","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-rc03"}
-{"type":"semantic","versionName":"1.5.0-rc04","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-rc04"}
-{"type":"semantic","versionName":"0.0.0-dev1165","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1165"}
-{"type":"semantic","versionName":"0.0.0-dev1166","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1166"}
-{"type":"semantic","versionName":"0.0.0-dev1167","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1167"}
-{"type":"semantic","versionName":"1.5.0-rc05","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-rc05"}
-{"type":"semantic","versionName":"1.5.0-dev1171","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-dev1171"}
-{"type":"semantic","versionName":"0.0.0-dev1173","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1173"}
-{"type":"semantic","versionName":"1.5.0-rc06","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-rc06"}
-{"type":"semantic","versionName":"0.0.0-dev1172","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1172"}
-{"type":"semantic","versionName":"0.0.0-dev1174","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1174"}
-{"type":"semantic","versionName":"0.0.0-dev1176","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1176"}
-{"type":"semantic","versionName":"0.0.0-dev1178","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1178"}
-{"type":"semantic","versionName":"0.0.0-dev1179","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1179"}
-{"type":"semantic","versionName":"0.0.0-dev1180","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1180"}
-{"type":"semantic","versionName":"0.0.0-dev1181","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1181"}
-{"type":"semantic","versionName":"0.0.0-dev1182","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1182"}
-{"type":"semantic","versionName":"0.0.0-dev1183","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1183"}
-{"type":"semantic","versionName":"1.5.10-dev1184","isStable":false,"semanticPart":"1.5.10","stabilityMarker":"-dev1184"}
-{"type":"semantic","versionName":"0.0.0-dev1185","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1185"}
-{"type":"semantic","versionName":"0.0.0-dev1187","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1187"}
-{"type":"semantic","versionName":"0.0.0-dev1188","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1188"}
-{"type":"semantic","versionName":"0.0.0-dev1189","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1189"}
-{"type":"semantic","versionName":"0.0.0-dev1190","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1190"}
-{"type":"semantic","versionName":"1.5.10-dev1191","isStable":false,"semanticPart":"1.5.10","stabilityMarker":"-dev1191"}
-{"type":"semantic","versionName":"0.0.0-dev1192","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1192"}
-{"type":"semantic","versionName":"1.5.10-dev1193","isStable":false,"semanticPart":"1.5.10","stabilityMarker":"-dev1193"}
-{"type":"semantic","versionName":"1.5.10-dev1194","isStable":false,"semanticPart":"1.5.10","stabilityMarker":"-dev1194"}
-{"type":"semantic","versionName":"1.5.10-dev1195","isStable":false,"semanticPart":"1.5.10","stabilityMarker":"-dev1195"}
-{"type":"semantic","versionName":"1.5.10-dev1196","isStable":false,"semanticPart":"1.5.10","stabilityMarker":"-dev1196"}
-{"type":"semantic","versionName":"0.0.0-dev1197","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1197"}
-{"type":"semantic","versionName":"1.5.10-dev1198","isStable":false,"semanticPart":"1.5.10","stabilityMarker":"-dev1198"}
-{"type":"semantic","versionName":"0.0.0-dev1200","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1200"}
-{"type":"semantic","versionName":"0.0.0-dev1201","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1201"}
-{"type":"semantic","versionName":"1.5.10-dev1202","isStable":false,"semanticPart":"1.5.10","stabilityMarker":"-dev1202"}
-{"type":"semantic","versionName":"0.0.0-dev1203","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1203"}
-{"type":"semantic","versionName":"0.0.0-dev1204","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1204"}
-{"type":"semantic","versionName":"0.0.0-dev1205","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1205"}
-{"type":"semantic","versionName":"0.0.0-dev1206","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1206"}
-{"type":"semantic","versionName":"1.5.0-dev1208","isStable":false,"semanticPart":"1.5.0","stabilityMarker":"-dev1208"}
-{"type":"semantic","versionName":"0.0.0-dev1211","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1211"}
-{"type":"semantic","versionName":"1.5.10-dev1212","isStable":false,"semanticPart":"1.5.10","stabilityMarker":"-dev1212"}
-{"type":"semantic","versionName":"0.0.0-dev1213","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1213"}
-{"type":"semantic","versionName":"0.0.0-dev1215","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1215"}
-{"type":"semantic","versionName":"0.0.0-dev1216","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1216"}
-{"type":"semantic","versionName":"0.0.0-dev1217","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1217"}
-{"type":"semantic","versionName":"0.0.0-dev1218","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1218"}
-{"type":"semantic","versionName":"0.0.0-dev1219","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1219"}
-{"type":"semantic","versionName":"1.5.10-dev1220","isStable":false,"semanticPart":"1.5.10","stabilityMarker":"-dev1220"}
-{"type":"semantic","versionName":"0.0.0-dev1221","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1221"}
-{"type":"semantic","versionName":"0.0.0-dev1222","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1222"}
-{"type":"semantic","versionName":"0.0.0-dev1223","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1223"}
-{"type":"semantic","versionName":"0.0.0-dev1225","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1225"}
-{"type":"semantic","versionName":"0.0.0-dev1226","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1226"}
-{"type":"semantic","versionName":"0.0.0-dev1227","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1227"}
-{"type":"semantic","versionName":"1.5.10-dev1228","isStable":false,"semanticPart":"1.5.10","stabilityMarker":"-dev1228"}
-{"type":"semantic","versionName":"0.0.0-dev1229","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1229"}
-{"type":"semantic","versionName":"0.0.0-dev1230","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1230"}
-{"type":"semantic","versionName":"0.0.0-dev1231","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1231"}
-{"type":"semantic","versionName":"0.0.0-dev1232","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1232"}
-{"type":"semantic","versionName":"0.0.0-dev1234","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1234"}
-{"type":"semantic","versionName":"0.0.0-dev1235","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1235"}
-{"type":"semantic","versionName":"0.0.0-dev1236","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1236"}
-{"type":"semantic","versionName":"0.0.0-dev1238","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1238"}
-{"type":"semantic","versionName":"0.0.0-dev1239","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1239"}
-{"type":"semantic","versionName":"0.0.0-dev1240","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1240"}
-{"type":"semantic","versionName":"0.0.0-dev1241","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1241"}
-{"type":"semantic","versionName":"0.0.0-dev1242","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1242"}
-{"type":"semantic","versionName":"1.5.10-dev1243","isStable":false,"semanticPart":"1.5.10","stabilityMarker":"-dev1243"}
-{"type":"semantic","versionName":"1.5.10-dev1244","isStable":false,"semanticPart":"1.5.10","stabilityMarker":"-dev1244"}
-{"type":"semantic","versionName":"1.5.10-dev1246","isStable":false,"semanticPart":"1.5.10","stabilityMarker":"-dev1246"}
-{"type":"semantic","versionName":"1.5.10-dev1247","isStable":false,"semanticPart":"1.5.10","stabilityMarker":"-dev1247"}
-{"type":"semantic","versionName":"0.0.0-dev1249","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1249"}
-{"type":"semantic","versionName":"0.0.0-dev1250","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1250"}
-{"type":"semantic","versionName":"0.0.0-dev1251","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1251"}
-{"type":"semantic","versionName":"1.5.10-dev1252","isStable":false,"semanticPart":"1.5.10","stabilityMarker":"-dev1252"}
-{"type":"semantic","versionName":"0.0.0-dev1253","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1253"}
-{"type":"semantic","versionName":"0.0.0-dev1255","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1255"}
-{"type":"semantic","versionName":"0.0.0-dev1256","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1256"}
-{"type":"semantic","versionName":"0.0.0-dev1257","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1257"}
-{"type":"semantic","versionName":"0.0.0-dev1259","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1259"}
-{"type":"semantic","versionName":"0.0.0-dev1260","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1260"}
-{"type":"semantic","versionName":"0.0.0-dev1261","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1261"}
-{"type":"semantic","versionName":"0.0.0-dev1262","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1262"}
-{"type":"semantic","versionName":"0.0.0-dev1263","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1263"}
-{"type":"semantic","versionName":"0.0.0-dev1264","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1264"}
-{"type":"semantic","versionName":"0.0.0-dev1267","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1267"}
-{"type":"semantic","versionName":"1.6.0-dev1265","isStable":false,"semanticPart":"1.6.0","stabilityMarker":"-dev1265"}
-{"type":"semantic","versionName":"1.6.0-dev1268","isStable":false,"semanticPart":"1.6.0","stabilityMarker":"-dev1268"}
-{"type":"semantic","versionName":"0.0.0-dev1270","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1270"}
-{"type":"semantic","versionName":"1.6.0-dev1272","isStable":false,"semanticPart":"1.6.0","stabilityMarker":"-dev1272"}
-{"type":"semantic","versionName":"1.6.0-dev1275","isStable":false,"semanticPart":"1.6.0","stabilityMarker":"-dev1275"}
-{"type":"semantic","versionName":"1.6.0-dev1276","isStable":false,"semanticPart":"1.6.0","stabilityMarker":"-dev1276"}
-{"type":"semantic","versionName":"0.0.0-dev1277","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1277"}
-{"type":"semantic","versionName":"0.0.0-dev1279","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1279"}
-{"type":"semantic","versionName":"1.6.0-dev1280","isStable":false,"semanticPart":"1.6.0","stabilityMarker":"-dev1280"}
-{"type":"semantic","versionName":"0.0.0-dev1281","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1281"}
-{"type":"semantic","versionName":"1.6.0-dev1282","isStable":false,"semanticPart":"1.6.0","stabilityMarker":"-dev1282"}
-{"type":"semantic","versionName":"0.0.0-dev1283","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1283"}
-{"type":"semantic","versionName":"0.0.0-dev1284","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1284"}
-{"type":"semantic","versionName":"0.0.0-dev1285","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1285"}
-{"type":"semantic","versionName":"0.0.0-dev1286","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1286"}
-{"type":"semantic","versionName":"1.6.0-dev1291","isStable":false,"semanticPart":"1.6.0","stabilityMarker":"-dev1291"}
-{"type":"semantic","versionName":"1.6.0-dev1294","isStable":false,"semanticPart":"1.6.0","stabilityMarker":"-dev1294"}
-{"type":"semantic","versionName":"1.6.0-dev1296","isStable":false,"semanticPart":"1.6.0","stabilityMarker":"-dev1296"}
-{"type":"semantic","versionName":"0.0.0-dev1299","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1299"}
-{"type":"semantic","versionName":"0.0.0-dev1304","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1304"}
-{"type":"semantic","versionName":"0.0.0-dev1305","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1305"}
-{"type":"semantic","versionName":"1.6.0-dev1306","isStable":false,"semanticPart":"1.6.0","stabilityMarker":"-dev1306"}
-{"type":"semantic","versionName":"0.0.0-dev1314","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1314"}
-{"type":"semantic","versionName":"0.0.0-dev1315","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1315"}
-{"type":"semantic","versionName":"0.0.0-dev1316","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1316"}
-{"type":"semantic","versionName":"1.6.0-dev1317","isStable":false,"semanticPart":"1.6.0","stabilityMarker":"-dev1317"}
-{"type":"semantic","versionName":"0.0.0-SNAPSHOT","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-SNAPSHOT"}
-{"type":"semantic","versionName":"0.0.0-dev1319","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1319"}
-{"type":"semantic","versionName":"1.6.0-dev1320","isStable":false,"semanticPart":"1.6.0","stabilityMarker":"-dev1320"}
-{"type":"semantic","versionName":"1.6.0-dev1322","isStable":false,"semanticPart":"1.6.0","stabilityMarker":"-dev1322"}
-{"type":"semantic","versionName":"1.6.0-dev1323","isStable":false,"semanticPart":"1.6.0","stabilityMarker":"-dev1323"}
-{"type":"semantic","versionName":"0.0.0-dev1325","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1325"}
-{"type":"semantic","versionName":"0.0.0-dev1326","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1326"}
-{"type":"semantic","versionName":"0.0.0-dev1330","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1330"}
-{"type":"semantic","versionName":"0.0.0-dev1331","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1331"}
-{"type":"semantic","versionName":"0.0.0-dev1332","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1332"}
-{"type":"semantic","versionName":"0.0.0-dev1333","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1333"}
-{"type":"semantic","versionName":"1.6.0-dev1334","isStable":false,"semanticPart":"1.6.0","stabilityMarker":"-dev1334"}
-{"type":"semantic","versionName":"0.0.0-dev1335","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1335"}
-{"type":"semantic","versionName":"0.0.0-dev1336","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1336"}
-{"type":"semantic","versionName":"0.0.0-dev1337","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1337"}
-{"type":"semantic","versionName":"0.0.0-dev1338","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1338"}
-{"type":"semantic","versionName":"0.0.0-dev1339","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1339"}
-{"type":"semantic","versionName":"1.6.0-dev1340","isStable":false,"semanticPart":"1.6.0","stabilityMarker":"-dev1340"}
-{"type":"semantic","versionName":"0.0.0-dev1341","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1341"}
-{"type":"semantic","versionName":"0.0.0-dev1342","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1342"}
-{"type":"semantic","versionName":"0.0.0-dev1343","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1343"}
-{"type":"semantic","versionName":"0.0.0-dev1344","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1344"}
-{"type":"semantic","versionName":"1.6.0-dev1345","isStable":false,"semanticPart":"1.6.0","stabilityMarker":"-dev1345"}
-{"type":"semantic","versionName":"0.0.0-dev1346","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1346"}
-{"type":"semantic","versionName":"1.6.0-dev1347","isStable":false,"semanticPart":"1.6.0","stabilityMarker":"-dev1347"}
-{"type":"semantic","versionName":"0.0.0-dev1348","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1348"}
-{"type":"semantic","versionName":"0.0.0-dev1349","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1349"}
-{"type":"semantic","versionName":"1.6.0-dev1350","isStable":false,"semanticPart":"1.6.0","stabilityMarker":"-dev1350"}
-{"type":"semantic","versionName":"0.0.0-dev1351","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1351"}
-{"type":"semantic","versionName":"0.0.0-dev1352","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1352"}
-{"type":"semantic","versionName":"0.0.0-dev1353","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1353"}
-{"type":"semantic","versionName":"1.6.0-dev1354","isStable":false,"semanticPart":"1.6.0","stabilityMarker":"-dev1354"}
-{"type":"semantic","versionName":"0.0.0-dev1355","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1355"}
-{"type":"semantic","versionName":"1.6.0-dev1357","isStable":false,"semanticPart":"1.6.0","stabilityMarker":"-dev1357"}
-{"type":"semantic","versionName":"1.6.0-dev1362","isStable":false,"semanticPart":"1.6.0","stabilityMarker":"-dev1362"}
-{"type":"semantic","versionName":"0.0.0-dev1365","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1365"}
-{"type":"semantic","versionName":"1.6.0-dev1369","isStable":false,"semanticPart":"1.6.0","stabilityMarker":"-dev1369"}
-{"type":"semantic","versionName":"0.0.0-dev1370","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1370"}
-{"type":"semantic","versionName":"0.0.0-dev1371","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1371"}
-{"type":"semantic","versionName":"1.6.0-dev1376","isStable":false,"semanticPart":"1.6.0","stabilityMarker":"-dev1376"}
-{"type":"semantic","versionName":"1.6.0-dev1378","isStable":false,"semanticPart":"1.6.0","stabilityMarker":"-dev1378"}
-{"type":"semantic","versionName":"0.0.0-dev1382","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1382"}
-{"type":"semantic","versionName":"1.6.0-dev1383","isStable":false,"semanticPart":"1.6.0","stabilityMarker":"-dev1383"}
-{"type":"semantic","versionName":"1.6.0-dev1385","isStable":false,"semanticPart":"1.6.0","stabilityMarker":"-dev1385"}
-{"type":"semantic","versionName":"1.6.0-beta01","isStable":false,"semanticPart":"1.6.0","stabilityMarker":"-beta01"}
-{"type":"semantic","versionName":"0.0.0-dev1390","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1390"}
-{"type":"semantic","versionName":"0.0.0-dev1391","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1391"}
-{"type":"semantic","versionName":"0.0.0-dev1395","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1395"}
-{"type":"semantic","versionName":"1.5.12","isStable":true,"semanticPart":"1.5.12"}
-{"type":"semantic","versionName":"1.6.0-dev1397","isStable":false,"semanticPart":"1.6.0","stabilityMarker":"-dev1397"}
-{"type":"semantic","versionName":"0.0.0-dev1399","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1399"}
-{"type":"semantic","versionName":"0.0.0-dev1401","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1401"}
-{"type":"semantic","versionName":"0.0.0-dev1402","isStable":false,"semanticPart":"0.0.0","stabilityMarker":"-dev1402"}
-{"type":"semantic","versionName":"1.6.0-rc01","isStable":false,"semanticPart":"1.6.0","stabilityMarker":"-rc01"}
-{"type":"semantic","versionName":"1.6.0","isStable":true,"semanticPart":"1.6.0"}
-{"type":"semantic","versionName":"1.6.1","isStable":true,"semanticPart":"1.6.1"}
+[
+  {
+    "type": "semantic",
+    "versionName": "1.4.0",
+    "isStable": true,
+    "semanticPart": "1.4.0"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.4.1",
+    "isStable": true,
+    "semanticPart": "1.4.1"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.4.3",
+    "isStable": true,
+    "semanticPart": "1.4.3"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-beta01",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-beta01"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-beta02",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-beta02"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0",
+    "isStable": true,
+    "semanticPart": "1.5.0"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.1",
+    "isStable": true,
+    "semanticPart": "1.5.1"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.2",
+    "isStable": true,
+    "semanticPart": "1.5.2"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.3",
+    "isStable": true,
+    "semanticPart": "1.5.3"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.10-beta01",
+    "isStable": false,
+    "semanticPart": "1.5.10",
+    "stabilityMarker": "-beta01"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.10-beta02",
+    "isStable": false,
+    "semanticPart": "1.5.10",
+    "stabilityMarker": "-beta02"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.10-rc01",
+    "isStable": false,
+    "semanticPart": "1.5.10",
+    "stabilityMarker": "-rc01"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.10-rc02",
+    "isStable": false,
+    "semanticPart": "1.5.10",
+    "stabilityMarker": "-rc02"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.10",
+    "isStable": true,
+    "semanticPart": "1.5.10"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.11",
+    "isStable": true,
+    "semanticPart": "1.5.11"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-alpha01",
+    "isStable": false,
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-alpha01"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-igor.demin-rename-web-to-html-dev1014",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "nonSemanticSuffix": "-igor.demin-rename-web-to-html-dev1014"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.4.0-rc02",
+    "isStable": false,
+    "semanticPart": "1.4.0",
+    "stabilityMarker": "-rc02"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-master-dev1017",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "nonSemanticSuffix": "-master-dev1017"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.4.0-rc03",
+    "isStable": false,
+    "semanticPart": "1.4.0",
+    "stabilityMarker": "-rc03"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-master-dev1020",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "nonSemanticSuffix": "-master-dev1020"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-master-dev1021",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "nonSemanticSuffix": "-master-dev1021"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-master-dev1022",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "nonSemanticSuffix": "-master-dev1022"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-master-dev1024",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "nonSemanticSuffix": "-master-dev1024"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-master-dev1026",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "nonSemanticSuffix": "-master-dev1026"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-master-dev1027",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "nonSemanticSuffix": "-master-dev1027"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-master-dev1028",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "nonSemanticSuffix": "-master-dev1028"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-master-dev1029",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "nonSemanticSuffix": "-master-dev1029"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-dev1030",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-dev1030"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-master-dev1031",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "nonSemanticSuffix": "-master-dev1031"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1034",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1034"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-dev1035",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-dev1035"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-dev1036",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-dev1036"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1037",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1037"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1039",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1039"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1040",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1040"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1041",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1041"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1042",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1042"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-dev1043",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-dev1043"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1044",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1044"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1045",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1045"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1046",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1046"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1047",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1047"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1048",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1048"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-dev1049",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-dev1049"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1050",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1050"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1051",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1051"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1054",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1054"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1055",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1055"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1056",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1056"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-dev1057",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-dev1057"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1058",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1058"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-dev1059",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-dev1059"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1060",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1060"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1061",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1061"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1062",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1062"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-dev1063",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-dev1063"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1064",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1064"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1065",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1065"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1068",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1068"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1069",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1069"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1070",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1070"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-dev1071",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-dev1071"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1072",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1072"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1073",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1073"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-dev1074",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-dev1074"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1075",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1075"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1076",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1076"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.4.1-rc01",
+    "isStable": false,
+    "semanticPart": "1.4.1",
+    "stabilityMarker": "-rc01"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1079",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1079"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-dev1080",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-dev1080"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-dev1082",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-dev1082"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1083",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1083"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-dev1084",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-dev1084"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1085",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1085"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1086",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1086"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1087",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1087"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1093",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1093"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-dev1094",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-dev1094"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1095",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1095"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1096",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1096"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1097",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1097"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1098",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1098"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1099",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1099"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1100",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1100"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1101",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1101"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-dev1103",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-dev1103"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-dev1104",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-dev1104"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1105",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1105"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-dev1108",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-dev1108"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-dev1109",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-dev1109"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1110",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1110"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-dev1111",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-dev1111"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-dev1112",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-dev1112"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-dev1113",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-dev1113"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-dev1114",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-dev1114"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1115",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1115"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-components-kotlin-1.8",
+    "isStable": true,
+    "semanticPart": "0.0.0",
+    "nonSemanticSuffix": "-components-kotlin-1.8"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-components-kotlin-1.8-2",
+    "isStable": true,
+    "semanticPart": "0.0.0",
+    "nonSemanticSuffix": "-components-kotlin-1.8-2"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-components-kotlin-1.8-3",
+    "isStable": true,
+    "semanticPart": "0.0.0",
+    "nonSemanticSuffix": "-components-kotlin-1.8-3"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-components-kotlin-1.8-4",
+    "isStable": true,
+    "semanticPart": "0.0.0",
+    "nonSemanticSuffix": "-components-kotlin-1.8-4"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1121",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1121"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-dev1122",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-dev1122"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.4.2",
+    "isStable": true,
+    "semanticPart": "1.4.2"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1124",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1124"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1125",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1125"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1127",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1127"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-dev1128",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-dev1128"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1132",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1132"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1133",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1133"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-dev1136",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-dev1136"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1137",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1137"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1138",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1138"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1139",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1139"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1140",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1140"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1141",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1141"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1142",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1142"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1144",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1144"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1145",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1145"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1146",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1146"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-dev1147",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-dev1147"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1149",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1149"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1150",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1150"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1151",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1151"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-dev1152",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-dev1152"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1153",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1153"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1154",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1154"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1155",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1155"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-rc01",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-rc01"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1157",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1157"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1158",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1158"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1159",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1159"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-rc02",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-rc02"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1161",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1161"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-dev1162",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-dev1162"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-rc03",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-rc03"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-rc04",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-rc04"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1165",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1165"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1166",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1166"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1167",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1167"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-rc05",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-rc05"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-dev1171",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-dev1171"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1173",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1173"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-rc06",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-rc06"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1172",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1172"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1174",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1174"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1176",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1176"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1178",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1178"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1179",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1179"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1180",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1180"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1181",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1181"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1182",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1182"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1183",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1183"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.10-dev1184",
+    "isStable": false,
+    "semanticPart": "1.5.10",
+    "stabilityMarker": "-dev1184"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1185",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1185"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1187",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1187"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1188",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1188"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1189",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1189"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1190",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1190"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.10-dev1191",
+    "isStable": false,
+    "semanticPart": "1.5.10",
+    "stabilityMarker": "-dev1191"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1192",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1192"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.10-dev1193",
+    "isStable": false,
+    "semanticPart": "1.5.10",
+    "stabilityMarker": "-dev1193"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.10-dev1194",
+    "isStable": false,
+    "semanticPart": "1.5.10",
+    "stabilityMarker": "-dev1194"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.10-dev1195",
+    "isStable": false,
+    "semanticPart": "1.5.10",
+    "stabilityMarker": "-dev1195"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.10-dev1196",
+    "isStable": false,
+    "semanticPart": "1.5.10",
+    "stabilityMarker": "-dev1196"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1197",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1197"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.10-dev1198",
+    "isStable": false,
+    "semanticPart": "1.5.10",
+    "stabilityMarker": "-dev1198"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1200",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1200"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1201",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1201"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.10-dev1202",
+    "isStable": false,
+    "semanticPart": "1.5.10",
+    "stabilityMarker": "-dev1202"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1203",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1203"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1204",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1204"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1205",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1205"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1206",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1206"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0-dev1208",
+    "isStable": false,
+    "semanticPart": "1.5.0",
+    "stabilityMarker": "-dev1208"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1211",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1211"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.10-dev1212",
+    "isStable": false,
+    "semanticPart": "1.5.10",
+    "stabilityMarker": "-dev1212"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1213",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1213"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1215",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1215"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1216",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1216"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1217",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1217"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1218",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1218"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1219",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1219"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.10-dev1220",
+    "isStable": false,
+    "semanticPart": "1.5.10",
+    "stabilityMarker": "-dev1220"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1221",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1221"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1222",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1222"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1223",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1223"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1225",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1225"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1226",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1226"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1227",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1227"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.10-dev1228",
+    "isStable": false,
+    "semanticPart": "1.5.10",
+    "stabilityMarker": "-dev1228"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1229",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1229"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1230",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1230"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1231",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1231"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1232",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1232"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1234",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1234"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1235",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1235"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1236",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1236"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1238",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1238"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1239",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1239"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1240",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1240"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1241",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1241"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1242",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1242"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.10-dev1243",
+    "isStable": false,
+    "semanticPart": "1.5.10",
+    "stabilityMarker": "-dev1243"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.10-dev1244",
+    "isStable": false,
+    "semanticPart": "1.5.10",
+    "stabilityMarker": "-dev1244"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.10-dev1246",
+    "isStable": false,
+    "semanticPart": "1.5.10",
+    "stabilityMarker": "-dev1246"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.10-dev1247",
+    "isStable": false,
+    "semanticPart": "1.5.10",
+    "stabilityMarker": "-dev1247"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1249",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1249"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1250",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1250"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1251",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1251"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.10-dev1252",
+    "isStable": false,
+    "semanticPart": "1.5.10",
+    "stabilityMarker": "-dev1252"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1253",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1253"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1255",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1255"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1256",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1256"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1257",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1257"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1259",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1259"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1260",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1260"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1261",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1261"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1262",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1262"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1263",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1263"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1264",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1264"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1267",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1267"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-dev1265",
+    "isStable": false,
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-dev1265"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-dev1268",
+    "isStable": false,
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-dev1268"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1270",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1270"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-dev1272",
+    "isStable": false,
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-dev1272"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-dev1275",
+    "isStable": false,
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-dev1275"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-dev1276",
+    "isStable": false,
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-dev1276"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1277",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1277"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1279",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1279"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-dev1280",
+    "isStable": false,
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-dev1280"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1281",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1281"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-dev1282",
+    "isStable": false,
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-dev1282"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1283",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1283"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1284",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1284"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1285",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1285"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1286",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1286"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-dev1291",
+    "isStable": false,
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-dev1291"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-dev1294",
+    "isStable": false,
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-dev1294"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-dev1296",
+    "isStable": false,
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-dev1296"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1299",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1299"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1304",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1304"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1305",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1305"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-dev1306",
+    "isStable": false,
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-dev1306"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1314",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1314"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1315",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1315"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1316",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1316"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-dev1317",
+    "isStable": false,
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-dev1317"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-SNAPSHOT",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-SNAPSHOT"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1319",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1319"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-dev1320",
+    "isStable": false,
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-dev1320"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-dev1322",
+    "isStable": false,
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-dev1322"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-dev1323",
+    "isStable": false,
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-dev1323"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1325",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1325"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1326",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1326"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1330",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1330"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1331",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1331"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1332",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1332"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1333",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1333"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-dev1334",
+    "isStable": false,
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-dev1334"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1335",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1335"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1336",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1336"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1337",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1337"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1338",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1338"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1339",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1339"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-dev1340",
+    "isStable": false,
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-dev1340"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1341",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1341"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1342",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1342"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1343",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1343"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1344",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1344"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-dev1345",
+    "isStable": false,
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-dev1345"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1346",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1346"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-dev1347",
+    "isStable": false,
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-dev1347"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1348",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1348"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1349",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1349"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-dev1350",
+    "isStable": false,
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-dev1350"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1351",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1351"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1352",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1352"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1353",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1353"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-dev1354",
+    "isStable": false,
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-dev1354"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1355",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1355"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-dev1357",
+    "isStable": false,
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-dev1357"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-dev1362",
+    "isStable": false,
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-dev1362"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1365",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1365"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-dev1369",
+    "isStable": false,
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-dev1369"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1370",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1370"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1371",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1371"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-dev1376",
+    "isStable": false,
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-dev1376"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-dev1378",
+    "isStable": false,
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-dev1378"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1382",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1382"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-dev1383",
+    "isStable": false,
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-dev1383"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-dev1385",
+    "isStable": false,
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-dev1385"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-beta01",
+    "isStable": false,
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-beta01"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1390",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1390"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1391",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1391"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1395",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1395"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.12",
+    "isStable": true,
+    "semanticPart": "1.5.12"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-dev1397",
+    "isStable": false,
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-dev1397"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1399",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1399"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1401",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1401"
+  },
+  {
+    "type": "semantic",
+    "versionName": "0.0.0-dev1402",
+    "isStable": false,
+    "semanticPart": "0.0.0",
+    "stabilityMarker": "-dev1402"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-rc01",
+    "isStable": false,
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-rc01"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0",
+    "isStable": true,
+    "semanticPart": "1.6.0"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.1",
+    "isStable": true,
+    "semanticPart": "1.6.1"
+  }
+]

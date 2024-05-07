@@ -7,13 +7,16 @@ import kotlin.js.Date
 @JsNonModule
 @JsName("dateFns")
 public external object DateFns {
-    public fun parse(dateString: String, format: String, referenceDate: Date): Date
+    public fun parse(
+        dateString: String,
+        format: String,
+        referenceDate: Date,
+    ): Date
 }
 
 internal data class DateFnsFormat(val format: String)
 
-public actual fun DateTimeFormatter(pattern: String): DateTimeFormatter =
-    DateTimeFormatter(DateFnsFormat(pattern))
+public actual fun DateTimeFormatter(pattern: String): DateTimeFormatter = DateTimeFormatter(DateFnsFormat(pattern))
 
 public actual class DateTimeFormatter internal constructor(private val format: DateFnsFormat) {
     public actual fun parse(dateTimeString: String): LocalDateTime {
@@ -29,6 +32,5 @@ public actual class DateTimeFormatter internal constructor(private val format: D
         )
     }
 
-    public actual fun parseOrNull(dateTimeString: String): LocalDateTime? =
-        runCatching { parse(dateTimeString) }.getOrNull()
+    public actual fun parseOrNull(dateTimeString: String): LocalDateTime? = runCatching { parse(dateTimeString) }.getOrNull()
 }

@@ -14,49 +14,34 @@ plugins {
 kotlin {
     explicitApi()
     jvm {
-         jvmToolchain(11)
+        jvmToolchain(11)
     }
     js(IR) {
         browser()
         nodejs()
     }
-    ios()
+    iosX64()
+    iosArm64()
+    iosSimulatorArm64()
     macosArm64()
     macosX64()
     watchosArm64()
     watchosX64()
-    tvos()
-
+    tvosArm64()
+    tvosX64()
+    tvosSimulatorArm64()
+    targets.all {
+        compilations.all {
+            kotlinOptions {
+                freeCompilerArgs += "-Xexpect-actual-classes"
+            }
+        }
+    }
     sourceSets {
         all {
             languageSettings {
                 optIn("kotlinx.serialization.ExperimentalSerializationApi")
             }
-        }
-        val commonMain by getting
-        val appleMain by creating {
-            dependsOn(commonMain)
-        }
-        val watchosX64Main by getting {
-            dependsOn(appleMain)
-        }
-        val watchosArm64Main by getting {
-            dependsOn(appleMain)
-        }
-        val iosMain by getting {
-            dependsOn(appleMain)
-        }
-        val macosMain by creating {
-            dependsOn(appleMain)
-        }
-        val macosArm64Main by getting {
-            dependsOn(macosMain)
-        }
-        val macosX64Main by getting {
-            dependsOn(macosMain)
-        }
-        val tvosMain by getting {
-            dependsOn(appleMain)
         }
     }
 }
@@ -96,6 +81,9 @@ publishing {
         }
     }
     repositories {
+        maven(rootProject.layout.buildDirectory.dir("localMaven")) {
+            name = "Local"
+        }
         maven {
             name = "Space"
             setUrl("https://packages.jetbrains.team/maven/p/kpm/public")

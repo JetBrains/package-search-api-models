@@ -32,79 +32,110 @@ public fun ProjectObjectModel.copy(
     name: String? = this.name,
     description: String? = this.description,
     scm: Scm? = this.scm,
-): ProjectObjectModel = copy(
-    groupId = groupId,
-    artifactId = artifactId,
-    parent = parent,
-    dependenciesContainer = Dependencies(dependencies),
-    dependencyManagementContainer = DependencyManagement(Dependencies(dependencyManagement)),
-    propertiesContainer = Properties(properties),
-    name = name,
-    description = description,
-    scm = scm
-)
+): ProjectObjectModel =
+    copy(
+        groupId = groupId,
+        artifactId = artifactId,
+        parent = parent,
+        dependenciesContainer = Dependencies(dependencies),
+        dependencyManagementContainer = DependencyManagement(Dependencies(dependencyManagement)),
+        propertiesContainer = Properties(properties),
+        name = name,
+        description = description,
+        scm = scm,
+    )
 
 public const val POM_XML_NAMESPACE: String = "http://maven.apache.org/POM/4.0.0"
 
 public interface MavenUrlBuilder {
-    public fun buildArtifactUrl(groupId: String, artifactId: String, version: String, artifactExtension: String): Url
-    public fun buildMetadataUrl(groupId: String, artifactId: String): Url
-}
+    public fun buildArtifactUrl(
+        groupId: String,
+        artifactId: String,
+        version: String,
+        artifactExtension: String,
+    ): Url
 
+    public fun buildMetadataUrl(
+        groupId: String,
+        artifactId: String,
+    ): Url
+}
 
 public class SimpleMavenUrlBuilder(
     rawBaseUrl: String,
 ) : MavenUrlBuilder {
-    private val baseUrl = Url(
-        rawBaseUrl.removeSuffix("/")
-    )
+    private val baseUrl =
+        Url(
+            rawBaseUrl.removeSuffix("/"),
+        )
 
     override fun buildArtifactUrl(
         groupId: String,
         artifactId: String,
         version: String,
         artifactExtension: String,
-    ): Url = buildUrl {
-        protocol = URLProtocol.HTTPS
-        host = baseUrl.host
-        port = protocol.defaultPort
-        pathSegments = buildList {
-            addAll(baseUrl.pathSegments)
-            addAll(groupId.split("."))
-            add(artifactId)
-            add(version)
-            add("$artifactId-$version$artifactExtension")
-        }
-    }
-
-    override fun buildMetadataUrl(groupId: String, artifactId: String): Url =
+    ): Url =
         buildUrl {
             protocol = URLProtocol.HTTPS
             host = baseUrl.host
             port = protocol.defaultPort
-            pathSegments = buildList {
-                addAll(baseUrl.pathSegments)
-                addAll(groupId.split("."))
-                add(artifactId)
-                add("maven-metadata.xml")
-            }
+            pathSegments =
+                buildList {
+                    addAll(baseUrl.pathSegments)
+                    addAll(groupId.split("."))
+                    add(artifactId)
+                    add(version)
+                    add("$artifactId-$version$artifactExtension")
+                }
+        }
+
+    override fun buildMetadataUrl(
+        groupId: String,
+        artifactId: String,
+    ): Url =
+        buildUrl {
+            protocol = URLProtocol.HTTPS
+            host = baseUrl.host
+            port = protocol.defaultPort
+            pathSegments =
+                buildList {
+                    addAll(baseUrl.pathSegments)
+                    addAll(groupId.split("."))
+                    add(artifactId)
+                    add("maven-metadata.xml")
+                }
         }
 }
 
-public fun MavenUrlBuilder.buildPomUrl(groupId: String, artifactId: String, version: String): Url =
-    buildArtifactUrl(groupId, artifactId, version, ".pom")
+public fun MavenUrlBuilder.buildPomUrl(
+    groupId: String,
+    artifactId: String,
+    version: String,
+): Url = buildArtifactUrl(groupId, artifactId, version, ".pom")
 
-public fun MavenUrlBuilder.buildGradleMetadataUrl(groupId: String, artifactId: String, version: String): Url =
-    buildArtifactUrl(groupId, artifactId, version, ".module")
+public fun MavenUrlBuilder.buildGradleMetadataUrl(
+    groupId: String,
+    artifactId: String,
+    version: String,
+): Url = buildArtifactUrl(groupId, artifactId, version, ".module")
 
-public fun MavenUrlBuilder.buildJarUrl(groupId: String, artifactId: String, version: String): Url =
-    buildArtifactUrl(groupId, artifactId, version, ".jar")
+public fun MavenUrlBuilder.buildJarUrl(
+    groupId: String,
+    artifactId: String,
+    version: String,
+): Url = buildArtifactUrl(groupId, artifactId, version, ".jar")
 
-public fun MavenUrlBuilder.buildSourcesJarUrl(groupId: String, artifactId: String, version: String): Url =
-    buildArtifactUrl(groupId, artifactId, version, "-sources.jar")
+public fun MavenUrlBuilder.buildSourcesJarUrl(
+    groupId: String,
+    artifactId: String,
+    version: String,
+): Url = buildArtifactUrl(groupId, artifactId, version, "-sources.jar")
 
-public fun MavenUrlBuilder.buildJavadocJarUrl(groupId: String, artifactId: String, version: String): Url =
-    buildArtifactUrl(groupId, artifactId, version, "-javadoc.jar")
+public fun MavenUrlBuilder.buildJavadocJarUrl(
+    groupId: String,
+    artifactId: String,
+    version: String,
+): Url = buildArtifactUrl(groupId, artifactId, version, "-javadoc.jar")
 
 public fun buildMavenUrl(
     groupId: String,
@@ -112,18 +143,20 @@ public fun buildMavenUrl(
     version: String?,
     host: String,
     artifactExtension: String,
-): Url = buildUrl {
-    protocol = URLProtocol.HTTPS
-    this.host = host
-    port = protocol.defaultPort
-    pathSegments = buildList {
-        add("maven2")
-        addAll(groupId.split("."))
-        add(artifactId)
-        version?.let { add(it) }
-        add("$artifactId-$version$artifactExtension")
+): Url =
+    buildUrl {
+        protocol = URLProtocol.HTTPS
+        this.host = host
+        port = protocol.defaultPort
+        pathSegments =
+            buildList {
+                add("maven2")
+                addAll(groupId.split("."))
+                add(artifactId)
+                version?.let { add(it) }
+                add("$artifactId-$version$artifactExtension")
+            }
     }
-}
 
 public object GoogleMavenCentralMirror : MavenUrlBuilder {
     public override fun buildArtifactUrl(
@@ -131,21 +164,26 @@ public object GoogleMavenCentralMirror : MavenUrlBuilder {
         artifactId: String,
         version: String,
         artifactExtension: String,
-    ): Url = buildMavenUrl(
-        groupId = groupId,
-        artifactId = artifactId,
-        version = version,
-        host = "maven-central.storage-download.googleapis.com",
-        artifactExtension = artifactExtension
-    )
+    ): Url =
+        buildMavenUrl(
+            groupId = groupId,
+            artifactId = artifactId,
+            version = version,
+            host = "maven-central.storage-download.googleapis.com",
+            artifactExtension = artifactExtension,
+        )
 
-    override fun buildMetadataUrl(groupId: String, artifactId: String): Url = buildMavenUrl(
-        groupId = groupId,
-        artifactId = artifactId,
-        version = null,
-        host = "maven-central.storage-download.googleapis.com",
-        artifactExtension = "maven-metadata.xml"
-    )
+    override fun buildMetadataUrl(
+        groupId: String,
+        artifactId: String,
+    ): Url =
+        buildMavenUrl(
+            groupId = groupId,
+            artifactId = artifactId,
+            version = null,
+            host = "maven-central.storage-download.googleapis.com",
+            artifactExtension = "maven-metadata.xml",
+        )
 }
 
 internal data class DependencyKey(val groupId: String, val artifactId: String)
@@ -157,7 +195,10 @@ internal data class DependencyKey(val groupId: String, val artifactId: String)
  * @param modelAccessor The JSON object representing the model accessor.
  * @return The evaluated value of the project property, or null if it cannot be evaluated.
  */
-internal fun evaluateProjectProperty(projectProperty: String, modelAccessor: JsonObject): String? {
+internal fun evaluateProjectProperty(
+    projectProperty: String,
+    modelAccessor: JsonObject,
+): String? {
     // Split the given project property string based on '.' and retrieve the first part.
     // If it's null or doesn't exist, return null.
     val property = projectProperty.split('.').firstOrNull() ?: return null
@@ -172,33 +213,28 @@ internal fun evaluateProjectProperty(projectProperty: String, modelAccessor: Jso
 
         // If the accessed value is another JsonObject, it indicates the property might have more nested parts.
         // Recursively evaluate this nested property by removing the currently accessed part from the property string.
-        is JsonObject -> evaluateProjectProperty(
-            projectProperty = projectProperty.removePrefix("$property.")
-                .takeIf { it.isNotEmpty() }
-                ?: return null,
-            modelAccessor = accessor
-        )
+        is JsonObject ->
+            evaluateProjectProperty(
+                projectProperty =
+                    projectProperty.removePrefix("$property.")
+                        .takeIf { it.isNotEmpty() }
+                        ?: return null,
+                modelAccessor = accessor,
+            )
 
         // For other types of JSON elements (like arrays), return null as they aren't supported.
         else -> null
     }
 }
 
-@Deprecated(
-    "Use decodeFromString instead",
-    ReplaceWith(
-        "decodeFromString<ProjectObjectModel>(POM_XML_NAMESPACE, string)",
-        "org.jetbrains.packagesearch.maven.decodeFromString",
-        "org.jetbrains.packagesearch.maven.ProjectObjectModel"
-    )
-)
-public fun XML.decodePomFromString(string: String): ProjectObjectModel {
-    return decodeFromString(POM_XML_NAMESPACE, string)
-}
-
 @Suppress("DELEGATED_MEMBER_HIDES_SUPERTYPE_OVERRIDE")
-public inline fun <reified T : Any> XML.decodeFromString(namespace: String, string: String): T {
-    return decodeFromReader<T>(object : XmlReader by XmlStreaming.newReader(string) {
-        override val namespaceURI: String get() = namespace
-    })
+public inline fun <reified T : Any> XML.decodeFromString(
+    namespace: String,
+    string: String,
+): T {
+    return decodeFromReader<T>(
+        object : XmlReader by XmlStreaming.newReader(string) {
+            override val namespaceURI: String = namespace
+        },
+    )
 }
