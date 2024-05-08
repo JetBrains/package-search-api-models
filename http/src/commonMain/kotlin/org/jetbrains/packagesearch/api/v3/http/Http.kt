@@ -29,7 +29,7 @@ public data class RefreshPackagesInfoRequest(
 ) {
     @Serializable
     public data class CacheRequest(
-        public val packageId: String,
+        public val packageIdHash: String,
         public val latestKnownVersion: String,
     )
 }
