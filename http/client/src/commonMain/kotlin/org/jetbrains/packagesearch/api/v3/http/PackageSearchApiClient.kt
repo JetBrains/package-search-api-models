@@ -230,13 +230,13 @@ public class PackageSearchApiClient(
         )
 
     override suspend fun refreshPackagesInfo(
-        ids: Set<String>,
+        request: RefreshPackagesInfoRequest,
         requestBuilder: (HttpRequestBuilder.() -> Unit)?,
     ): List<ApiPackage> =
         defaultRequest<_, List<ApiPackage>>(
             method = HttpMethod.Post,
             url = endpoints.refreshPackagesInfo,
-            body = GetPackageInfoRequest(ids),
+            body = request,
             requestBuilder = requestBuilder,
         )
 

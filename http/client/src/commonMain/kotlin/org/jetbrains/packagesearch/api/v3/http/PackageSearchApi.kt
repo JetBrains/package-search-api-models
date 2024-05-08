@@ -42,7 +42,7 @@ public interface PackageSearchApi {
     ): List<ApiProject>
 
     public suspend fun refreshPackagesInfo(
-        ids: Set<String>,
+        request: RefreshPackagesInfoRequest,
         requestBuilder: (HttpRequestBuilder.() -> Unit)? = null,
     ): List<ApiPackage>
 
