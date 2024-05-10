@@ -27,6 +27,8 @@ public data class ApiMavenRepository(
 ) : ApiRepository {
     public override val name: String
         get() = friendlyName
+
+    override fun toString(): String = "GitHub Repo: $url"
 }
 
 // @Serializable

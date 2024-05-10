@@ -89,6 +89,8 @@ public data class ApiMavenPackage(
     public override val authors: List<Author>
         get() = versions.latest.authors
 
+    override fun toString(): String = id
+
     @Serializable
     @SerialName("mavenVersion")
     public data class MavenVersion(

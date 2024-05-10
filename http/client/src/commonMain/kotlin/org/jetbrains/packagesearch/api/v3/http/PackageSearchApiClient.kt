@@ -38,23 +38,13 @@ import org.jetbrains.packagesearch.api.v3.ApiPackage
 import org.jetbrains.packagesearch.api.v3.ApiProject
 import org.jetbrains.packagesearch.api.v3.ApiRepository
 import kotlin.time.Duration
+import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
 public class PackageSearchApiClient(
     public val endpoints: PackageSearchEndpoints,
     private val httpClient: HttpClient = defaultHttpClient(),
 ) {
-    @Suppress("UNUSED_PARAMETER")
-    @Deprecated(
-        message = "Use new constructor",
-        replaceWith = ReplaceWith("PackageSearchApiClient(endpoints, httpClient)"),
-    )
-    public constructor(
-        endpoints: PackageSearchEndpoints,
-        httpClient: HttpClient = defaultHttpClient(),
-        scope: CoroutineScope,
-        pollingInterval: Duration = 1.seconds,
-    ) : this(endpoints, httpClient)
 
     @Serializable
     private data class Error(val error: Inner) {
@@ -138,7 +128,7 @@ public class PackageSearchApiClient(
         method: HttpMethod,
         url: Url,
         body: T,
-        noinline requestBuilder: (HttpRequestBuilder.() -> Unit)?,
+        noinline requestBuilder: (HttpRequestBuilder.() -> Unit)? = null,
         cache: Boolean = true,
     ) = httpClient.request(url) {
         this@request.method = method
@@ -152,11 +142,11 @@ public class PackageSearchApiClient(
         method: HttpMethod,
         url: Url,
         body: T,
-        noinline requestBuilder: (HttpRequestBuilder.() -> Unit)?,
+        noinline requestBuilder: (HttpRequestBuilder.() -> Unit)? = null,
         cache: Boolean = true,
     ) = defaultRawRequest<T>(method, url, body, requestBuilder, cache).body<R>()
 
-    public suspend fun getKnownRepositories(requestBuilder: (HttpRequestBuilder.() -> Unit)?): List<ApiRepository> =
+    public suspend fun getKnownRepositories(requestBuilder: (HttpRequestBuilder.() -> Unit)? = null): List<ApiRepository> =
         httpClient.request(endpoints.knownRepositories) {
             method = HttpMethod.Get
             header(HttpHeaders.Accept, ContentType.Application.Json)
@@ -165,7 +155,7 @@ public class PackageSearchApiClient(
 
     public suspend fun getPackageInfoByIds(
         ids: Set<String>,
-        requestBuilder: (HttpRequestBuilder.() -> Unit)?,
+        requestBuilder: (HttpRequestBuilder.() -> Unit)? = null,
     ): Map<String, ApiPackage> =
         defaultRequest<_, List<ApiPackage>>(
             method = HttpMethod.Post,
@@ -176,7 +166,7 @@ public class PackageSearchApiClient(
 
     public suspend fun getPackageInfoByIdHashes(
         ids: Set<String>,
-        requestBuilder: (HttpRequestBuilder.() -> Unit)?,
+        requestBuilder: (HttpRequestBuilder.() -> Unit)? = null,
     ): Map<String, ApiPackage> =
         defaultRequest<_, List<ApiPackage>>(
             method = HttpMethod.Post,
@@ -187,7 +177,7 @@ public class PackageSearchApiClient(
 
     public suspend fun searchPackages(
         request: SearchPackagesRequest,
-        requestBuilder: (HttpRequestBuilder.() -> Unit)?,
+        requestBuilder: (HttpRequestBuilder.() -> Unit)? = null,
     ): List<ApiPackage> =
         defaultRequest<_, List<ApiPackage>>(
             method = HttpMethod.Post,
@@ -198,7 +188,7 @@ public class PackageSearchApiClient(
 
     public suspend fun startScroll(
         request: SearchPackagesStartScrollRequest,
-        requestBuilder: (HttpRequestBuilder.() -> Unit)?,
+        requestBuilder: (HttpRequestBuilder.() -> Unit)? = null,
     ): SearchPackagesScrollResponse =
         defaultRequest<_, SearchPackagesScrollResponse>(
             method = HttpMethod.Post,
@@ -209,7 +199,7 @@ public class PackageSearchApiClient(
 
     public suspend fun nextScroll(
         request: SearchPackagesNextScrollRequest,
-        requestBuilder: (HttpRequestBuilder.() -> Unit)?,
+        requestBuilder: (HttpRequestBuilder.() -> Unit)? = null,
     ): SearchPackagesScrollResponse =
         defaultRequest<_, SearchPackagesScrollResponse>(
             method = HttpMethod.Post,
@@ -231,7 +221,7 @@ public class PackageSearchApiClient(
 
     public suspend fun refreshPackagesInfo(
         request: RefreshPackagesInfoRequest,
-        requestBuilder: (HttpRequestBuilder.() -> Unit)?,
+        requestBuilder: (HttpRequestBuilder.() -> Unit)? = null,
     ): List<ApiPackage> =
         defaultRequest<_, List<ApiPackage>>(
             method = HttpMethod.Post,
@@ -240,7 +230,7 @@ public class PackageSearchApiClient(
             requestBuilder = requestBuilder,
         )
 
-    public fun isOnlineFlow(pollingInterval: Duration): Flow<Boolean> =
+    public fun isOnlineFlow(pollingInterval: Duration = 1.minutes): Flow<Boolean> =
         flow {
             while (true) {
                 val request =
