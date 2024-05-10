@@ -19,23 +19,23 @@ public class PackageSearchDefaultEndpoints(
         }
 
     override val knownRepositories: Url
-        get() = buildUrl("known-repositories")
+        get() = buildUrl(PackageSearchEndpointPaths.knownRepositories)
     override val packageInfoByIds: Url
-        get() = buildUrl("package-info-by-ids")
+        get() = buildUrl(PackageSearchEndpointPaths.packageInfoByIds)
     override val packageInfoByIdHashes: Url
-        get() = buildUrl("package-info-by-id-hashes")
+        get() = buildUrl(PackageSearchEndpointPaths.packageInfoByIdHashes)
     override val searchPackages: Url
-        get() = buildUrl("search-packages")
+        get() = buildUrl(PackageSearchEndpointPaths.searchPackages)
     override val startScroll: Url
-        get() = buildUrl("search-packages", "scroll", "start")
+        get() = buildUrl(PackageSearchEndpointPaths.searchPackages, "scroll", "start")
     override val nextScroll: Url
-        get() = buildUrl("search-packages", "scroll", "next")
+        get() = buildUrl(PackageSearchEndpointPaths.searchPackages, "scroll", "next")
     override val searchProjects: Url
-        get() = buildUrl("search-projects")
+        get() = buildUrl(PackageSearchEndpointPaths.searchProjects)
     override val health: Url
-        get() = buildUrl("health")
+        get() = buildUrl(PackageSearchEndpointPaths.health)
     override val refreshPackagesInfo: Url
-        get() = buildUrl("refresh-packages-info")
+        get() = buildUrl(PackageSearchEndpointPaths.refreshPackagesInfo)
 }
 
 private fun buildUrl(action: URLBuilder.() -> Unit): Url = URLBuilder().apply(action).build()

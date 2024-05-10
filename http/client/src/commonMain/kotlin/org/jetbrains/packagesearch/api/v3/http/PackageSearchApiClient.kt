@@ -43,7 +43,7 @@ import kotlin.time.Duration.Companion.seconds
 public class PackageSearchApiClient(
     public val endpoints: PackageSearchEndpoints,
     private val httpClient: HttpClient = defaultHttpClient(),
-) : PackageSearchApi {
+) {
     @Suppress("UNUSED_PARAMETER")
     @Deprecated(
         message = "Use new constructor",
@@ -156,14 +156,14 @@ public class PackageSearchApiClient(
         cache: Boolean = true,
     ) = defaultRawRequest<T>(method, url, body, requestBuilder, cache).body<R>()
 
-    override suspend fun getKnownRepositories(requestBuilder: (HttpRequestBuilder.() -> Unit)?): List<ApiRepository> =
+    public suspend fun getKnownRepositories(requestBuilder: (HttpRequestBuilder.() -> Unit)?): List<ApiRepository> =
         httpClient.request(endpoints.knownRepositories) {
             method = HttpMethod.Get
             header(HttpHeaders.Accept, ContentType.Application.Json)
             requestBuilder?.invoke(this)
         }.body<List<ApiRepository>>()
 
-    override suspend fun getPackageInfoByIds(
+    public suspend fun getPackageInfoByIds(
         ids: Set<String>,
         requestBuilder: (HttpRequestBuilder.() -> Unit)?,
     ): Map<String, ApiPackage> =
@@ -174,7 +174,7 @@ public class PackageSearchApiClient(
             requestBuilder = requestBuilder,
         ).associateBy { it.id }
 
-    override suspend fun getPackageInfoByIdHashes(
+    public suspend fun getPackageInfoByIdHashes(
         ids: Set<String>,
         requestBuilder: (HttpRequestBuilder.() -> Unit)?,
     ): Map<String, ApiPackage> =
@@ -185,7 +185,7 @@ public class PackageSearchApiClient(
             requestBuilder = requestBuilder,
         ).associateBy { it.id }
 
-    override suspend fun searchPackages(
+    public suspend fun searchPackages(
         request: SearchPackagesRequest,
         requestBuilder: (HttpRequestBuilder.() -> Unit)?,
     ): List<ApiPackage> =
@@ -196,7 +196,7 @@ public class PackageSearchApiClient(
             requestBuilder = requestBuilder,
         )
 
-    override suspend fun startScroll(
+    public suspend fun startScroll(
         request: SearchPackagesStartScrollRequest,
         requestBuilder: (HttpRequestBuilder.() -> Unit)?,
     ): SearchPackagesScrollResponse =
@@ -207,7 +207,7 @@ public class PackageSearchApiClient(
             requestBuilder = requestBuilder,
         )
 
-    override suspend fun nextScroll(
+    public suspend fun nextScroll(
         request: SearchPackagesNextScrollRequest,
         requestBuilder: (HttpRequestBuilder.() -> Unit)?,
     ): SearchPackagesScrollResponse =
@@ -218,7 +218,7 @@ public class PackageSearchApiClient(
             requestBuilder = requestBuilder,
         )
 
-    override suspend fun searchProjects(
+    public suspend fun searchProjects(
         request: SearchProjectRequest,
         requestBuilder: (HttpRequestBuilder.() -> Unit)?,
     ): List<ApiProject> =
@@ -229,7 +229,7 @@ public class PackageSearchApiClient(
             requestBuilder = requestBuilder,
         )
 
-    override suspend fun refreshPackagesInfo(
+    public suspend fun refreshPackagesInfo(
         request: RefreshPackagesInfoRequest,
         requestBuilder: (HttpRequestBuilder.() -> Unit)?,
     ): List<ApiPackage> =
@@ -240,7 +240,7 @@ public class PackageSearchApiClient(
             requestBuilder = requestBuilder,
         )
 
-    override fun isOnlineFlow(pollingInterval: Duration): Flow<Boolean> =
+    public fun isOnlineFlow(pollingInterval: Duration): Flow<Boolean> =
         flow {
             while (true) {
                 val request =
