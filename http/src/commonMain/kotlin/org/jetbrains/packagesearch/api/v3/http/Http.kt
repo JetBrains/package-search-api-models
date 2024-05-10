@@ -30,7 +30,7 @@ public data class RefreshPackagesInfoRequest(
     @Serializable
     public data class CacheRequest(
         public val packageIdHash: String,
-        public val latestKnownVersion: String,
+        public val latestKnownVersion: String? = null,
     )
 }
 
