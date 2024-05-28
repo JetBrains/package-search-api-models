@@ -55,14 +55,16 @@ public object VersionComparatorUtil {
     }
 
     private fun <T> Sequence<T>.zipWithValueOrNull(other: Sequence<T>): Sequence<Pair<T?, T?>> {
+        val thisIterator = this.iterator()
         val otherIterator = other.iterator()
-        return map { t ->
-            t to
-                if (otherIterator.hasNext()) {
-                    otherIterator.next()
-                } else {
-                    null
-                }
+
+        return sequence {
+            while (thisIterator.hasNext() || otherIterator.hasNext()) {
+                yield(Pair(
+                    if (thisIterator.hasNext()) thisIterator.next() else null,
+                    if (otherIterator.hasNext()) otherIterator.next() else null)
+                )
+            }
         }
     }
 

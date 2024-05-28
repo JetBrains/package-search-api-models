@@ -1,0 +1,1305 @@
+[
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-eap-3",
+    "isStable": false,
+    "releasedAt": "2021-01-29T10:42:14Z",
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-eap-3"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-eap-5",
+    "isStable": false,
+    "releasedAt": "2021-02-04T12:00:39Z",
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-eap-5"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-eap-6",
+    "isStable": false,
+    "releasedAt": "2021-02-04T14:07:25Z",
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-eap-6"
+  },
+  {
+    "type": "garbage",
+    "versionName": "master-17",
+    "isStable": false,
+    "releasedAt": "2021-02-05T11:29:41Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "master-19",
+    "isStable": false,
+    "releasedAt": "2021-02-05T12:08:34Z"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-eap-22",
+    "isStable": false,
+    "releasedAt": "2021-02-05T15:32:31Z",
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-eap-22"
+  },
+  {
+    "type": "garbage",
+    "versionName": "master-23",
+    "isStable": false,
+    "releasedAt": "2021-02-10T11:57:12Z"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-eap-25",
+    "isStable": false,
+    "releasedAt": "2021-02-11T20:07:30Z",
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-eap-25"
+  },
+  {
+    "type": "garbage",
+    "versionName": "master-24",
+    "isStable": false,
+    "releasedAt": "2021-02-11T20:34:31Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "master-26",
+    "isStable": false,
+    "releasedAt": "2021-02-12T20:33:21Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "master-27",
+    "isStable": false,
+    "releasedAt": "2021-02-15T20:11:25Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "master-28",
+    "isStable": false,
+    "releasedAt": "2021-02-16T20:41:42Z"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-eap-29",
+    "isStable": false,
+    "releasedAt": "2021-02-16T21:44:12Z",
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-eap-29"
+  },
+  {
+    "type": "garbage",
+    "versionName": "master-30",
+    "isStable": false,
+    "releasedAt": "2021-02-17T20:11:05Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "master-31",
+    "isStable": false,
+    "releasedAt": "2021-02-19T20:43:25Z"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-eap-33",
+    "isStable": false,
+    "releasedAt": "2021-02-24T20:13:41Z",
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-eap-33"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-eap-36",
+    "isStable": false,
+    "releasedAt": "2021-02-26T20:12:21Z",
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-eap-36"
+  },
+  {
+    "type": "garbage",
+    "versionName": "master-35",
+    "isStable": false,
+    "releasedAt": "2021-02-26T20:43:39Z"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-eap-37",
+    "isStable": false,
+    "releasedAt": "2021-03-01T20:36:39Z",
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-eap-37"
+  },
+  {
+    "type": "garbage",
+    "versionName": "master-38",
+    "isStable": false,
+    "releasedAt": "2021-03-02T20:42:59Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "master-39",
+    "isStable": false,
+    "releasedAt": "2021-03-05T20:11:08Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "master-40",
+    "isStable": false,
+    "releasedAt": "2021-03-09T20:12:00Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "master-41",
+    "isStable": false,
+    "releasedAt": "2021-03-10T20:11:41Z"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-eap-42",
+    "isStable": false,
+    "releasedAt": "2021-03-10T20:27:17Z",
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-eap-42"
+  },
+  {
+    "type": "garbage",
+    "versionName": "master-43",
+    "isStable": false,
+    "releasedAt": "2021-03-12T20:11:53Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "master-44",
+    "isStable": false,
+    "releasedAt": "2021-03-15T20:43:51Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "master-45",
+    "isStable": false,
+    "releasedAt": "2021-03-16T20:44:34Z"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-eap-46",
+    "isStable": false,
+    "releasedAt": "2021-03-17T20:43:22Z",
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-eap-46"
+  },
+  {
+    "type": "garbage",
+    "versionName": "master-49",
+    "isStable": false,
+    "releasedAt": "2021-03-22T20:05:24Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "new-routing-eap-52",
+    "isStable": false,
+    "releasedAt": "2021-03-23T13:34:47Z"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-eap-54",
+    "isStable": false,
+    "releasedAt": "2021-03-23T20:35:52Z",
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-eap-54"
+  },
+  {
+    "type": "garbage",
+    "versionName": "master-53",
+    "isStable": false,
+    "releasedAt": "2021-03-23T20:51:21Z"
+  },
+  {
+    "type": "semantic",
+    "versionName": "2.0.0-eap-55",
+    "isStable": false,
+    "releasedAt": "2021-03-23T21:06:59Z",
+    "semanticPart": "2.0.0",
+    "stabilityMarker": "-eap-55"
+  },
+  {
+    "type": "garbage",
+    "versionName": "master-56",
+    "isStable": false,
+    "releasedAt": "2021-03-25T20:05:40Z"
+  },
+  {
+    "type": "semantic",
+    "versionName": "2.0.0-eap-57",
+    "isStable": false,
+    "releasedAt": "2021-03-28T20:10:07Z",
+    "semanticPart": "2.0.0",
+    "stabilityMarker": "-eap-57"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-eap-58",
+    "isStable": false,
+    "releasedAt": "2021-03-29T20:10:12Z",
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-eap-58"
+  },
+  {
+    "type": "garbage",
+    "versionName": "new-routing-eap-59",
+    "isStable": false,
+    "releasedAt": "2021-03-30T13:43:11Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "master-60",
+    "isStable": false,
+    "releasedAt": "2021-03-30T20:34:55Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "new-routing-eap-63",
+    "isStable": false,
+    "releasedAt": "2021-03-30T20:56:56Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "new-routing-eap-64",
+    "isStable": false,
+    "releasedAt": "2021-03-31T17:12:26Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "new-routing-eap-65",
+    "isStable": false,
+    "releasedAt": "2021-03-31T20:05:24Z"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-eap-66",
+    "isStable": false,
+    "releasedAt": "2021-03-31T20:21:55Z",
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-eap-66"
+  },
+  {
+    "type": "garbage",
+    "versionName": "new-routing-eap-67",
+    "isStable": false,
+    "releasedAt": "2021-04-01T13:04:41Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "new-routing-eap-69",
+    "isStable": false,
+    "releasedAt": "2021-04-01T16:23:20Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "master-70",
+    "isStable": false,
+    "releasedAt": "2021-04-02T20:43:36Z"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-eap-71",
+    "isStable": false,
+    "releasedAt": "2021-04-02T21:00:46Z",
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-eap-71"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-eap-72",
+    "isStable": false,
+    "releasedAt": "2021-04-06T21:32:22Z",
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-eap-72"
+  },
+  {
+    "type": "garbage",
+    "versionName": "master-73",
+    "isStable": false,
+    "releasedAt": "2021-04-07T20:35:07Z"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-eap-75",
+    "isStable": false,
+    "releasedAt": "2021-04-08T20:50:28Z",
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-eap-75"
+  },
+  {
+    "type": "semantic",
+    "versionName": "2.0.0-eap-76",
+    "isStable": false,
+    "releasedAt": "2021-04-08T21:06:11Z",
+    "semanticPart": "2.0.0",
+    "stabilityMarker": "-eap-76"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-new-routing-eap-77",
+    "isStable": false,
+    "releasedAt": "2021-04-09T14:39:59Z",
+    "semanticPart": "1.6.0",
+    "nonSemanticSuffix": "-new-routing-eap-77"
+  },
+  {
+    "type": "garbage",
+    "versionName": "master-78",
+    "isStable": false,
+    "releasedAt": "2021-04-09T20:40:11Z"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-eap-79",
+    "isStable": false,
+    "releasedAt": "2021-04-09T20:54:32Z",
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-eap-79"
+  },
+  {
+    "type": "semantic",
+    "versionName": "2.0.0-eap-80",
+    "isStable": false,
+    "releasedAt": "2021-04-09T21:08:44Z",
+    "semanticPart": "2.0.0",
+    "stabilityMarker": "-eap-80"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-81",
+    "isStable": false,
+    "releasedAt": "2021-04-12T20:08:55Z"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-eap-82",
+    "isStable": false,
+    "releasedAt": "2021-04-12T21:24:35Z",
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-eap-82"
+  },
+  {
+    "type": "semantic",
+    "versionName": "2.0.0-eap-83",
+    "isStable": false,
+    "releasedAt": "2021-04-12T21:39:47Z",
+    "semanticPart": "2.0.0",
+    "stabilityMarker": "-eap-83"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-84",
+    "isStable": false,
+    "releasedAt": "2021-04-13T20:39:32Z"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-eap-85",
+    "isStable": false,
+    "releasedAt": "2021-04-14T20:40:07Z",
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-eap-85"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-eap-86",
+    "isStable": false,
+    "releasedAt": "2021-04-15T20:40:43Z",
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-eap-86"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-new-routing-eap-88",
+    "isStable": false,
+    "releasedAt": "2021-04-16T20:39:53Z",
+    "semanticPart": "1.6.0",
+    "nonSemanticSuffix": "-new-routing-eap-88"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-89",
+    "isStable": false,
+    "releasedAt": "2021-04-20T20:39:01Z"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-new-routing-eap-90",
+    "isStable": false,
+    "releasedAt": "2021-04-20T20:56:18Z",
+    "semanticPart": "1.6.0",
+    "nonSemanticSuffix": "-new-routing-eap-90"
+  },
+  {
+    "type": "semantic",
+    "versionName": "2.0.0-eap-91",
+    "isStable": false,
+    "releasedAt": "2021-04-20T21:12:31Z",
+    "semanticPart": "2.0.0",
+    "stabilityMarker": "-eap-91"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-93",
+    "isStable": false,
+    "releasedAt": "2021-04-21T20:10:42Z"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-new-routing-eap-94",
+    "isStable": false,
+    "releasedAt": "2021-04-21T20:40:35Z",
+    "semanticPart": "1.6.0",
+    "nonSemanticSuffix": "-new-routing-eap-94"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-95",
+    "isStable": false,
+    "releasedAt": "2021-04-22T20:39:45Z"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-eap-96",
+    "isStable": false,
+    "releasedAt": "2021-04-22T20:57:43Z",
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-eap-96"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-new-routing-eap-97",
+    "isStable": false,
+    "releasedAt": "2021-04-22T21:12:14Z",
+    "semanticPart": "1.6.0",
+    "nonSemanticSuffix": "-new-routing-eap-97"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-99",
+    "isStable": false,
+    "releasedAt": "2021-04-23T20:38:02Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-100",
+    "isStable": false,
+    "releasedAt": "2021-04-26T20:09:38Z"
+  },
+  {
+    "type": "semantic",
+    "versionName": "2.0.0-eap-101",
+    "isStable": false,
+    "releasedAt": "2021-04-26T20:40:05Z",
+    "semanticPart": "2.0.0",
+    "stabilityMarker": "-eap-101"
+  },
+  {
+    "type": "semantic",
+    "versionName": "2.0.0-eap-102",
+    "isStable": false,
+    "releasedAt": "2021-04-27T21:03:20Z",
+    "semanticPart": "2.0.0",
+    "stabilityMarker": "-eap-102"
+  },
+  {
+    "type": "semantic",
+    "versionName": "2.0.0-eap-104",
+    "isStable": false,
+    "releasedAt": "2021-04-28T20:38:55Z",
+    "semanticPart": "2.0.0",
+    "stabilityMarker": "-eap-104"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-eap-103",
+    "isStable": false,
+    "releasedAt": "2021-04-28T20:56:42Z",
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-eap-103"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-105",
+    "isStable": false,
+    "releasedAt": "2021-04-29T20:06:36Z"
+  },
+  {
+    "type": "semantic",
+    "versionName": "2.0.0-eap-106",
+    "isStable": false,
+    "releasedAt": "2021-04-29T20:22:17Z",
+    "semanticPart": "2.0.0",
+    "stabilityMarker": "-eap-106"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-eap-107",
+    "isStable": false,
+    "releasedAt": "2021-04-29T20:37:08Z",
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-eap-107"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-new-routing-eap-108",
+    "isStable": false,
+    "releasedAt": "2021-04-29T20:51:05Z",
+    "semanticPart": "1.6.0",
+    "nonSemanticSuffix": "-new-routing-eap-108"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-109",
+    "isStable": false,
+    "releasedAt": "2021-04-30T20:23:24Z"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-eap-110",
+    "isStable": false,
+    "releasedAt": "2021-04-30T20:41:27Z",
+    "semanticPart": "1.6.0",
+    "stabilityMarker": "-eap-110"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-new-routing-eap-112",
+    "isStable": false,
+    "releasedAt": "2021-04-30T20:55:49Z",
+    "semanticPart": "1.6.0",
+    "nonSemanticSuffix": "-new-routing-eap-112"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-113",
+    "isStable": false,
+    "releasedAt": "2021-05-03T20:42:49Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-114",
+    "isStable": false,
+    "releasedAt": "2021-05-04T20:10:58Z"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-new-routing-eap-115",
+    "isStable": false,
+    "releasedAt": "2021-05-04T20:40:15Z",
+    "semanticPart": "1.6.0",
+    "nonSemanticSuffix": "-new-routing-eap-115"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-117",
+    "isStable": false,
+    "releasedAt": "2021-05-06T20:38:01Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-118",
+    "isStable": false,
+    "releasedAt": "2021-05-11T20:09:34Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-120",
+    "isStable": false,
+    "releasedAt": "2021-05-12T20:33:40Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-122",
+    "isStable": false,
+    "releasedAt": "2021-05-14T20:30:48Z"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0-new-routing-eap-123",
+    "isStable": false,
+    "releasedAt": "2021-05-15T21:06:25Z",
+    "semanticPart": "1.6.0",
+    "nonSemanticSuffix": "-new-routing-eap-123"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-128",
+    "isStable": false,
+    "releasedAt": "2021-05-20T20:41:25Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-131",
+    "isStable": false,
+    "releasedAt": "2021-05-24T06:34:47Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-133",
+    "isStable": false,
+    "releasedAt": "2021-05-24T11:31:22Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-134",
+    "isStable": false,
+    "releasedAt": "2021-05-25T20:41:41Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-136",
+    "isStable": false,
+    "releasedAt": "2021-05-26T20:41:49Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-137",
+    "isStable": false,
+    "releasedAt": "2021-05-27T20:41:01Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-139",
+    "isStable": false,
+    "releasedAt": "2021-05-28T20:09:08Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-140",
+    "isStable": false,
+    "releasedAt": "2021-05-29T20:45:25Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-141",
+    "isStable": false,
+    "releasedAt": "2021-05-31T20:08:23Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-143",
+    "isStable": false,
+    "releasedAt": "2021-06-01T21:37:11Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-145",
+    "isStable": false,
+    "releasedAt": "2021-06-04T20:09:18Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-146",
+    "isStable": false,
+    "releasedAt": "2021-06-07T20:09:25Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-149",
+    "isStable": false,
+    "releasedAt": "2021-06-09T21:05:15Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-151",
+    "isStable": false,
+    "releasedAt": "2021-06-10T20:09:16Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-153",
+    "isStable": false,
+    "releasedAt": "2021-06-15T20:31:47Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-155",
+    "isStable": false,
+    "releasedAt": "2021-06-16T20:45:01Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-157",
+    "isStable": false,
+    "releasedAt": "2021-06-17T21:02:28Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-159",
+    "isStable": false,
+    "releasedAt": "2021-06-26T20:43:07Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-160",
+    "isStable": false,
+    "releasedAt": "2021-06-28T20:12:27Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-163",
+    "isStable": false,
+    "releasedAt": "2021-06-30T20:43:35Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-164",
+    "isStable": false,
+    "releasedAt": "2021-07-01T20:44:17Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-166",
+    "isStable": false,
+    "releasedAt": "2021-07-02T20:39:40Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-170",
+    "isStable": false,
+    "releasedAt": "2021-07-09T20:40:44Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-172",
+    "isStable": false,
+    "releasedAt": "2021-07-14T20:12:00Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-174",
+    "isStable": false,
+    "releasedAt": "2021-07-19T20:41:13Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-175",
+    "isStable": false,
+    "releasedAt": "2021-07-20T20:38:28Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-179",
+    "isStable": false,
+    "releasedAt": "2021-07-26T20:34:33Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-181",
+    "isStable": false,
+    "releasedAt": "2021-07-28T20:36:14Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-182",
+    "isStable": false,
+    "releasedAt": "2021-07-29T20:35:53Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-183",
+    "isStable": false,
+    "releasedAt": "2021-08-03T20:36:32Z"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.2-native-mm-eap-185",
+    "isStable": false,
+    "releasedAt": "2021-08-06T20:09:40Z",
+    "semanticPart": "1.6.2",
+    "nonSemanticSuffix": "-native-mm-eap-185"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.2-native-mm-eap-188",
+    "isStable": false,
+    "releasedAt": "2021-08-11T16:46:18Z",
+    "semanticPart": "1.6.2",
+    "nonSemanticSuffix": "-native-mm-eap-188"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.2-native-mm-eap-189",
+    "isStable": false,
+    "releasedAt": "2021-08-11T18:58:35Z",
+    "semanticPart": "1.6.2",
+    "nonSemanticSuffix": "-native-mm-eap-189"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-190",
+    "isStable": false,
+    "releasedAt": "2021-08-11T20:35:46Z"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.2-native-mm-eap-192",
+    "isStable": false,
+    "releasedAt": "2021-08-12T20:33:38Z",
+    "semanticPart": "1.6.2",
+    "nonSemanticSuffix": "-native-mm-eap-192"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-193",
+    "isStable": false,
+    "releasedAt": "2021-08-16T20:34:50Z"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.2-native-mm-eap-195",
+    "isStable": false,
+    "releasedAt": "2021-08-17T13:47:56Z",
+    "semanticPart": "1.6.2",
+    "nonSemanticSuffix": "-native-mm-eap-195"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.2-native-mm-eap-196",
+    "isStable": false,
+    "releasedAt": "2021-08-17T20:34:26Z",
+    "semanticPart": "1.6.2",
+    "nonSemanticSuffix": "-native-mm-eap-196"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-197",
+    "isStable": false,
+    "releasedAt": "2021-08-18T20:38:15Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-198",
+    "isStable": false,
+    "releasedAt": "2021-08-20T20:39:40Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-199",
+    "isStable": false,
+    "releasedAt": "2021-08-23T20:36:18Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-201",
+    "isStable": false,
+    "releasedAt": "2021-08-25T20:37:30Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-202",
+    "isStable": false,
+    "releasedAt": "2021-08-26T20:37:01Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-203",
+    "isStable": false,
+    "releasedAt": "2021-08-27T20:36:44Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-204",
+    "isStable": false,
+    "releasedAt": "2021-08-31T20:36:52Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-211",
+    "isStable": false,
+    "releasedAt": "2021-09-08T20:10:51Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-214",
+    "isStable": false,
+    "releasedAt": "2021-09-13T20:09:56Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-216",
+    "isStable": false,
+    "releasedAt": "2021-09-15T20:07:46Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-218",
+    "isStable": false,
+    "releasedAt": "2021-09-16T20:35:40Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-220",
+    "isStable": false,
+    "releasedAt": "2021-09-20T20:35:17Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-221",
+    "isStable": false,
+    "releasedAt": "2021-09-22T17:46:04Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-222",
+    "isStable": false,
+    "releasedAt": "2021-09-22T18:43:44Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-224",
+    "isStable": false,
+    "releasedAt": "2021-09-22T20:09:40Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-226",
+    "isStable": false,
+    "releasedAt": "2021-09-23T20:10:19Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-227",
+    "isStable": false,
+    "releasedAt": "2021-09-27T20:36:52Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-230",
+    "isStable": false,
+    "releasedAt": "2021-09-30T20:10:18Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "main-231",
+    "isStable": false,
+    "releasedAt": "2021-10-01T20:35:45Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "-eap-279",
+    "isStable": false,
+    "releasedAt": "2021-12-06T12:14:14Z"
+  },
+  {
+    "type": "garbage",
+    "versionName": "-eap-281",
+    "isStable": false,
+    "releasedAt": "2021-12-06T14:27:14Z"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.7-eap-282",
+    "isStable": false,
+    "releasedAt": "2021-12-06T15:13:54Z",
+    "semanticPart": "1.6.7",
+    "stabilityMarker": "-eap-282"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.8-eap-339",
+    "isStable": false,
+    "releasedAt": "2022-03-04T20:35:24Z",
+    "semanticPart": "1.6.8",
+    "stabilityMarker": "-eap-339"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.8-eap-341",
+    "isStable": false,
+    "releasedAt": "2022-03-07T20:35:50Z",
+    "semanticPart": "1.6.8",
+    "stabilityMarker": "-eap-341"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.8-eap-343",
+    "isStable": false,
+    "releasedAt": "2022-03-08T20:41:44Z",
+    "semanticPart": "1.6.8",
+    "stabilityMarker": "-eap-343"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.8-eap-344",
+    "isStable": false,
+    "releasedAt": "2022-03-09T13:58:05Z",
+    "semanticPart": "1.6.8",
+    "stabilityMarker": "-eap-344"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.8-eap-346",
+    "isStable": false,
+    "releasedAt": "2022-03-09T20:43:09Z",
+    "semanticPart": "1.6.8",
+    "stabilityMarker": "-eap-346"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.8-eap-349",
+    "isStable": false,
+    "releasedAt": "2022-03-11T20:40:27Z",
+    "semanticPart": "1.6.8",
+    "stabilityMarker": "-eap-349"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.0.0-rc",
+    "isStable": false,
+    "semanticPart": "1.0.0",
+    "stabilityMarker": "-rc"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.0.0",
+    "isStable": true,
+    "semanticPart": "1.0.0"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.0.1",
+    "isStable": true,
+    "semanticPart": "1.0.1"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.1.0",
+    "isStable": true,
+    "semanticPart": "1.1.0"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.1.1",
+    "isStable": true,
+    "semanticPart": "1.1.1"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.1.2",
+    "isStable": true,
+    "semanticPart": "1.1.2"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.1.3",
+    "isStable": true,
+    "semanticPart": "1.1.3"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.1.4",
+    "isStable": true,
+    "semanticPart": "1.1.4"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.2.0-rc",
+    "isStable": false,
+    "semanticPart": "1.2.0",
+    "stabilityMarker": "-rc"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.2.0-rc2",
+    "isStable": false,
+    "semanticPart": "1.2.0",
+    "stabilityMarker": "-rc2"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.2.0",
+    "isStable": true,
+    "semanticPart": "1.2.0"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.2.1",
+    "isStable": true,
+    "semanticPart": "1.2.1"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.2.2",
+    "isStable": true,
+    "semanticPart": "1.2.2"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.2.3-rc",
+    "isStable": false,
+    "semanticPart": "1.2.3",
+    "stabilityMarker": "-rc"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.2.3",
+    "isStable": true,
+    "semanticPart": "1.2.3"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.2.4",
+    "isStable": true,
+    "semanticPart": "1.2.4"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.2.5",
+    "isStable": true,
+    "semanticPart": "1.2.5"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.2.6",
+    "isStable": true,
+    "semanticPart": "1.2.6"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.3.0-rc",
+    "isStable": false,
+    "semanticPart": "1.3.0",
+    "stabilityMarker": "-rc"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.3.0-rc2",
+    "isStable": false,
+    "semanticPart": "1.3.0",
+    "stabilityMarker": "-rc2"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.3.0",
+    "isStable": true,
+    "semanticPart": "1.3.0"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.3.1",
+    "isStable": true,
+    "semanticPart": "1.3.1"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.3.2-1.4.0-rc",
+    "isStable": false,
+    "semanticPart": "1.3.2",
+    "nonSemanticSuffix": "-1.4.0-rc"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.4.0",
+    "isStable": true,
+    "semanticPart": "1.4.0"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.4.1",
+    "isStable": true,
+    "semanticPart": "1.4.1"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.4.2",
+    "isStable": true,
+    "semanticPart": "1.4.2"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.4.3",
+    "isStable": true,
+    "semanticPart": "1.4.3"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.0",
+    "isStable": true,
+    "semanticPart": "1.5.0"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.1",
+    "isStable": true,
+    "semanticPart": "1.5.1"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.2",
+    "isStable": true,
+    "semanticPart": "1.5.2"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.3",
+    "isStable": true,
+    "semanticPart": "1.5.3"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.5.4",
+    "isStable": true,
+    "semanticPart": "1.5.4"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.0",
+    "isStable": true,
+    "semanticPart": "1.6.0"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.1",
+    "isStable": true,
+    "semanticPart": "1.6.1"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.2",
+    "isStable": true,
+    "semanticPart": "1.6.2"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.3",
+    "isStable": true,
+    "semanticPart": "1.6.3"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.4",
+    "isStable": true,
+    "semanticPart": "1.6.4"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.5",
+    "isStable": true,
+    "semanticPart": "1.6.5"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.6",
+    "isStable": true,
+    "semanticPart": "1.6.6"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.7",
+    "isStable": true,
+    "semanticPart": "1.6.7"
+  },
+  {
+    "type": "semantic",
+    "versionName": "1.6.8",
+    "isStable": true,
+    "semanticPart": "1.6.8"
+  }
+]

@@ -16,4 +16,20 @@ internal class NormalizedVersionSortingTest {
                 .isNotEmpty(),
         )
     }
+
+    @Test
+    fun `has comparison transitivity properties`() {
+        val versionsStream = javaClass.classLoader.getResourceAsStream("comp_versions.json")
+            ?: error("Cannot find comp_versions.json")
+
+        val normalizedVersions = Json.decodeFromStream<List<NormalizedVersion>>(versionsStream)
+
+        /*
+        DEBUG: Problematic indices:
+        val i1 = 1
+        val i2 = 188
+        val i3 = 0
+         */
+        normalizedVersions.sortedDescending()
+    }
 }
