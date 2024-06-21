@@ -3,7 +3,6 @@ package org.jetbrains.packagesearch.maven
 import io.ktor.client.HttpClient
 import io.ktor.http.URLBuilder
 import io.ktor.utils.io.core.Closeable
-import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.encodeToJsonElement
@@ -75,10 +74,7 @@ public class PomResolver(
         groupId: String,
         artifactId: String,
         version: String,
-    ): ProjectObjectModel? =
-        pomProvider.getPomFromMultipleRepositories(groupId, artifactId, version)
-            .firstOrNull()
-            ?.let { resolve(it) }
+    ): ProjectObjectModel? = pomProvider.getPom(groupId, artifactId, version)
 
     /**
      * Retrieves the Project Object Model (POM) for the specified parent.
@@ -112,6 +108,7 @@ public class PomResolver(
 
         // Initialize a count variable to ensure that the loop does not run indefinitely.
         var count = 0
+        val knowParents = mutableSetOf<MavenId>()
 
         // Loop to merge parent POMs until a max of 10 parent POMs or until there's no parent.
         while (count < 10) {
@@ -119,9 +116,11 @@ public class PomResolver(
 
             // If there's no parent, break out of the loop.
             val parent = currentParent ?: break
+            if (parent.id in knowParents) break
 
             // Attempt to retrieve the POM for the parent. If it fails or if it's null, break out of the loop.
             val parentPom = runCatching { getPom(parent) }.getOrNull() ?: break
+            knowParents.add(parent.id)
 
             // Merge the current mergedPom with its parent. This includes merging the dependencies,
             // dependencyManagement, and properties.
@@ -131,7 +130,8 @@ public class PomResolver(
                     groupId = mergedPom.groupId ?: parentPom.groupId,
                     artifactId = mergedPom.artifactId ?: parentPom.artifactId,
                     dependencies = parentPom.dependencies.plus(mergedPom.dependencies).distinct(),
-                    dependencyManagement = parentPom.dependencyManagement.plus(mergedPom.dependencyManagement).distinct(),
+                    dependencyManagement = parentPom.dependencyManagement.plus(mergedPom.dependencyManagement)
+                        .distinct(),
                     properties = parentPom.properties + mergedPom.properties,
                 )
 
@@ -156,10 +156,10 @@ public class PomResolver(
                 .map {
                     it.copy(
                         version =
-                            resolvedDependencyManagement[DependencyKey(it.groupId, it.artifactId)]
-                                ?.takeIf { it.version != null }
-                                ?.version
-                                ?: it.version?.resolve(mergedPom.properties, accessor),
+                        resolvedDependencyManagement[DependencyKey(it.groupId, it.artifactId)]
+                            ?.takeIf { it.version != null }
+                            ?.version
+                            ?: it.version?.resolve(mergedPom.properties, accessor),
                     )
                 }
 
@@ -173,12 +173,12 @@ public class PomResolver(
             name = mergedPom.name?.resolve(mergedPom.properties, accessor),
             description = mergedPom.description?.resolve(mergedPom.properties, accessor),
             scm =
-                mergedPom.scm?.copy(
-                    connection = mergedPom.scm?.connection?.resolve(mergedPom.properties, accessor),
-                    developerConnection = mergedPom.scm?.developerConnection?.resolve(mergedPom.properties, accessor),
-                    url = mergedPom.scm?.url?.resolve(mergedPom.properties, accessor),
-                    tag = mergedPom.scm?.tag?.resolve(mergedPom.properties, accessor),
-                ),
+            mergedPom.scm?.copy(
+                connection = mergedPom.scm?.connection?.resolve(mergedPom.properties, accessor),
+                developerConnection = mergedPom.scm?.developerConnection?.resolve(mergedPom.properties, accessor),
+                url = mergedPom.scm?.url?.resolve(mergedPom.properties, accessor),
+                tag = mergedPom.scm?.tag?.resolve(mergedPom.properties, accessor),
+            ),
         )
     }
 
@@ -236,6 +236,13 @@ public class PomResolver(
     override fun close() {
         if (pomProvider is Closeable) pomProvider.close()
     }
+
 }
+
+
+
+private data class MavenId(val groupId: String, val artifactId: String, val version: String)
+private val Parent.id
+    get() = MavenId(groupId, artifactId, version)
 
 internal fun buildUrl(action: URLBuilder.() -> Unit) = URLBuilder().apply(action).build()

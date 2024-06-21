@@ -15,6 +15,7 @@ import io.ktor.utils.io.core.Closeable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import nl.adaptivity.xmlutil.serialization.XML
 
@@ -50,29 +51,28 @@ public class HttpClientMavenPomProvider(
         groupId: String,
         artifactId: String,
         version: String,
-    ): ProjectObjectModel {
-        return getPomFromMultipleRepositories(groupId, artifactId, version).first()
-    }
+    ): ProjectObjectModel = mirrors
+        .asFlow()
+        .map { it.getPom(groupId, artifactId, version) }
+        .firstOrNull()
+        ?: error("Failed to fetch POM for $groupId:$artifactId:$version")
 
     override suspend fun getPomFromMultipleRepositories(
         groupId: String,
         artifactId: String,
         version: String,
-    ): Flow<ProjectObjectModel> {
-        return mirrors.asFlow().map {
-            it.getPom(groupId, artifactId, version)
-        }
-    }
+    ): Flow<ProjectObjectModel> = mirrors
+        .asFlow()
+        .map { it.getPom(groupId, artifactId, version) }
 
-    override suspend fun getPomByUrl(url: Url): ProjectObjectModel {
-        return httpClient.get(url).bodyAsPom(xml)
-    }
+    override suspend fun getPomByUrl(url: Url): ProjectObjectModel =
+        httpClient.get(url).bodyAsPom(xml)
 
     private suspend fun MavenUrlBuilder.getPom(
         groupId: String,
         artifactId: String,
         version: String,
-    ): ProjectObjectModel = getPomByUrl(buildPomUrl(groupId, artifactId, version))
+    ): ProjectObjectModel = httpClient.get(buildPomUrl(groupId, artifactId, version)).bodyAsPom(xml)
 
     private suspend fun HttpResponse.bodyAsPom(xml: XML) =
         runCatching { body<ProjectObjectModel>() }.getOrNull()
