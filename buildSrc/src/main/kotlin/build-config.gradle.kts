@@ -14,22 +14,22 @@ plugins {
 kotlin {
     explicitApi()
     jvm {
-        jvmToolchain(11)
+//        jvmToolchain(11)
     }
-    js(IR) {
-        browser()
-        nodejs()
-    }
-    iosX64()
-    iosArm64()
-    iosSimulatorArm64()
-    macosArm64()
-    macosX64()
-    watchosArm64()
-    watchosX64()
-    tvosArm64()
-    tvosX64()
-    tvosSimulatorArm64()
+//    js(IR) {
+//        browser()
+//        nodejs()
+//    }
+//    iosX64()
+//    iosArm64()
+//    iosSimulatorArm64()
+//    macosArm64()
+//    macosX64()
+//    watchosArm64()
+//    watchosX64()
+//    tvosArm64()
+//    tvosX64()
+//    tvosSimulatorArm64()
     targets.all {
         compilations.all {
             kotlinOptions {
