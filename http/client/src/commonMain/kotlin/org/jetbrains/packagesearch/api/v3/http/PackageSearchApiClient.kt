@@ -1,36 +1,26 @@
 package org.jetbrains.packagesearch.api.v3.http
 
-import io.ktor.client.HttpClient
-import io.ktor.client.HttpClientConfig
-import io.ktor.client.call.body
-import io.ktor.client.engine.HttpClientEngine
-import io.ktor.client.engine.HttpClientEngineConfig
-import io.ktor.client.engine.HttpClientEngineFactory
-import io.ktor.client.plugins.HttpCallValidator
-import io.ktor.client.plugins.HttpRequestRetry
-import io.ktor.client.plugins.HttpTimeout
-import io.ktor.client.plugins.compression.ContentEncoding
-import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
+import cache.ApiPackageCacheEntry
+import cache.ApiRepositoryCacheEntry
+import cache.CacheDB
+import io.ktor.client.*
+import io.ktor.client.call.*
+import io.ktor.client.engine.*
+import io.ktor.client.plugins.*
+import io.ktor.client.plugins.compression.*
+import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.HttpRequestBuilder
 import io.ktor.client.request.get
 import io.ktor.client.request.request
 import io.ktor.client.request.setBody
-import io.ktor.client.statement.HttpResponse
-import io.ktor.client.statement.bodyAsText
-import io.ktor.client.statement.request
-import io.ktor.http.ContentType
-import io.ktor.http.HttpHeaders
-import io.ktor.http.HttpMethod
-import io.ktor.http.HttpStatusCode
-import io.ktor.http.Url
-import io.ktor.http.isSuccess
-import io.ktor.serialization.kotlinx.json.json
-import io.ktor.serialization.kotlinx.protobuf.protobuf
-import io.ktor.util.AttributeKey
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import io.ktor.client.statement.*
+import io.ktor.http.*
+import io.ktor.serialization.kotlinx.json.*
+import io.ktor.serialization.kotlinx.protobuf.*
+import io.ktor.util.*
+import kotlinx.coroutines.*
+import kotlinx.coroutines.flow.*
+import kotlinx.document.database.DataStore
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.protobuf.ProtoBuf
@@ -44,7 +34,13 @@ import kotlin.time.Duration.Companion.seconds
 public class PackageSearchApiClient(
     public val endpoints: PackageSearchEndpoints,
     private val httpClient: HttpClient = defaultHttpClient(),
+    dataStore: DataStore,
 ) {
+
+    private val cachedb = CacheDB(dataStore)
+
+    private suspend fun isOffline() = httpClient.isOffline()
+
 
     @Serializable
     private data class Error(val error: Inner) {
@@ -146,45 +142,104 @@ public class PackageSearchApiClient(
         cache: Boolean = true,
     ) = defaultRawRequest<T>(method, url, body, requestBuilder, cache).body<R>()
 
-    public suspend fun getKnownRepositories(requestBuilder: (HttpRequestBuilder.() -> Unit)? = null): List<ApiRepository> =
-        httpClient.request(endpoints.knownRepositories) {
+    public suspend fun getKnownRepositories(requestBuilder: (HttpRequestBuilder.() -> Unit)? = null): List<ApiRepository> {
+        val apiRepositoryCache = cachedb.apiRepositoryCache()
+
+        apiRepositoryCache.iterateAll()
+            .firstOrNull()
+            ?.let { if (isOffline() || !it.isExpired) return it.values }
+
+        val results = httpClient.request(endpoints.knownRepositories) {
             method = HttpMethod.Get
             header(HttpHeaders.Accept, ContentType.Application.Json)
             requestBuilder?.invoke(this)
         }.body<List<ApiRepository>>()
 
+        apiRepositoryCache.clear()
+        apiRepositoryCache.insert(ApiRepositoryCacheEntry(results))
+        return results
+    }
+
+
     public suspend fun getPackageInfoByIds(
         ids: Set<String>,
         requestBuilder: (HttpRequestBuilder.() -> Unit)? = null,
     ): Map<String, ApiPackage> =
-        defaultRequest<_, List<ApiPackage>>(
-            method = HttpMethod.Post,
-            url = endpoints.packageInfoByIds,
-            body = GetPackageInfoRequest(ids),
-            requestBuilder = requestBuilder,
-        ).associateBy { it.id }
+        fetchPackageInfo(ids, "id", endpoints.packageInfoByIds, requestBuilder)
 
     public suspend fun getPackageInfoByIdHashes(
         ids: Set<String>,
         requestBuilder: (HttpRequestBuilder.() -> Unit)? = null,
     ): Map<String, ApiPackage> =
-        defaultRequest<_, List<ApiPackage>>(
+        fetchPackageInfo(ids, "_id", endpoints.packageInfoByIds, requestBuilder)
+
+    // Common Function to Fetch Package Info (Handles Both ID and ID Hash Retrieval)
+    private suspend fun fetchPackageInfo(
+        identifiers: Set<String>,
+        lookupField: String,  // "_id" for idHash, "id" for id
+        endpointUrl: Url,  // Differentiate between the two endpoints
+        requestBuilder: (HttpRequestBuilder.() -> Unit)? = null,
+    ): Map<String, ApiPackage> = coroutineScope {
+
+        val packageInfoCache = cachedb.apiPackagesCache()
+
+        val cachedResults =
+            identifiers
+                .map { id ->
+                    async {
+                        packageInfoCache
+                            .find(lookupField, id)
+                            .firstOrNull()
+                            ?.takeIf { isOffline() || !it.isExpired }
+                            ?.let { id to it.apiPackage }  // Pair the ID with the cache entry for easier processing
+                    }
+                }
+                .awaitAll()
+                .filterNotNull()
+                .toMap()
+
+        val unresolvedIdentifiers = identifiers - cachedResults.keys
+
+        if (unresolvedIdentifiers.isEmpty()) {
+            return@coroutineScope cachedResults
+        }
+
+        val onlineResults = defaultRequest<_, List<ApiPackage>>(
             method = HttpMethod.Post,
-            url = endpoints.packageInfoByIdHashes,
-            body = GetPackageInfoRequest(ids),
+            url = endpointUrl,
+            body = GetPackageInfoRequest(unresolvedIdentifiers),
             requestBuilder = requestBuilder,
         ).associateBy { it.id }
+
+        onlineResults.values.forEach {
+            packageInfoCache.insert(ApiPackageCacheEntry(it))
+        }
+
+        // Combine Results
+        onlineResults + cachedResults
+    }
 
     public suspend fun searchPackages(
         request: SearchPackagesRequest,
         requestBuilder: (HttpRequestBuilder.() -> Unit)? = null,
-    ): List<ApiPackage> =
+    ): List<ApiPackage> {
+        val searchCache= cachedb.searchPackageCache()
+        searchCache.find("searchQuery", request.searchQuery)
+            .filter { it.request.packagesType.any { it in request.packagesType } }
+            //filter and delete the exiped one
+            .toList()
+            .partition { !it.isExpired }
+            //find the most
+//            .let { if (isOffline() || !it.isExpired) return it.request.searchQuery }
+
         defaultRequest<_, List<ApiPackage>>(
             method = HttpMethod.Post,
             url = endpoints.searchPackages,
             body = request,
             requestBuilder = requestBuilder,
         )
+
+    }
 
     public suspend fun startScroll(
         request: SearchPackagesStartScrollRequest,
