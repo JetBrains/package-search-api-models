@@ -1,0 +1,84 @@
+POST https://api.prod.package-search.services.jetbrains.com/package-info-by-id-hashes
+Content-Type: application/json
+
+{
+  "ids": ["afa0f79b67522a855aa1343ed55939170e5910020c7e39f081c59f38f132c0cf"]
+}
+
+###
+GET https://api.prod.package-search.services.jetbrains.com/known-repositories
+Accept: application/json
+
+###
+
+POST https://api.prod.package-search.services.jetbrains.com/search-packages/scroll/start
+Content-Type: application/json
+
+{
+  "packagesType": [ ],
+  "searchQuery": "ktor",
+  "batchSize" : 10,
+  "duration": "2m"
+}
+
+###
+POST https://api.prod.package-search.services.jetbrains.com/search-packages/scroll/next
+Content-Type: application/json
+
+{
+  "scrollId": "H4sIAAAAAAAA/y3Qy26qQACA4XdhSxNGELAmZ8FFUEEcbgJumkEQBrDDvTBN3/00Oeff/dvvmxlK1Gfa1A+kH5j997//ABtmzxy3w0n5HydGXhBy+kVZTW47wyi78S4m7wVwoazoR5Tk7mSNBqwJC+yu5US+VirfBZekHRtOfiAqqI5lBfU5vcXxfaOGui1RvbFYOx/5kEZ8pzv0TOti59qjdcxS77NY4oArIuBmJBAVzWHDIjAvqCyz3si9s7mJtFRmDVhKEPDkcYRPEoIMdlfflKTVC07h3GWChmTlmmGq71rUdeadN6JqTtVV9uVg9ctWKGIyfc2sOgPlBb9oPiVEjPMULktDnj2ODdVmD/WEja1suk66w/5qv0TuFEeIFFf5UT+izjbrtbUcNq4WWTwcLtLtScX3vknaExR+9e7VWfOSV3rXOeu6TthrHUFVs+Wz2inYRfTZhNov8x/m541p0DDa+IVHZr8BP38BJ1soAaMBAAA=",
+  "duration": "2m"
+}
+
+###
+POST https://api.prod.package-search.services.jetbrains.com/search-packages
+Content-Type: application/json
+JB-Plugin-Version: 241.0.12
+
+{
+  "packagesType": [ ],
+  "searchQuery": "ktor"
+}
+
+###
+POST https://api.prod.package-search.services.jetbrains.com/search-projects
+Content-Type: application/json
+
+{
+  "query": "ktor",
+  "onlyStable": true
+}
+
+
+
+###
+POST https://api.dev.package-search.services.jetbrains.com/refresh-packages-info
+Content-Type: application/json
+JB-Plugin-Version: 241.0.9
+#JB-IDE-Version: test
+
+{
+  "packages": [
+    {
+      "packageIdHash": "726e58b2eca1ac6c63b6e923c67630aaa59a23a37969efd3059982adae27e90b",
+      "latestKnownVersion": null
+    },
+    {
+      "packageIdHash": "67f3a6fb77bc58f1fa43027fbe89e2804e1f38bfbc3bca52e051dd7a0fb0a078",
+      "latestKnownVersion": null
+    }
+  ]
+}
+
+###
+POST https://api.dev.package-search.services.jetbrains.com/package-info-by-ids
+Content-Type: application/json
+JB-Plugin-Version: 241.0.9
+
+
+{
+  "ids": [
+    "maven:io.ktor:ktor-client-core"
+  ]
+}
+
