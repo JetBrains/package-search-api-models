@@ -1,3 +1,7 @@
+GET https://api.prod.package-search.services.jetbrains.com/health
+Accept: application/json
+
+###
 POST https://api.prod.package-search.services.jetbrains.com/package-info-by-id-hashes
 Content-Type: application/json
 

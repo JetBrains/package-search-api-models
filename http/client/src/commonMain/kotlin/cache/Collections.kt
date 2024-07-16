@@ -21,9 +21,19 @@ internal class CacheDB(val dataStore: DataStore) {
         }
 
     suspend fun searchPackageCache()=
-        db.getObjectCollection<SearchPackageRequestEntry>("SEARCH_PACKAGES").apply {
+        db.getObjectCollection<SearchPackageRequestCacheEntry>("SEARCH_PACKAGES").apply {
             getAllIndexNames().ifEmpty {
-                createIndex(SearchPackageRequestEntry::searchQuery.name)
+                createIndex(SearchPackageRequestCacheEntry::searchQuery.name)
+            }
+        }
+
+    suspend fun scrollStartPackageCache() =
+        db.getObjectCollection<SearchPackageScrollCacheEntry>("SCROLL_PACKAGES")
+
+    suspend fun apiProjectsCache() =
+        db.getObjectCollection<ApiProjectsCacheEntry>("API_PROJECTS").apply {
+            getAllIndexNames().ifEmpty {
+                createIndex(ApiProjectsCacheEntry::queryString.name)
             }
         }
 
