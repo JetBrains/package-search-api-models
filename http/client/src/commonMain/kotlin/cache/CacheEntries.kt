@@ -2,7 +2,6 @@ package cache
 
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
-import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.jetbrains.packagesearch.api.v3.ApiPackage
 import org.jetbrains.packagesearch.api.v3.ApiProject
@@ -19,8 +18,8 @@ public val SHORT_EXPIRATION_TIME: Duration = 6.hours
 internal data class ApiRepositoryCacheEntry(
     val _id: Long? = null,
     val values: List<ApiRepository>,
-) {
     val expires: Instant = Clock.System.now().plus(SHORT_EXPIRATION_TIME)
+) {
     val isExpired: Boolean
         get() = expires < Clock.System.now()
 }
@@ -29,14 +28,12 @@ internal data class ApiRepositoryCacheEntry(
 @Serializable
 internal data class ApiPackageCacheEntry(
     val _id: Long? = null,
-    val apiPackage: ApiPackage
+    val apiPackage: ApiPackage,
+    val expires: Instant = Clock.System.now().plus(DEFAULT_EXPIRATION_TIME)
 ) {
     val id: String = apiPackage.id
 
-    @SerialName("_id")
     val idHash: String = apiPackage.idHash
-
-    val expires: Instant = Clock.System.now().plus(DEFAULT_EXPIRATION_TIME)
     val isExpired: Boolean
         get() = expires < Clock.System.now()
 }
@@ -45,11 +42,11 @@ internal data class ApiPackageCacheEntry(
 internal data class SearchPackageRequestCacheEntry(
     val _id: Long? = null,
     val request: SearchPackagesRequest,
-    val packages: List<ApiPackage>
+    val packages: List<ApiPackage>,
+    val expires: Instant = Clock.System.now().plus(SHORT_EXPIRATION_TIME)
 ) {
     val searchQuery: String = request.searchQuery
 
-    val expires: Instant = Clock.System.now().plus(DEFAULT_EXPIRATION_TIME)
     val isExpired: Boolean
         get() = expires < Clock.System.now()
 }
@@ -58,9 +55,9 @@ internal data class SearchPackageRequestCacheEntry(
 internal data class SearchPackageScrollCacheEntry(
     val _id: Long? = null,
     val scrollId: String,
-    val packages: List<ApiPackage>
+    val packages: List<ApiPackage>,
+    val expires: Instant = Clock.System.now().plus(SHORT_EXPIRATION_TIME)
 ) {
-    val expires: Instant = Clock.System.now().plus(DEFAULT_EXPIRATION_TIME)
     val isExpired: Boolean
         get() = expires < Clock.System.now()
 }
@@ -69,9 +66,9 @@ internal data class SearchPackageScrollCacheEntry(
 internal data class ApiProjectsCacheEntry(
     val _id: Long? = null,
     val queryString: String,
-    val values: List<ApiProject>
+    val values: List<ApiProject>,
+    val expires: Instant = Clock.System.now().plus(SHORT_EXPIRATION_TIME)
 ) {
-    val expires: Instant = Clock.System.now().plus(DEFAULT_EXPIRATION_TIME)
     val isExpired: Boolean
         get() = expires < Clock.System.now()
 }

@@ -1,3 +1,5 @@
+import org.gradle.kotlin.dsl.kotlin
+
 plugins {
     `build-config`
 }
@@ -21,6 +23,17 @@ kotlin {
                 api(packageSearchApiModelsVersions.ktor.serialization.kotlinx.protobuf)
                 api(packageSearchApiModelsVersions.kotlinx.serialization.protobuf)
                 api(packageSearchApiModelsVersions.kotlinx.serialization.json)
+            }
+        }
+        commonTest{
+            dependencies{
+                api(kotlin("test-junit5"))
+                api(packageSearchApiModelsVersions.kotlinx.coroutines.test)
+                api(packageSearchApiModelsVersions.ktor.client.mock)
+                api(packageSearchApiModelsVersions.ktor.client.logging)
+                api(packageSearchApiModelsVersions.junit.jupiter.engine)
+                api(packageSearchApiModelsVersions.mvstore)
+                api(kotlinxDocumentStore.mvstore)
             }
         }
         jvmMain {
