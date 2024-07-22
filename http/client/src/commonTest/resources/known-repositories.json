@@ -1,0 +1,89 @@
+[
+  {
+    "type": "maven",
+    "id": "maven_central",
+    "lastChecked": null,
+    "url": "https://repo.maven.apache.org/maven2/",
+    "alternateUrls": [
+      "https://repo1.maven.org/maven2/",
+      "https://maven-central.storage-download.googleapis.com/maven2"
+    ],
+    "friendlyName": "Maven Central",
+    "userFacingUrl": "https://search.maven.org/",
+    "packageCount": null,
+    "artifactCount": null,
+    "namedLinks": null
+  },
+  {
+    "type": "maven",
+    "id": "clojars",
+    "lastChecked": null,
+    "url": "https://repo.clojars.org/",
+    "alternateUrls": [],
+    "friendlyName": "Maven Central",
+    "userFacingUrl": "https://clojars.org/",
+    "packageCount": null,
+    "artifactCount": null,
+    "namedLinks": null
+  },
+  {
+    "type": "maven",
+    "id": "ktor_eap",
+    "lastChecked": null,
+    "url": "https://maven.pkg.jetbrains.space/public/p/ktor/eap/",
+    "alternateUrls": [],
+    "friendlyName": "Ktor EAP",
+    "userFacingUrl": null,
+    "packageCount": null,
+    "artifactCount": null,
+    "namedLinks": null
+  },
+  {
+    "type": "maven",
+    "id": "dokka_dev",
+    "lastChecked": null,
+    "url": "https://maven.pkg.jetbrains.space/kotlin/p/dokka/dev/",
+    "alternateUrls": [],
+    "friendlyName": "Dokka DEV",
+    "userFacingUrl": null,
+    "packageCount": null,
+    "artifactCount": null,
+    "namedLinks": null
+  },
+  {
+    "type": "maven",
+    "id": "compose_dev",
+    "lastChecked": null,
+    "url": "https://maven.pkg.jetbrains.space/public/p/compose/dev/",
+    "alternateUrls": [],
+    "friendlyName": "Compose DEV",
+    "userFacingUrl": null,
+    "packageCount": null,
+    "artifactCount": null,
+    "namedLinks": null
+  },
+  {
+    "type": "maven",
+    "id": "space_sdk",
+    "lastChecked": null,
+    "url": "https://maven.pkg.jetbrains.space/public/p/space/maven/",
+    "alternateUrls": [],
+    "friendlyName": "Space SDK",
+    "userFacingUrl": null,
+    "packageCount": null,
+    "artifactCount": null,
+    "namedLinks": null
+  },
+  {
+    "type": "maven",
+    "id": "gmaven",
+    "lastChecked": null,
+    "url": "https://maven.google.com/",
+    "alternateUrls": [],
+    "friendlyName": "Google Maven",
+    "userFacingUrl": null,
+    "packageCount": null,
+    "artifactCount": null,
+    "namedLinks": null
+  }
+]

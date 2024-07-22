@@ -181,7 +181,7 @@ public class PackageSearchApiClient(
         ids: Set<String>,
         requestBuilder: (HttpRequestBuilder.() -> Unit)? = null,
     ): Map<String, ApiPackage> =
-        fetchPackageInfo(ids, "idHash", endpoints.packageInfoByIds, requestBuilder)
+        fetchPackageInfo(ids, "idHash", endpoints.packageInfoByIdHashes, requestBuilder)
 
     // Common Function to Fetch Package Info (Handles Both ID and ID Hash Retrieval)
     private suspend fun fetchPackageInfo(
