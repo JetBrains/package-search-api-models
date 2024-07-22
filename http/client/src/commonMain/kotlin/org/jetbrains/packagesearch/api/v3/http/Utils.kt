@@ -1,6 +1,5 @@
 package org.jetbrains.packagesearch.api.v3.http
 
-import io.ktor.client.*
 import io.ktor.client.plugins.*
 import io.ktor.client.request.*
 import io.ktor.http.*
@@ -49,10 +48,3 @@ public data class SerializableHttpRequest(
 
 public fun HttpRequest.toSerializable(): SerializableHttpRequest =
     SerializableHttpRequest(url.toString(), method.value, headers.toMap())
-
-internal suspend fun HttpClient.isOffline() = !isOnline()
-
-internal suspend fun HttpClient.isOnline() =
-    head("https://www.jetbrains.com").status.isSuccess()
-
-
