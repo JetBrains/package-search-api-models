@@ -27,18 +27,23 @@ kotlin {
         }
         commonTest{
             dependencies{
-                api(kotlin("test-junit5"))
                 api(packageSearchApiModelsVersions.kotlinx.coroutines.test)
                 api(packageSearchApiModelsVersions.ktor.client.mock)
                 api(packageSearchApiModelsVersions.ktor.client.logging)
-                api(packageSearchApiModelsVersions.junit.jupiter.engine)
                 api(packageSearchApiModelsVersions.mvstore)
-                api(kotlinxDocumentStore.mvstore)
             }
         }
         jvmMain {
             dependencies {
                 api(packageSearchApiModelsVersions.logback.classic)
+            }
+        }
+        jvmTest {
+            dependencies {
+                api(kotlin("test-junit5"))
+                api(kotlinxDocumentStore.mvstore)
+                api(packageSearchApiModelsVersions.junit.jupiter.engine)
+
             }
         }
     }

@@ -175,27 +175,36 @@ public class PackageSearchApiClient(
         ids: Set<String>,
         requestBuilder: (HttpRequestBuilder.() -> Unit)? = null,
     ): Map<String, ApiPackage> =
-        fetchPackageInfo(ids, "id", endpoints.packageInfoByIds, requestBuilder)
+        fetchPackageInfo(
+            ids = ids,
+            requestBuilder = requestBuilder)
 
     public suspend fun getPackageInfoByIdHashes(
         ids: Set<String>,
         requestBuilder: (HttpRequestBuilder.() -> Unit)? = null,
     ): Map<String, ApiPackage> =
-        fetchPackageInfo(ids, "idHash", endpoints.packageInfoByIdHashes, requestBuilder)
+        fetchPackageInfo(
+            ids = ids,
+            idHash = true,
+            requestBuilder = requestBuilder
+        )
 
     // Common Function to Fetch Package Info (Handles Both ID and ID Hash Retrieval)
     private suspend fun fetchPackageInfo(
-        identifiers: Set<String>,
-        lookupField: String,  // "idHash" or "id"
-        endpointUrl: Url,  // Differentiate between the two endpoints
+        ids: Set<String>,
+        idHash: Boolean = false,  // "idHash" or "id"
         requestBuilder: (HttpRequestBuilder.() -> Unit)? = null,
     ): Map<String, ApiPackage> = coroutineScope {
 
         val apiPackageCacheDB = cacheDB.apiPackagesCache()
         val isOffline = !onlineStateFlow.value
 
+        val lookupField = if (idHash) "idHash" else "id"
+        val endpointUrl =
+            if (idHash) endpoints.packageInfoByIdHashes else endpoints.packageInfoByIds
+
         val cachedResults =
-            identifiers
+            ids
                 .map { id -> // NOTE: id depends on the lookupField
                     async {
                         apiPackageCacheDB
@@ -210,7 +219,7 @@ public class PackageSearchApiClient(
 
         val validResults = if (!isOffline) cachedResults.filter { !it.value.isExpired } else cachedResults
 
-        val unresolvedIdentifiers = identifiers - validResults.keys
+        val unresolvedIdentifiers = ids - validResults.keys
 
         if (unresolvedIdentifiers.isEmpty()) {
             return@coroutineScope validResults.mapValues { it.value.apiPackage }
@@ -222,7 +231,6 @@ public class PackageSearchApiClient(
             body = GetPackageInfoRequest(unresolvedIdentifiers),
             requestBuilder = requestBuilder,
         ).associateBy { if (lookupField == "id") it.id else it.idHash }
-
 
 
         onlineResults.values.forEach {
@@ -350,7 +358,7 @@ public class PackageSearchApiClient(
             )
 
         // update ApiPackageCache
-        coroutineScope.launch(Dispatchers.IO) {
+        coroutineScope.launch {
             val apiPackageCacheDB = cacheDB.apiPackagesCache()
             val updates =
                 results
@@ -392,7 +400,7 @@ public class PackageSearchApiClient(
     }
 
     private fun initiateOnlineCheckJob(onlineCheckInterval: Duration) {
-        coroutineScope.launch(Dispatchers.IO) {
+        coroutineScope.launch {
             while (coroutineScope.isActive) {
                 _onlineStateFlow.emit(checkOnlineState())
                 delay(onlineCheckInterval)

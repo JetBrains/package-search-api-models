@@ -16,7 +16,7 @@ kotlin {
         jsMain {
             dependencies {
                 api(npm(packageSearchApiModelsVersions.date.fns))
-                api(kotlinxDocumentStore.mvstore)
+                api(kotlinxDocumentStore.browser)
             }
         }
         jvmTest {
@@ -25,7 +25,6 @@ kotlin {
                 implementation(packageSearchApiModelsVersions.junit.jupiter.params)
                 implementation(packageSearchApiModelsVersions.assertk)
                 implementation(kotlinxDocumentStore.mvstore)
-
                 runtimeOnly(packageSearchApiModelsVersions.junit.jupiter.engine)
             }
         }
