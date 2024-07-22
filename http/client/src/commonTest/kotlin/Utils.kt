@@ -21,14 +21,17 @@ import org.jetbrains.packagesearch.api.v3.http.PackageSearchApiClient
 import org.jetbrains.packagesearch.api.v3.http.PackageSearchEndpoints
 
 
+fun MockEngine.geRequestsFor(url: Url) =
+    requestHistory.filter { it.url == url }
+
 fun MockEngine.getRequestCount(filterUrl: Url) =
-    requestHistory.filter { it.url == filterUrl }.size
+    geRequestsFor(filterUrl).size
 
 
 internal inline fun <reified T> TestScope.setupTestEnv(
-    mockResponseResourceName: String,
+    resourceFilename: String,
 ): TestEnv<T> {
-    val jsonResponse = this::class.java.classLoader.getResource(mockResponseResourceName)!!.readText()
+    val jsonResponse = this::class.java.classLoader.getResource(resourceFilename)!!.readText()
     val mockResponse = Json.decodeFromString<T>(jsonResponse)
 
     val mockEngine = buildMockEngine(jsonResponse)
