@@ -20,6 +20,8 @@ jobs:
           distribution: 'adopt'
           java-version: '17'
       - name: Build with Gradle
+        env:
+          GRADLE_ENTERPRISE_KEY: ${{ secrets.GRADLE_ENTERPRISE_KEY }}
         run: ./gradlew build --no-daemon
       - name: Run tests
         run: ./gradlew :http:client:jvmTest --tests "CacheTests"
