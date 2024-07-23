@@ -2,6 +2,7 @@ import CacheTests.TestEnv
 import cache.CacheDB
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
+import io.ktor.client.engine.mock.MockEngine.Companion.invoke
 import io.ktor.client.engine.mock.respond
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.DEFAULT
@@ -19,6 +20,7 @@ import kotlinx.serialization.json.Json
 import org.h2.mvstore.MVStore
 import org.jetbrains.packagesearch.api.v3.http.PackageSearchApiClient
 import org.jetbrains.packagesearch.api.v3.http.PackageSearchEndpoints
+import kotlin.collections.filter
 
 
 fun MockEngine.geRequestsFor(url: Url) =

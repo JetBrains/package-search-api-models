@@ -12,6 +12,11 @@ import org.jetbrains.packagesearch.api.v3.http.SearchPackagesRequest
 import org.jetbrains.packagesearch.api.v3.search.PackagesType
 import org.junit.jupiter.api.Test
 import kotlin.collections.first
+import kotlin.collections.firstOrNull
+import kotlin.collections.forEach
+import kotlin.collections.map
+import kotlin.collections.plus
+import kotlin.collections.toSet
 import kotlin.test.assertEquals
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
@@ -120,7 +125,7 @@ class CacheTests {
 
     @Test
     fun `getKnownRepositories test Cache Hit`() = runTest(timeout = 10.seconds) {
-       val (apiClient, mockEngine ) = setupTestEnv<List<ApiRepository>>("known-repositories.json")
+        val (apiClient, mockEngine) = setupTestEnv<List<ApiRepository>>("known-repositories.json")
 
         val response1 = apiClient.getKnownRepositories()
         // Second request (should hit cache)

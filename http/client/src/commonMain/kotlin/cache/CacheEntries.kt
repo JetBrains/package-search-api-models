@@ -16,7 +16,6 @@ public val SHORT_EXPIRATION_TIME: Duration = 6.hours
 
 @Serializable
 internal data class ApiRepositoryCacheEntry(
-    val _id: Long? = null,
     val values: List<ApiRepository>,
     val expires: Instant = Clock.System.now().plus(SHORT_EXPIRATION_TIME)
 ) {
@@ -24,10 +23,10 @@ internal data class ApiRepositoryCacheEntry(
         get() = expires < Clock.System.now()
 }
 
+internal fun List<ApiRepository>.toCacheEntry(): ApiRepositoryCacheEntry = ApiRepositoryCacheEntry(this)
 
 @Serializable
 internal data class ApiPackageCacheEntry(
-    val _id: Long? = null,
     val apiPackage: ApiPackage,
     val expires: Instant = Clock.System.now().plus(DEFAULT_EXPIRATION_TIME)
 ) {
@@ -38,9 +37,10 @@ internal data class ApiPackageCacheEntry(
         get() = expires < Clock.System.now()
 }
 
+internal fun ApiPackage.toCacheEntry(): ApiPackageCacheEntry = ApiPackageCacheEntry(this)
+
 @Serializable
 internal data class SearchPackageRequestCacheEntry(
-    val _id: Long? = null,
     val request: SearchPackagesRequest,
     val packages: List<ApiPackage>,
     val expires: Instant = Clock.System.now().plus(SHORT_EXPIRATION_TIME)
@@ -53,7 +53,6 @@ internal data class SearchPackageRequestCacheEntry(
 
 @Serializable
 internal data class SearchPackageScrollCacheEntry(
-    val _id: Long? = null,
     val scrollId: String,
     val packages: List<ApiPackage>,
     val expires: Instant = Clock.System.now().plus(SHORT_EXPIRATION_TIME)
@@ -64,7 +63,6 @@ internal data class SearchPackageScrollCacheEntry(
 
 @Serializable
 internal data class ApiProjectsCacheEntry(
-    val _id: Long? = null,
     val queryString: String,
     val values: List<ApiProject>,
     val expires: Instant = Clock.System.now().plus(SHORT_EXPIRATION_TIME)
