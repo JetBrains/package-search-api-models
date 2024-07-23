@@ -36,11 +36,6 @@ kotlin {
                 api(packageSearchApiModelsVersions.ktor.client.js)
             }
         }
-        appleMain {
-            dependencies {
-                api(packageSearchApiModelsVersions.ktor.client.darwin)
-            }
-        }
         jvmTest {
             dependencies {
                 implementation(packageSearchApiModelsVersions.kotlinx.coroutines.test)

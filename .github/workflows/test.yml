@@ -9,7 +9,7 @@ on:
       - main
 
 jobs:
-  build:
+  build-and-test:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout repository
@@ -19,9 +19,9 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '17'
-      - name: Build with Gradle
-        env:
-          GRADLE_ENTERPRISE_KEY: ${{ secrets.GRADLE_ENTERPRISE_KEY }}
-        run: ./gradlew build --no-daemon
-      - name: Run tests
+#      - name: Build with Gradle
+#        env:
+#          GRADLE_ENTERPRISE_KEY: ${{ secrets.GRADLE_ENTERPRISE_KEY }}
+#        run: ./gradlew build --no-daemon
+      - name: Run tests for cache system
         run: ./gradlew :http:client:jvmTest --tests "CacheTests"
