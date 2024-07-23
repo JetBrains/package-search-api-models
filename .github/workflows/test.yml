@@ -3,10 +3,10 @@ name: Test with Cache
 on:
   push:
     branches:
-      [main, fabrizio.scarponi/cache-integration]
+      [main, master]
   pull_request:
     branches:
-      - main
+      [main, master]
 
 jobs:
   build-and-test:
@@ -19,9 +19,5 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '17'
-#      - name: Build with Gradle
-#        env:
-#          GRADLE_ENTERPRISE_KEY: ${{ secrets.GRADLE_ENTERPRISE_KEY }}
-#        run: ./gradlew build --no-daemon
       - name: Run tests for cache system
         run: ./gradlew :http:client:jvmTest --tests "CacheTests"
