@@ -12,16 +12,14 @@ dependencyResolutionManagement {
     repositories {
         mavenCentral()
         maven("https://packages.jetbrains.team/maven/p/kpm/public")
-        maven {
-            url = uri("https://plugins.gradle.org/m2/")
-        }
+        gradlePluginPortal()
     }
     versionCatalogs {
         create("packageSearchApiModelsVersions") {
             from(files("packagesearch-api-models.versions.toml"))
         }
         create("kotlinxDocumentStore") {
-            from("com.github.lamba92:kotlinx-document-store-version-catalog:0.0.1-dev4")
+            from("com.github.lamba92:kotlinx-document-store-version-catalog:0.0.1-dev5")
         }
     }
 }
