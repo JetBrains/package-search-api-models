@@ -212,9 +212,9 @@ public class PackageSearchApiClient(
                     async {
                         apiPackageCacheDB
                             .find(
-                                lookupField,
-                                id,
-                                String.serializer()
+                                selector = lookupField,
+                                value = id,
+                                valueSerializer = String.serializer()
                             )
                             .firstOrNull()
                             ?.let { id to it }  // Pair the ID with the cache entry for easier processing
