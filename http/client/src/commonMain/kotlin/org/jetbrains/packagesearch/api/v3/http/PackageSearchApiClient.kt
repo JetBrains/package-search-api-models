@@ -24,6 +24,7 @@ import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
 import kotlinx.document.database.DataStore
 import kotlinx.serialization.Serializable
+import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.protobuf.ProtoBuf
@@ -210,7 +211,11 @@ public class PackageSearchApiClient(
                 .map { id -> // NOTE: id depends on the lookupField
                     async {
                         apiPackageCacheDB
-                            .find(lookupField, JsonPrimitive(id))
+                            .find(
+                                lookupField,
+                                id,
+                                String.serializer()
+                            )
                             .firstOrNull()
                             ?.let { id to it }  // Pair the ID with the cache entry for easier processing
                     }
@@ -259,7 +264,7 @@ public class PackageSearchApiClient(
         val searchCache = cacheDB.searchPackageCache()
 
         val searchResult =
-            searchCache.find(SearchPackageRequestCacheEntry::request.name, request)
+            searchCache.find(SearchPackageRequestCacheEntry::request.name, request, SearchPackagesRequest.serializer())
                 .firstOrNull() { it.request.packagesType.toSet().containsAll(request.packagesType.toSet()) }
 
         searchResult
@@ -292,7 +297,7 @@ public class PackageSearchApiClient(
         val cache = cacheDB.scrollStartPackageCache()
 
         cache
-            .find("searchQuery", JsonPrimitive(request.searchQuery))
+            .find("searchQuery", request.searchQuery, String.serializer())
             .firstOrNull()
             ?.also {
                 if (!it.isExpired) return SearchPackagesScrollResponse(it.scrollId, it.packages)
@@ -333,7 +338,7 @@ public class PackageSearchApiClient(
     ): List<ApiProject> {
         val apiProjectsCache = cacheDB.apiProjectsCache()
 
-        apiProjectsCache.find("queryString", JsonPrimitive(request.query))
+        apiProjectsCache.find("queryString", request.query, String.serializer())
             .firstOrNull()
             ?.also { if (!it.isExpired) return it.values }
 
