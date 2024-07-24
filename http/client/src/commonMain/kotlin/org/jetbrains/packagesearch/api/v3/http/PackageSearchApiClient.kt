@@ -1,12 +1,7 @@
 package org.jetbrains.packagesearch.api.v3.http
 
-import cache.ApiProjectsCacheEntry
-import cache.CacheDB
 import cache.CacheEntry
 import cache.DEFAULT_EXPIRATION_TIME
-import cache.SearchPackageRequestCacheEntry
-import cache.SearchPackageScrollCacheEntry
-import cache.toCacheEntry
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.engine.*
@@ -30,10 +25,8 @@ import kotlinx.document.database.find
 import kotlinx.document.database.getObjectCollection
 import kotlinx.document.database.updateWhere
 import kotlinx.serialization.Serializable
-import kotlinx.serialization.builtins.serializer
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
-import kotlinx.serialization.json.JsonPrimitive
 import kotlinx.serialization.json.decodeFromJsonElement
 import kotlinx.serialization.json.encodeToJsonElement
 import kotlinx.serialization.protobuf.ProtoBuf
@@ -47,6 +40,8 @@ import kotlin.time.Duration.Companion.seconds
 
 internal typealias SearchCacheEntry = CacheEntry<SearchPackagesRequest, List<ApiPackage>>
 internal typealias PackageCacheEntry = CacheEntry<String, ApiPackage?>
+internal typealias ScrollRequestCacheEntry = CacheEntry<SearchPackagesStartScrollRequest, SearchPackagesScrollResponse>
+internal typealias ApiProjectCacheEntry = CacheEntry<SearchProjectRequest, List<ApiProject>>
 internal typealias MiscellaneousCacheEntry = CacheEntry<String, JsonElement>
 
 public class PackageSearchApiClient(
@@ -66,13 +61,23 @@ public class PackageSearchApiClient(
     }
 
     private val repositoriesCacheCollection = coroutineScope.async {
-        kotlinxDb.getObjectCollection<MiscellaneousCacheEntry>("MiscellaneousCacheEntry")
+        kotlinxDb.getObjectCollection<MiscellaneousCacheEntry>("Miscellaneous")
             .apply { createIndex(MiscellaneousCacheEntry::key.name) }
     }
 
     private val packagesCacheCollection = coroutineScope.async {
-        kotlinxDb.getObjectCollection<PackageCacheEntry>("PackageCacheEntry")
+        kotlinxDb.getObjectCollection<PackageCacheEntry>("Packages")
             .apply { createIndex(PackageCacheEntry::key.name) }
+    }
+
+    private val scrollRequestCacheCollection = coroutineScope.async {
+        kotlinxDb.getObjectCollection<ScrollRequestCacheEntry>("StartScrollRequests")
+            .apply { createIndex(ScrollRequestCacheEntry::key.name) }
+    }
+
+    private val apiProjectCacheCollection = coroutineScope.async {
+        kotlinxDb.getObjectCollection<ApiProjectCacheEntry>("ApiProjects")
+            .apply { createIndex(ApiProjectCacheEntry::key.name) }
     }
 
 
@@ -225,8 +230,9 @@ public class PackageSearchApiClient(
         requestBuilder: (HttpRequestBuilder.() -> Unit)? = null,
     ): Map<String, ApiPackage> =
         getPackageInfoByIdHashes(
-            ids.map { ApiPackage.hashPackageId(it) }.toSet(),
-            requestBuilder
+            idHashes = ids.map { ApiPackage.hashPackageId(it) }.toSet(),
+            useHashes = false,
+            requestBuilder = requestBuilder
         )
 
     public suspend fun getPackageInfoByIdHashes(
@@ -306,15 +312,13 @@ public class PackageSearchApiClient(
         requestBuilder: (HttpRequestBuilder.() -> Unit)? = null,
     ): List<ApiPackage> {
         val isOffline = !onlineStateFlow.value
-        val searchCache = cacheDB.searchPackageCache()
 
-        val searchResult =
-            searchCache.find(SearchPackageRequestCacheEntry::request.name, request, SearchPackagesRequest.serializer())
-                .firstOrNull() { it.request.packagesType.toSet().containsAll(request.packagesType.toSet()) }
+        val searchCache = searchCacheCollection.await()
 
-        searchResult
-            ?.takeIf { isOffline || !it.isExpired }
-            ?.also { return it.packages }
+        searchCache.find(selector = SearchCacheEntry::key.name, value = request)
+            .firstOrNull()
+            ?.takeIf { isOffline || !it.isExpired() }
+            ?.also { return it.value }
 
         // cache result not found or expired or not exhaustive enough
 
@@ -324,14 +328,11 @@ public class PackageSearchApiClient(
             body = request,
             requestBuilder = requestBuilder,
         ).also { newPackages ->
-            //todo update apipackages cache now!
-
-            searchCache.updateWhere(
-                fieldSelector = "request",
-                fieldValue = JsonPrimitive(request.searchQuery),
-                upsert = true,
-                update = SearchPackageRequestCacheEntry(request, newPackages)
-            )
+            searchCache.insert(SearchCacheEntry(request, newPackages))
+            val packagesCache = packagesCacheCollection.await()
+            newPackages.forEach {
+                packagesCache.insert(PackageCacheEntry(it.idHash, it))
+            }
         }
 
     }
@@ -340,13 +341,12 @@ public class PackageSearchApiClient(
         request: SearchPackagesStartScrollRequest,
         requestBuilder: (HttpRequestBuilder.() -> Unit)? = null,
     ): SearchPackagesScrollResponse {
-        val cache = cacheDB.scrollStartPackageCache()
 
-        cache
-            .find("searchQuery", request.searchQuery, String.serializer())
+        val scrollCache = scrollRequestCacheCollection.await()
+        scrollCache.find(selector = ScrollRequestCacheEntry::key.name, value = request)
             .firstOrNull()
             ?.also {
-                if (!it.isExpired) return SearchPackagesScrollResponse(it.scrollId, it.packages)
+                if (!it.isExpired()) return it.value
             }
 
         return defaultRequest<_, SearchPackagesScrollResponse>(
@@ -355,15 +355,11 @@ public class PackageSearchApiClient(
             body = request,
             requestBuilder = requestBuilder,
         ).also {
-            cache.updateWhere(
-                fieldSelector = "searchQuery",
-                fieldValue = JsonPrimitive(request.searchQuery),
-                upsert = true,
-                update = SearchPackageScrollCacheEntry(
-                    scrollId = it.scrollId,
-                    packages = it.data
-                )
-            )
+            scrollCache.insert(ScrollRequestCacheEntry(request, it))
+            val packagesCache = packagesCacheCollection.await()
+            it.data.forEach {
+                packagesCache.insert(PackageCacheEntry(it.idHash, it))
+            }
         }
     }
 
@@ -382,11 +378,11 @@ public class PackageSearchApiClient(
         request: SearchProjectRequest,
         requestBuilder: (HttpRequestBuilder.() -> Unit)?,
     ): List<ApiProject> {
-        val apiProjectsCache = cacheDB.apiProjectsCache()
 
-        apiProjectsCache.find("queryString", request.query, String.serializer())
-            .firstOrNull()
-            ?.also { if (!it.isExpired) return it.values }
+        val apiProjectsCache = apiProjectCacheCollection.await()
+
+        apiProjectsCache.find(selector = SearchCacheEntry::key.name, value = request).firstOrNull()
+            ?.also { if (!it.isExpired()) return it.value }
 
         return defaultRequest<_, List<ApiProject>>(
             method = HttpMethod.Post,
@@ -394,15 +390,7 @@ public class PackageSearchApiClient(
             body = request,
             requestBuilder = requestBuilder,
         ).also {
-            apiProjectsCache.updateWhere(
-                fieldSelector = "queryString",
-                fieldValue = JsonPrimitive(request.query),
-                upsert = true,
-                update = ApiProjectsCacheEntry(
-                    queryString = request.query,
-                    values = it
-                )
-            )
+            apiProjectsCache.insert(ApiProjectCacheEntry(request, it))
         }
 
     }
@@ -420,15 +408,10 @@ public class PackageSearchApiClient(
                 requestBuilder = requestBuilder,
             )
 
+        val packagesCache = packagesCacheCollection.await()
         results.forEach {
-            cacheDB.apiPackagesCache().updateWhere(
-                fieldSelector = "idHash",
-                fieldValue = JsonPrimitive(it.idHash),
-                upsert = true,
-                update = it.toCacheEntry()
-            )
+            packagesCache.insert(PackageCacheEntry(it.idHash, it))
         }
-
         return results
 
     }
