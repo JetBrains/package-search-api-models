@@ -45,7 +45,6 @@ internal data class SearchPackageRequestCacheEntry(
     val packages: List<ApiPackage>,
     val expires: Instant = Clock.System.now().plus(SHORT_EXPIRATION_TIME)
 ) {
-    val searchQuery: String = request.searchQuery
 
     val isExpired: Boolean
         get() = expires < Clock.System.now()

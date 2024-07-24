@@ -21,7 +21,7 @@ dependencyResolutionManagement {
             from(files("packagesearch-api-models.versions.toml"))
         }
         create("kotlinxDocumentStore") {
-            from("com.github.lamba92:kotlinx-document-store-version-catalog:1.0.0-SNAPSHOT")
+            from("com.github.lamba92:kotlinx-document-store-version-catalog:0.0.1-dev1")
         }
     }
 }

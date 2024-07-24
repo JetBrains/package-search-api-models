@@ -23,7 +23,7 @@ internal class CacheDB(val dataStore: DataStore) {
     suspend fun searchPackageCache()=
         db.getObjectCollection<SearchPackageRequestCacheEntry>("SEARCH_PACKAGES").apply {
             getAllIndexNames().ifEmpty {
-                createIndex(SearchPackageRequestCacheEntry::searchQuery.name)
+                createIndex(SearchPackageRequestCacheEntry::request.name)
             }
         }
 

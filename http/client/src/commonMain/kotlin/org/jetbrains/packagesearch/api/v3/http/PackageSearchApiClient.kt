@@ -259,7 +259,7 @@ public class PackageSearchApiClient(
         val searchCache = cacheDB.searchPackageCache()
 
         val searchResult =
-            searchCache.find("searchQuery", JsonPrimitive(request.searchQuery))
+            searchCache.find(SearchPackageRequestCacheEntry::request.name, request)
                 .firstOrNull() { it.request.packagesType.toSet().containsAll(request.packagesType.toSet()) }
 
         searchResult
@@ -276,7 +276,7 @@ public class PackageSearchApiClient(
         ).also { newPackages ->
 
             searchCache.updateWhere(
-                fieldSelector = "searchQuery",
+                fieldSelector = "request",
                 fieldValue = JsonPrimitive(request.searchQuery),
                 upsert = true,
                 update = SearchPackageRequestCacheEntry(request, newPackages)
