@@ -17,7 +17,7 @@ internal data class CacheEntry<K, V>(
 ) {
 
     internal fun isExpired(expirationTime: Duration = DEFAULT_EXPIRATION_TIME): Boolean =
-        createdAt + expirationTime > Clock.System.now()
+        createdAt + expirationTime < Clock.System.now()
 
 
 }

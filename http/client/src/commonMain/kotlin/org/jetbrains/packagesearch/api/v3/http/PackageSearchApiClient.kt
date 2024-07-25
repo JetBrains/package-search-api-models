@@ -19,11 +19,7 @@ import io.ktor.serialization.kotlinx.protobuf.*
 import io.ktor.util.*
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.*
-import kotlinx.document.database.DataStore
-import kotlinx.document.database.KotlinxDocumentDatabase
-import kotlinx.document.database.find
-import kotlinx.document.database.getObjectCollection
-import kotlinx.document.database.updateWhere
+import kotlinx.document.database.*
 import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonElement
@@ -55,27 +51,27 @@ public class PackageSearchApiClient(
 
     private val kotlinxDb = KotlinxDocumentDatabase(dataStore)
 
-    private val searchCacheCollection = coroutineScope.async {
+    internal val searchCacheCollection = coroutineScope.async {
         kotlinxDb.getObjectCollection<SearchCacheEntry>("SearchRequests")
             .apply { createIndex(SearchCacheEntry::key.name) }
     }
 
-    private val repositoriesCacheCollection = coroutineScope.async {
+    internal val repositoriesCacheCollection = coroutineScope.async {
         kotlinxDb.getObjectCollection<MiscellaneousCacheEntry>("Miscellaneous")
             .apply { createIndex(MiscellaneousCacheEntry::key.name) }
     }
 
-    private val packagesCacheCollection = coroutineScope.async {
+    internal val packagesCacheCollection = coroutineScope.async {
         kotlinxDb.getObjectCollection<PackageCacheEntry>("Packages")
             .apply { createIndex(PackageCacheEntry::key.name) }
     }
 
-    private val scrollRequestCacheCollection = coroutineScope.async {
+    internal val scrollRequestCacheCollection = coroutineScope.async {
         kotlinxDb.getObjectCollection<ScrollRequestCacheEntry>("StartScrollRequests")
             .apply { createIndex(ScrollRequestCacheEntry::key.name) }
     }
 
-    private val apiProjectCacheCollection = coroutineScope.async {
+    internal val apiProjectCacheCollection = coroutineScope.async {
         kotlinxDb.getObjectCollection<ApiProjectCacheEntry>("ApiProjects")
             .apply { createIndex(ApiProjectCacheEntry::key.name) }
     }
@@ -198,7 +194,7 @@ public class PackageSearchApiClient(
         val apiRepositoryCache = repositoriesCacheCollection.await()
         val isOffline = !onlineStateFlow.value
         val cachedResult = apiRepositoryCache.find(
-            selector = "key",
+            selector = MiscellaneousCacheEntry::key.name,
             value = "repositories"
         ).singleOrNull()
 
@@ -215,8 +211,11 @@ public class PackageSearchApiClient(
             requestBuilder?.invoke(this)
         }.body<List<ApiRepository>>()
 
-        apiRepositoryCache.insert(
-            MiscellaneousCacheEntry(
+        apiRepositoryCache.updateWhere(
+            fieldSelector = MiscellaneousCacheEntry::key.name,
+            fieldValue = "repositories",
+            upsert = true,
+            update = MiscellaneousCacheEntry(
                 key = "repositories",
                 value = apiRepositoryCache.json.encodeToJsonElement(results)
             )
@@ -237,7 +236,7 @@ public class PackageSearchApiClient(
 
     public suspend fun getPackageInfoByIdHashes(
         idHashes: Set<String>,
-        useHashes: Boolean,
+        useHashes: Boolean = true,
         requestBuilder: (HttpRequestBuilder.() -> Unit)? = null,
     ): Map<String, ApiPackage> = coroutineScope {
 
@@ -266,7 +265,10 @@ public class PackageSearchApiClient(
                 else -> return@coroutineScope cachedResultMap
             }
 
-        val unresolvedIdentifiers = idHashes - validResults.map { it.key }
+        val resultIds = validResults.map { it.key }
+
+        val unresolvedIdentifiers =
+            idHashes - resultIds
 
         if (unresolvedIdentifiers.isEmpty()) {
             return@coroutineScope validResults
@@ -281,7 +283,7 @@ public class PackageSearchApiClient(
             requestBuilder = requestBuilder,
         ).associateBy { it.idHash }
 
-        val notFoundPackages = idHashes - cachedResults.map { it.key } - onlineResults.keys
+        val notFoundPackages = idHashes - cachedResults.map { it.key }.toSet() - onlineResults.keys
 
         notFoundPackages.forEach {
             packagesCache.updateWhere(
@@ -328,10 +330,20 @@ public class PackageSearchApiClient(
             body = request,
             requestBuilder = requestBuilder,
         ).also { newPackages ->
-            searchCache.insert(SearchCacheEntry(request, newPackages))
+            searchCache.updateWhere(
+                fieldSelector = SearchCacheEntry::key.name,
+                fieldValue = request,
+                upsert = true,
+                update = SearchCacheEntry(request, newPackages)
+            )
             val packagesCache = packagesCacheCollection.await()
             newPackages.forEach {
-                packagesCache.insert(PackageCacheEntry(it.idHash, it))
+                packagesCache.updateWhere(
+                    fieldSelector = PackageCacheEntry::key.name,
+                    fieldValue = it.idHash,
+                    upsert = true,
+                    update = PackageCacheEntry(it.idHash, it)
+                )
             }
         }
 
@@ -354,11 +366,21 @@ public class PackageSearchApiClient(
             url = endpoints.startScroll,
             body = request,
             requestBuilder = requestBuilder,
-        ).also {
-            scrollCache.insert(ScrollRequestCacheEntry(request, it))
+        ).also { it ->
+            scrollCache.updateWhere(
+                fieldSelector = ScrollRequestCacheEntry::key.name,
+                fieldValue = request,
+                upsert = true,
+                update = ScrollRequestCacheEntry(request, it)
+            )
             val packagesCache = packagesCacheCollection.await()
             it.data.forEach {
-                packagesCache.insert(PackageCacheEntry(it.idHash, it))
+                packagesCache.updateWhere(
+                    fieldSelector = PackageCacheEntry::key.name,
+                    fieldValue = it.idHash,
+                    upsert = true,
+                    update = PackageCacheEntry(it.idHash, it)
+                )
             }
         }
     }
@@ -390,7 +412,12 @@ public class PackageSearchApiClient(
             body = request,
             requestBuilder = requestBuilder,
         ).also {
-            apiProjectsCache.insert(ApiProjectCacheEntry(request, it))
+            apiProjectsCache.updateWhere(
+                fieldSelector = ApiProjectCacheEntry::key.name,
+                fieldValue = request,
+                upsert = true,
+                update = ApiProjectCacheEntry(request, it)
+            )
         }
 
     }
@@ -410,7 +437,12 @@ public class PackageSearchApiClient(
 
         val packagesCache = packagesCacheCollection.await()
         results.forEach {
-            packagesCache.insert(PackageCacheEntry(it.idHash, it))
+            packagesCache.updateWhere(
+                fieldSelector = PackageCacheEntry::key.name,
+                fieldValue = it.idHash,
+                upsert = true,
+                update = PackageCacheEntry(it.idHash, it)
+            )
         }
         return results
 

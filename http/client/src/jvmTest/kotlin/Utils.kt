@@ -1,5 +1,4 @@
 import CacheTests.TestEnv
-import cache.CacheDB
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
 import io.ktor.client.engine.mock.MockEngine.Companion.invoke
@@ -38,8 +37,6 @@ internal inline fun <reified T> TestScope.setupTestEnv(
 
     val mockEngine = buildMockEngine(jsonResponse)
 
-    val dataStore = MVStore.open(null).asDataStore()
-
     val apiClient = PackageSearchApiClient(
         httpClient = setupHttpClient(mockEngine),
         endpoints = PackageSearchEndpoints.DEV,
@@ -50,7 +47,6 @@ internal inline fun <reified T> TestScope.setupTestEnv(
         apiClient = apiClient,
         mockEngine = mockEngine,
         mockResponse = mockResponse,
-        db = CacheDB(dataStore)
     )
 }
 
