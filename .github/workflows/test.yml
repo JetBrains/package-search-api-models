@@ -1,4 +1,4 @@
-name: Test with Cache
+name: Test APIClient Cache
 
 on:
   push:
@@ -19,5 +19,5 @@ jobs:
         with:
           distribution: 'adopt'
           java-version: '17'
-      - name: Run tests for cache system
+      - name: Run Test APIClient Cache
         run: ./gradlew :http:client:jvmTest --tests "CacheTests"
