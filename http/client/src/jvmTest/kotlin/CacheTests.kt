@@ -1,25 +1,14 @@
-import io.ktor.client.engine.mock.MockEngine
+import io.ktor.client.engine.mock.*
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
 import org.jetbrains.packagesearch.api.v3.ApiPackage
 import org.jetbrains.packagesearch.api.v3.ApiRepository
-import org.jetbrains.packagesearch.api.v3.http.PackageCacheEntry
-import org.jetbrains.packagesearch.api.v3.http.PackageSearchApiClient
-import org.jetbrains.packagesearch.api.v3.http.PackageSearchEndpoints
-import org.jetbrains.packagesearch.api.v3.http.RefreshPackagesInfoRequest
-import org.jetbrains.packagesearch.api.v3.http.SearchPackagesRequest
+import org.jetbrains.packagesearch.api.v3.http.*
 import org.jetbrains.packagesearch.api.v3.search.PackagesType
 import org.junit.jupiter.api.Test
-import kotlin.collections.first
-import kotlin.collections.firstOrNull
-import kotlin.collections.forEach
-import kotlin.collections.map
-import kotlin.collections.plus
-import kotlin.collections.toSet
 import kotlin.test.assertEquals
 import kotlin.time.Duration.Companion.days
-import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
 
 class CacheTests {
@@ -55,7 +44,7 @@ class CacheTests {
 
 
     @Test
-    fun `PackageByID test Cache Expired`() = runTest(timeout = 30.minutes) {
+    fun `PackageByID test Cache Expired`() = runTest(timeout = 30.seconds) {
 
         val testEnv =
             setupTestEnv<List<ApiPackage>>(resourceFilename = "package-info-by-ids-ktor.json")
