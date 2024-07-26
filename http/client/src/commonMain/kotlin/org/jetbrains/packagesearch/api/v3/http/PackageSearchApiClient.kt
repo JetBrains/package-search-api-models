@@ -238,6 +238,11 @@ public class PackageSearchApiClient(
 
     public suspend fun getPackageInfoByIdHashes(
         idHashes: Set<String>,
+        requestBuilder: (HttpRequestBuilder.() -> Unit)? = null,
+    ): Map<String, ApiPackage> = getPackageInfoByIdHashes(idHashes, true, requestBuilder)
+
+    private suspend fun getPackageInfoByIdHashes(
+        idHashes: Set<String>,
         useHashes: Boolean = true,
         requestBuilder: (HttpRequestBuilder.() -> Unit)? = null,
     ): Map<String, ApiPackage> = coroutineScope {
@@ -266,7 +271,7 @@ public class PackageSearchApiClient(
         val resultIds = validResults.map { it.key }
 
         val unresolvedIdentifiers =
-            idHashes - resultIds
+            idHashes - resultIds.toSet()
 
         if (unresolvedIdentifiers.isEmpty()) {
             return@coroutineScope validResults
