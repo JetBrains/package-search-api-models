@@ -19,12 +19,16 @@ kotlin {
                 api(kotlinxDocumentStore.browser)
             }
         }
+        jvmMain{
+            dependencies{
+                api(kotlinxDocumentStore.mvstore)
+            }
+        }
         jvmTest {
             dependencies {
                 implementation(packageSearchApiModelsVersions.junit.jupiter.api)
                 implementation(packageSearchApiModelsVersions.junit.jupiter.params)
                 implementation(packageSearchApiModelsVersions.assertk)
-                implementation(kotlinxDocumentStore.mvstore)
                 runtimeOnly(packageSearchApiModelsVersions.junit.jupiter.engine)
             }
         }

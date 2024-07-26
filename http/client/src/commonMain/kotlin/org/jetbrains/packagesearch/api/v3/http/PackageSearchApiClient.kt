@@ -29,6 +29,7 @@ import kotlinx.serialization.protobuf.ProtoBuf
 import org.jetbrains.packagesearch.api.v3.ApiPackage
 import org.jetbrains.packagesearch.api.v3.ApiProject
 import org.jetbrains.packagesearch.api.v3.ApiRepository
+import org.jetbrains.packagesearch.packageversionutils.normalization.NormalizedVersion
 import kotlin.collections.map
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
@@ -44,9 +45,9 @@ public class PackageSearchApiClient(
     dataStore: DataStore,
     private val httpClient: HttpClient = defaultHttpClient(),
     public val endpoints: PackageSearchEndpoints,
-    coroutineScope: CoroutineScope = CoroutineScope(httpClient.coroutineContext),
+    coroutineScope: CoroutineScope = httpClient,
     onlineCheckInterval: Duration = 1.minutes,
-    public val cacheDuration: Duration = DEFAULT_EXPIRATION_TIME,
+    private val cacheDuration: Duration = DEFAULT_EXPIRATION_TIME,
 ) {
 
     private val kotlinxDb = KotlinxDocumentDatabase(dataStore)
@@ -76,7 +77,6 @@ public class PackageSearchApiClient(
             .apply { createIndex(ApiProjectCacheEntry::key.name) }
     }
 
-
     public val onlineStateFlow: StateFlow<Boolean> =
         flow {
             while (true) {
@@ -89,6 +89,8 @@ public class PackageSearchApiClient(
         }
             .retry()
             .stateIn(coroutineScope, SharingStarted.Lazily, true)
+
+    private val isOffline get() = !onlineStateFlow.value
 
     @Serializable
     private data class Error(val error: Inner) {
@@ -192,14 +194,14 @@ public class PackageSearchApiClient(
 
     public suspend fun getKnownRepositories(requestBuilder: (HttpRequestBuilder.() -> Unit)? = null): List<ApiRepository> {
         val apiRepositoryCache = repositoriesCacheCollection.await()
-        val isOffline = !onlineStateFlow.value
+
         val cachedResult = apiRepositoryCache.find(
             selector = MiscellaneousCacheEntry::key.name,
             value = "repositories"
         ).singleOrNull()
 
         cachedResult?.let {
-            if (isOffline || !it.isExpired()) {
+            if (isOffline || !it.isExpired(cacheDuration)) {
                 return apiRepositoryCache.json.decodeFromJsonElement<List<ApiRepository>>(it.value)
             }
 
@@ -240,15 +242,11 @@ public class PackageSearchApiClient(
         requestBuilder: (HttpRequestBuilder.() -> Unit)? = null,
     ): Map<String, ApiPackage> = coroutineScope {
 
-        val packagesCache = packagesCacheCollection.await()
-
-        val isOffline = !onlineStateFlow.value
-
         val cachedResults =
             idHashes
                 .map { id -> // NOTE: id depends on the lookupField
                     async {
-                        packagesCache
+                        packagesCacheCollection.await()
                             .find(PackageCacheEntry::key.name, value = id)
                             .firstOrNull()
                     }
@@ -286,7 +284,7 @@ public class PackageSearchApiClient(
         val notFoundPackages = idHashes - cachedResults.map { it.key }.toSet() - onlineResults.keys
 
         notFoundPackages.forEach {
-            packagesCache.updateWhere(
+            packagesCacheCollection.await().updateWhere(
                 fieldSelector = PackageCacheEntry::key.name,
                 fieldValue = it,
                 upsert = true,
@@ -295,7 +293,7 @@ public class PackageSearchApiClient(
         }
 
         onlineResults.values.forEach {
-            packagesCache.updateWhere(
+            packagesCacheCollection.await().updateWhere(
                 fieldSelector = PackageCacheEntry::key.name,
                 fieldValue = it.idHash,
                 upsert = true,
@@ -313,13 +311,13 @@ public class PackageSearchApiClient(
         request: SearchPackagesRequest,
         requestBuilder: (HttpRequestBuilder.() -> Unit)? = null,
     ): List<ApiPackage> {
-        val isOffline = !onlineStateFlow.value
+
 
         val searchCache = searchCacheCollection.await()
 
         searchCache.find(selector = SearchCacheEntry::key.name, value = request)
             .firstOrNull()
-            ?.takeIf { isOffline || !it.isExpired() }
+            ?.takeIf { isOffline || !it.isExpired(cacheDuration) }
             ?.also { return it.value }
 
         // cache result not found or expired or not exhaustive enough
@@ -356,10 +354,7 @@ public class PackageSearchApiClient(
 
         val scrollCache = scrollRequestCacheCollection.await()
         scrollCache.find(selector = ScrollRequestCacheEntry::key.name, value = request)
-            .firstOrNull()
-            ?.also {
-                if (!it.isExpired()) return it.value
-            }
+            .firstOrNull()?.also { if (!it.isExpired(cacheDuration)) return it.value }
 
         return defaultRequest<_, SearchPackagesScrollResponse>(
             method = HttpMethod.Post,
@@ -403,8 +398,8 @@ public class PackageSearchApiClient(
 
         val apiProjectsCache = apiProjectCacheCollection.await()
 
-        apiProjectsCache.find(selector = SearchCacheEntry::key.name, value = request).firstOrNull()
-            ?.also { if (!it.isExpired()) return it.value }
+        apiProjectsCache.find(selector = SearchCacheEntry::key.name, value = request)
+            .firstOrNull()?.also { if (!it.isExpired(cacheDuration)) return it.value }
 
         return defaultRequest<_, List<ApiProject>>(
             method = HttpMethod.Post,
@@ -426,17 +421,47 @@ public class PackageSearchApiClient(
         request: RefreshPackagesInfoRequest,
         requestBuilder: (HttpRequestBuilder.() -> Unit)? = null,
     ): List<ApiPackage> {
-        //no caches for this endpoint
-        val results =
+        //gather results from cache
+        val packagesCache = packagesCacheCollection.await()
+
+        val cachedResults = request.packages
+            .associate { it.packageIdHash to it.latestKnownVersion }
+            .mapKeys { packagesCache.find(PackageCacheEntry::key.name, it).firstOrNull() }
+            .filterKeys { it != null }.mapKeys { it.key!! }
+            .map { (cacheEntry, versionName) ->
+                when {
+                    versionName == null -> cacheEntry // no version specified so any version is fine
+                    cacheEntry.value == null -> cacheEntry // We don't know this package at all, so the cached result is ok
+
+                    NormalizedVersion.from(versionName) < cacheEntry.value.versions.latest.normalized ->
+                        cacheEntry //we know that the version is outdated, so we need to refresh it
+
+                    NormalizedVersion.from(versionName) > cacheEntry.value.versions.latest.normalized ->
+                        PackageCacheEntry(cacheEntry.key, null)//we know that there are no other new versions,
+                    // so we can omit this package for online request
+
+                    else -> null
+                }
+            }.filterNotNull()
+
+
+        val cachedIdHashes = cachedResults.map { it.key }
+        val notFoundPackages = request.packages.filter { it.packageIdHash !in cachedIdHashes }
+
+        if (isOffline || notFoundPackages.isEmpty()) {
+            return cachedResults.mapNotNull { it.value }
+        }
+
+
+        val onlineResults =
             defaultRequest<_, List<ApiPackage>>(
                 method = HttpMethod.Post,
                 url = endpoints.refreshPackagesInfo,
-                body = request,
+                body = RefreshPackagesInfoRequest(notFoundPackages),
                 requestBuilder = requestBuilder,
             )
 
-        val packagesCache = packagesCacheCollection.await()
-        results.forEach {
+        onlineResults.forEach {
             packagesCache.updateWhere(
                 fieldSelector = PackageCacheEntry::key.name,
                 fieldValue = it.idHash,
@@ -444,8 +469,7 @@ public class PackageSearchApiClient(
                 update = PackageCacheEntry(it.idHash, it)
             )
         }
-        return results
-
+        return cachedResults.mapNotNull { it.value } + onlineResults
     }
 
 }

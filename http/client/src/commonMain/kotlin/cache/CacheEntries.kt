@@ -16,7 +16,7 @@ internal data class CacheEntry<K, V>(
     val createdAt: Instant = Clock.System.now()
 ) {
 
-    internal fun isExpired(expirationTime: Duration = DEFAULT_EXPIRATION_TIME): Boolean =
+    internal fun isExpired(expirationTime: Duration): Boolean =
         createdAt + expirationTime < Clock.System.now()
 
 

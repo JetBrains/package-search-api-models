@@ -25,8 +25,8 @@ kotlin {
                 api(packageSearchApiModelsVersions.kotlinx.serialization.json)
             }
         }
-        commonTest{
-            dependencies{
+        commonTest {
+            dependencies {
                 api(packageSearchApiModelsVersions.kotlinx.coroutines.test)
                 api(packageSearchApiModelsVersions.ktor.client.mock)
                 api(packageSearchApiModelsVersions.ktor.client.logging)
