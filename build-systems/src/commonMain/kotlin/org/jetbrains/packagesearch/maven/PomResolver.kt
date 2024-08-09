@@ -2,7 +2,9 @@ package org.jetbrains.packagesearch.maven
 
 import io.ktor.client.HttpClient
 import io.ktor.http.URLBuilder
-import io.ktor.utils.io.core.Closeable
+import kotlinx.coroutines.flow.asFlow
+import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.encodeToJsonElement
@@ -16,10 +18,31 @@ import nl.adaptivity.xmlutil.serialization.XML
  * @property pomProvider The MavenPomProvider used to retrieve the POM.
  * @property xml The XML object used for encoding and decoding POMs. It has a default value if not provided.
  */
+public fun PomResolver(
+    vararg pomProviders: MavenPomProvider,
+    xml: XML = PomResolver.defaultXml(),
+): PomResolver =
+    PomResolver(
+        pomProviders.toList(),
+        xml
+    )
+
+/**
+ * PomResolver is a class that resolves Maven POMs (Project Object Models) using a provided MavenPomProvider.
+ * It implements the Closeable interface.
+ *
+ * @property pomProvider The MavenPomProvider used to retrieve the POM.
+ * @property xml The XML object used for encoding and decoding POMs. It has a default value if not provided.
+ */
 public class PomResolver(
-    public val pomProvider: MavenPomProvider,
+    public val pomProviders: List<MavenPomProvider>,
     public val xml: XML = defaultXml(),
-) : Closeable {
+) {
+
+    init {
+        require(pomProviders.isNotEmpty()) { "At least one MavenPomProvider must be provided." }
+    }
+
     public companion object {
         /**
          * Generates a default XML configuration for the PomResolver class.
@@ -74,7 +97,9 @@ public class PomResolver(
         groupId: String,
         artifactId: String,
         version: String,
-    ): ProjectObjectModel? = pomProvider.getPom(groupId, artifactId, version)
+    ): ProjectObjectModel? = pomProviders.asFlow()
+        .mapNotNull { it.getPom(groupId, artifactId, version) }
+        .firstOrNull()
 
     /**
      * Retrieves the Project Object Model (POM) for the specified parent.
@@ -233,15 +258,11 @@ public class PomResolver(
     private fun String.replaceProperty(transform: (String) -> CharSequence?): String =
         replace(PROPERTY_REFERENCE_REGEX) { transform(it.groupValues[1]) ?: it.groupValues.first() }
 
-    override fun close() {
-        if (pomProvider is Closeable) pomProvider.close()
-    }
-
 }
 
 
-
 private data class MavenId(val groupId: String, val artifactId: String, val version: String)
+
 private val Parent.id
     get() = MavenId(groupId, artifactId, version)
 

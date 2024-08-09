@@ -11,10 +11,14 @@ rootProject.name = "packagesearch-api-models"
 dependencyResolutionManagement {
     repositories {
         mavenCentral()
+        maven("https://packages.jetbrains.team/maven/p/kpm/public")
     }
     versionCatalogs {
         create("packageSearchApiModelsVersions") {
             from(files("packagesearch-api-models.versions.toml"))
+        }
+        create("kotlinxDocumentStore") {
+            from("com.github.lamba92:kotlinx-document-store-version-catalog:1.0.0-SNAPSHOT")
         }
     }
 }
