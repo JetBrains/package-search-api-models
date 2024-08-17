@@ -52,7 +52,8 @@ public interface MavenUrlBuilder {
         groupId: String,
         artifactId: String,
         version: String,
-        artifactExtension: String,
+        classifier: String? = null,
+        extension: String,
     ): Url
 
     public fun buildMetadataUrl(
@@ -61,31 +62,33 @@ public interface MavenUrlBuilder {
     ): Url
 }
 
+public fun SimpleMavenUrlBuilder(baseUrl: String): SimpleMavenUrlBuilder =
+    SimpleMavenUrlBuilder(Url(baseUrl))
+
 public class SimpleMavenUrlBuilder(
-    rawBaseUrl: String,
+    private val baseUrl: Url,
 ) : MavenUrlBuilder {
-    private val baseUrl =
-        Url(
-            rawBaseUrl.removeSuffix("/"),
-        )
 
     override fun buildArtifactUrl(
         groupId: String,
         artifactId: String,
         version: String,
-        artifactExtension: String,
+        classifier: String?,
+        extension: String,
     ): Url =
         buildUrl {
-            protocol = URLProtocol.HTTPS
+            protocol = baseUrl.protocol
             host = baseUrl.host
-            port = protocol.defaultPort
+            port = baseUrl.port
             pathSegments =
                 buildList {
                     addAll(baseUrl.pathSegments)
                     addAll(groupId.split("."))
                     add(artifactId)
                     add(version)
-                    add("$artifactId-$version$artifactExtension")
+                    add("$artifactId-$version")
+                    classifier?.let { add("-$it") }
+                    add(".${extension.removePrefix(".")}")
                 }
         }
 
@@ -111,38 +114,39 @@ public fun MavenUrlBuilder.buildPomUrl(
     groupId: String,
     artifactId: String,
     version: String,
-): Url = buildArtifactUrl(groupId, artifactId, version, ".pom")
+): Url = buildArtifactUrl(groupId, artifactId, version, extension = ".pom")
 
 public fun MavenUrlBuilder.buildGradleMetadataUrl(
     groupId: String,
     artifactId: String,
     version: String,
-): Url = buildArtifactUrl(groupId, artifactId, version, ".module")
+): Url = buildArtifactUrl(groupId, artifactId, version, extension = ".module")
 
 public fun MavenUrlBuilder.buildJarUrl(
     groupId: String,
     artifactId: String,
     version: String,
-): Url = buildArtifactUrl(groupId, artifactId, version, ".jar")
+): Url = buildArtifactUrl(groupId, artifactId, version, extension = ".jar")
 
 public fun MavenUrlBuilder.buildSourcesJarUrl(
     groupId: String,
     artifactId: String,
     version: String,
-): Url = buildArtifactUrl(groupId, artifactId, version, "-sources.jar")
+): Url = buildArtifactUrl(groupId, artifactId, version, "sources", "jar")
 
 public fun MavenUrlBuilder.buildJavadocJarUrl(
     groupId: String,
     artifactId: String,
     version: String,
-): Url = buildArtifactUrl(groupId, artifactId, version, "-javadoc.jar")
+): Url = buildArtifactUrl(groupId, artifactId, version, "javadoc", "jar")
 
 public fun buildMavenUrl(
     groupId: String,
     artifactId: String,
     version: String?,
     host: String,
-    artifactExtension: String,
+    classifier: String? = null,
+    extension: String,
 ): Url =
     buildUrl {
         protocol = URLProtocol.HTTPS
@@ -154,36 +158,45 @@ public fun buildMavenUrl(
                 addAll(groupId.split("."))
                 add(artifactId)
                 version?.let { add(it) }
-                add("$artifactId-$version$artifactExtension")
+                add("$artifactId-$version")
+                classifier?.let { add("-$it") }
+                add(".${extension.removePrefix(".")}")
             }
     }
 
-public object GoogleMavenCentralMirror : MavenUrlBuilder {
+public object MavenCentralGoogleMirror : MavenUrlBuilder {
     public override fun buildArtifactUrl(
         groupId: String,
         artifactId: String,
         version: String,
-        artifactExtension: String,
+        classifier: String?,
+        extension: String,
     ): Url =
         buildMavenUrl(
             groupId = groupId,
             artifactId = artifactId,
             version = version,
             host = "maven-central.storage-download.googleapis.com",
-            artifactExtension = artifactExtension,
+            classifier = classifier,
+            extension = extension,
         )
 
     override fun buildMetadataUrl(
         groupId: String,
         artifactId: String,
     ): Url =
-        buildMavenUrl(
-            groupId = groupId,
-            artifactId = artifactId,
-            version = null,
-            host = "maven-central.storage-download.googleapis.com",
-            artifactExtension = "maven-metadata.xml",
-        )
+        buildUrl {
+            protocol = URLProtocol.HTTPS
+            host = "maven-central.storage-download.googleapis.com"
+            port = protocol.defaultPort
+            pathSegments =
+                buildList {
+                    add("maven2")
+                    addAll(groupId.split("."))
+                    add(artifactId)
+                    add("maven-metadata.xml")
+                }
+        }
 }
 
 internal data class DependencyKey(val groupId: String, val artifactId: String)

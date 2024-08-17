@@ -5,3 +5,4 @@ build/
 yarn.lock
 google.credentials.json
 google.credentials
+.kotlin/

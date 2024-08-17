@@ -57,25 +57,6 @@ public class PomResolver(
             }
 
         /**
-         * Returns the default MavenPomProvider instance with the provided optional parameters.
-         *
-         * @param repositories the list of MavenUrlBuilder instances representing the repositories to search for POM files (default: [GoogleMavenCentralMirror])
-         * @param xml the XML configuration (default: defaultXml())
-         * @param httpClient the HttpClient instance used to make HTTP requests (default: defaultHttpClient(xml))
-         * @return the default MavenPomProvider instance
-         */
-        public fun defaultPomProvider(
-            repositories: List<MavenUrlBuilder> = listOf(GoogleMavenCentralMirror),
-            xml: XML = defaultXml(),
-            httpClient: HttpClient = HttpClientMavenPomProvider.defaultHttpClient(xml),
-        ): MavenPomProvider =
-            HttpClientMavenPomProvider(
-                mirrors = repositories,
-                httpClient = httpClient,
-                xml = xml,
-            )
-
-        /**
          * Regular expression used for pattern matching and extraction.
          * This regex pattern is used to match and extract substrings in the format `${...}` from a string.
          * It is used in the `String.resolve()` function to resolve property references.
@@ -117,6 +98,15 @@ public class PomResolver(
      */
     public suspend fun resolve(pomText: String): ProjectObjectModel =
         resolve(xml.decodeFromString<ProjectObjectModel>(POM_XML_NAMESPACE, pomText))
+
+    /**
+     * Resolves the Project Object Model (POM) using the provided POM text.
+     *
+     * @param pomText The POM text to be resolved.
+     * @return The resolved ProjectObjectModel.
+     */
+    public suspend fun resolve(groupId: String, artifactId: String, version: String): ProjectObjectModel =
+        resolve(getPom(groupId, artifactId, version) ?: error("POM not found"))
 
     /**
      * Resolves the provided Project Object Model (POM) by merging it with its parent POMs and resolving the property values.

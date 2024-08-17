@@ -11,7 +11,7 @@ kotlinx-serialization = "1.6.3"
 krypto = "4.0.10"
 ktor = "2.3.10"
 logback = "1.5.6"
-xmlutil = "0.86.2" # DO NOT UPDATE TO 0.83.3, it breaks org.jetbrains.packagesearch.maven.XML#decodeFromString
+xmlutil = "0.90.0" # DO NOT UPDATE TO 0.83.3, it breaks org.jetbrains.packagesearch.maven.XML#decodeFromString
 
 [libraries]
 assertk = { module = "com.willowtreeapps.assertk:assertk", version.ref = "assertk" }
