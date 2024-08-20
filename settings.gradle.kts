@@ -2,7 +2,7 @@
 
 plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.5.0"
-    `gradle-enterprise`
+    id("com.gradle.develocity") version "3.18"
 }
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
@@ -23,7 +23,6 @@ dependencyResolutionManagement {
     }
 }
 
-
 include(
     ":http",
     ":sonatype-apis",
@@ -36,11 +35,11 @@ include(
 val isCi
     get() = System.getenv("CI") == "true"
 
-gradleEnterprise {
+develocity {
+    server = "https://ge.labs.jb.gg/"
+    accessKey = System.getenv("GRADLE_ENTERPRISE_ACCESS_KEY")
+        ?: extra.properties["gradleEnterpriseAccessKey"]?.toString()
     buildScan {
-        server = "https://ge.labs.jb.gg/"
-        accessKey = System.getenv("GRADLE_ENTERPRISE_ACCESS_KEY")
-            ?: extra.properties["gradleEnterpriseAccessKey"]?.toString()
-        publishAlwaysIf(isCi)
+        publishing.onlyIf { isCi }
     }
 }

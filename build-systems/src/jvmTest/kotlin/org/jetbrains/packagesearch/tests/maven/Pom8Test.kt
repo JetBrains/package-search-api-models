@@ -9,10 +9,13 @@ import io.ktor.http.ContentType
 import io.ktor.serialization.kotlinx.serialization
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.encodeToString
+import nl.adaptivity.xmlutil.XmlReader
 import nl.adaptivity.xmlutil.serialization.XML
+import nl.adaptivity.xmlutil.xmlStreaming
+import org.jetbrains.packagesearch.maven.HttpClientMavenPomProvider
+import org.jetbrains.packagesearch.maven.MavenCentralGoogleMirror
 import org.jetbrains.packagesearch.maven.POM_XML_NAMESPACE
 import org.jetbrains.packagesearch.maven.PomResolver
-import org.jetbrains.packagesearch.maven.PomResolver.Companion.defaultPomProvider
 import org.jetbrains.packagesearch.maven.ProjectObjectModel
 import org.jetbrains.packagesearch.maven.decodeFromString
 import org.jetbrains.packagesearch.tests.BuildSystemsTestBase
@@ -25,6 +28,7 @@ class Pom8Test : BuildSystemsTestBase() {
             indentString = "    "
             defaultPolicy {
                 ignoreUnknownChildren()
+                ignoreNamespaces()
             }
         }
 
@@ -74,8 +78,9 @@ class Pom8Test : BuildSystemsTestBase() {
     fun testSolver(coordinates: String) =
         runTest {
             val (groupId, artifactId, version) = coordinates.split(':')
-            val pom =
-                PomResolver(pomProvider = defaultPomProvider(httpClient = httpClient)).getPom(groupId, artifactId, version)
+            val pomProviders =
+                listOf(HttpClientMavenPomProvider(MavenCentralGoogleMirror, httpClient))
+            val pom = PomResolver(pomProviders).getPom(groupId, artifactId, version)
             println(xml.encodeToString(pom))
         }
 }

@@ -7,6 +7,7 @@ import kotlinx.serialization.json.JsonPrimitive
 import nl.adaptivity.xmlutil.XmlReader
 import nl.adaptivity.xmlutil.XmlStreaming
 import nl.adaptivity.xmlutil.serialization.XML
+import nl.adaptivity.xmlutil.xmlStreaming
 
 public val ProjectObjectModel.properties: Map<String, String>
     get() = propertiesContainer?.properties ?: emptyMap()
@@ -121,6 +122,12 @@ public fun MavenUrlBuilder.buildGradleMetadataUrl(
     artifactId: String,
     version: String,
 ): Url = buildArtifactUrl(groupId, artifactId, version, extension = ".module")
+
+public fun MavenUrlBuilder.buildKotlinMetadataUrl(
+    groupId: String,
+    artifactId: String,
+    version: String,
+): Url = buildArtifactUrl(groupId, artifactId, version, "kotlin-tooling-metadata", ".json")
 
 public fun MavenUrlBuilder.buildJarUrl(
     groupId: String,
@@ -252,13 +259,12 @@ public fun XML.decodePomFromString(string: String): ProjectObjectModel {
     return decodeFromString(POM_XML_NAMESPACE, string)
 }
 
-@Suppress("DELEGATED_MEMBER_HIDES_SUPERTYPE_OVERRIDE")
 public inline fun <reified T : Any> XML.decodeFromString(
     namespace: String,
     string: String,
 ): T {
     return decodeFromReader<T>(
-        object : XmlReader by XmlStreaming.newReader(string) {
+        object : XmlReader by xmlStreaming.newReader(string) {
             override val namespaceURI: String get() = namespace
         },
     )

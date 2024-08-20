@@ -17,19 +17,4 @@ public class FallbackMavenPomProvider(
         }
         return null
     }
-
-    override suspend fun getPomFromMultipleRepositories(
-        groupId: String,
-        artifactId: String,
-        version: String,
-    ): Flow<ProjectObjectModel> {
-        return providers.firstOrNull()?.getPomFromMultipleRepositories(groupId, artifactId, version) ?: emptyFlow()
-    }
-
-    override suspend fun getPomByUrl(url: Url): ProjectObjectModel? {
-        for (provider in providers) {
-            provider.getPomByUrl(url)?.let { return it }
-        }
-        return null
-    }
 }

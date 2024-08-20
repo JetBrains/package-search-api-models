@@ -11,6 +11,7 @@ import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
 import io.ktor.serialization.kotlinx.KotlinxSerializationConverter
 import io.ktor.utils.io.core.Closeable
+import nl.adaptivity.xmlutil.QName
 import nl.adaptivity.xmlutil.serialization.XML
 
 public class HttpClientMavenPomProvider(
@@ -46,6 +47,6 @@ public class HttpClientMavenPomProvider(
 
     private suspend fun HttpResponse.bodyAsPom(xml: XML) =
         runCatching { body<ProjectObjectModel>() }.getOrNull()
-            ?: xml.decodeFromString(POM_XML_NAMESPACE, bodyAsText())
+            ?: xml.decodeFromString(ProjectObjectModel.serializer(), bodyAsText(), QName(POM_XML_NAMESPACE))
 
 }

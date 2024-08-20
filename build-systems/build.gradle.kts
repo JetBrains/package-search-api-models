@@ -24,6 +24,7 @@ kotlin {
                 api(packageSearchApiModelsVersions.kotlinx.serialization.json)
                 api(packageSearchApiModelsVersions.ktor.client.content.negotiation)
                 api(packageSearchApiModelsVersions.ktor.serialization.kotlinx)
+                api(packageSearchApiModelsVersions.datetime)
             }
         }
         jvmMain {

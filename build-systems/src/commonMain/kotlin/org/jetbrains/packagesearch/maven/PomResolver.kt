@@ -1,6 +1,5 @@
 package org.jetbrains.packagesearch.maven
 
-import io.ktor.client.HttpClient
 import io.ktor.http.URLBuilder
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.firstOrNull
@@ -11,21 +10,6 @@ import kotlinx.serialization.json.encodeToJsonElement
 import kotlinx.serialization.json.jsonObject
 import nl.adaptivity.xmlutil.serialization.XML
 
-/**
- * PomResolver is a class that resolves Maven POMs (Project Object Models) using a provided MavenPomProvider.
- * It implements the Closeable interface.
- *
- * @property pomProvider The MavenPomProvider used to retrieve the POM.
- * @property xml The XML object used for encoding and decoding POMs. It has a default value if not provided.
- */
-public fun PomResolver(
-    vararg pomProviders: MavenPomProvider,
-    xml: XML = PomResolver.defaultXml(),
-): PomResolver =
-    PomResolver(
-        pomProviders.toList(),
-        xml
-    )
 
 /**
  * PomResolver is a class that resolves Maven POMs (Project Object Models) using a provided MavenPomProvider.
@@ -78,7 +62,8 @@ public class PomResolver(
         groupId: String,
         artifactId: String,
         version: String,
-    ): ProjectObjectModel? = pomProviders.asFlow()
+    ): ProjectObjectModel? = pomProviders
+        .asFlow()
         .mapNotNull { it.getPom(groupId, artifactId, version) }
         .firstOrNull()
 
