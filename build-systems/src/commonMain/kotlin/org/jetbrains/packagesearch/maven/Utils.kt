@@ -4,8 +4,8 @@ import io.ktor.http.URLProtocol
 import io.ktor.http.Url
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
+import nl.adaptivity.xmlutil.QName
 import nl.adaptivity.xmlutil.XmlReader
-import nl.adaptivity.xmlutil.XmlStreaming
 import nl.adaptivity.xmlutil.serialization.XML
 import nl.adaptivity.xmlutil.xmlStreaming
 
@@ -21,7 +21,7 @@ public val ProjectObjectModel.developers: List<Developer>
     get() = developersContainer?.developers ?: emptyList()
 
 public val Contributor.properties: Map<String, String>
-    get() = propertiesContainer?.properties ?: emptyMap()
+    get() = properties?.properties ?: emptyMap()
 
 public fun ProjectObjectModel.copy(
     groupId: String? = this.groupId,
@@ -64,7 +64,7 @@ public interface MavenUrlBuilder {
 }
 
 public fun SimpleMavenUrlBuilder(baseUrl: String): SimpleMavenUrlBuilder =
-    SimpleMavenUrlBuilder(Url(baseUrl))
+    SimpleMavenUrlBuilder(Url(baseUrl.removeSuffix("/")))
 
 public class SimpleMavenUrlBuilder(
     private val baseUrl: Url,
@@ -81,16 +81,18 @@ public class SimpleMavenUrlBuilder(
             protocol = baseUrl.protocol
             host = baseUrl.host
             port = baseUrl.port
-            pathSegments =
-                buildList {
-                    addAll(baseUrl.pathSegments)
-                    addAll(groupId.split("."))
-                    add(artifactId)
-                    add(version)
-                    add("$artifactId-$version")
-                    classifier?.let { add("-$it") }
-                    add(".${extension.removePrefix(".")}")
-                }
+            val urlSegments = buildList {
+                addAll(baseUrl.pathSegments)
+                addAll(groupId.split("."))
+                add(artifactId)
+                add(version)
+                add(buildString {
+                    append("$artifactId-$version")
+                    classifier?.let { append("-$it") }
+                    append(".${extension.removePrefix(".")}")
+                })
+            }
+            pathSegments = urlSegments
         }
 
     override fun buildMetadataUrl(
@@ -247,25 +249,18 @@ internal fun evaluateProjectProperty(
     }
 }
 
-@Deprecated(
-    "Use decodeFromString instead",
-    ReplaceWith(
-        "decodeFromString<ProjectObjectModel>(POM_XML_NAMESPACE, string)",
-        "org.jetbrains.packagesearch.maven.decodeFromString",
-        "org.jetbrains.packagesearch.maven.ProjectObjectModel",
-    ),
-)
-public fun XML.decodePomFromString(string: String): ProjectObjectModel {
-    return decodeFromString(POM_XML_NAMESPACE, string)
-}
-
 public inline fun <reified T : Any> XML.decodeFromString(
     namespace: String,
     string: String,
-): T {
-    return decodeFromReader<T>(
-        object : XmlReader by xmlStreaming.newReader(string) {
-            override val namespaceURI: String get() = namespace
-        },
-    )
+): T = decodeFromReader<T>(ManualNamespaceXmlReader(namespace, string))
+
+public class ManualNamespaceXmlReader(
+    private val forcedUri: String,
+    xmlString: String,
+) : XmlReader by xmlStreaming.newReader(xmlString) {
+    override fun toString(): String = "ManualNamespaceXmlReader(namespaceURI=\"$namespaceURI\")"
+    override val namespaceURI: String
+        get() = forcedUri
+    override val name: QName
+        get() = QName(forcedUri, localName, prefix)
 }

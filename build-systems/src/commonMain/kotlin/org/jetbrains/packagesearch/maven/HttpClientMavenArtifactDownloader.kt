@@ -9,16 +9,16 @@ import io.ktor.client.request.get
 import io.ktor.client.statement.HttpResponse
 import io.ktor.client.statement.bodyAsText
 import io.ktor.http.ContentType
+import io.ktor.http.isSuccess
 import io.ktor.serialization.kotlinx.KotlinxSerializationConverter
 import io.ktor.utils.io.core.Closeable
-import nl.adaptivity.xmlutil.QName
 import nl.adaptivity.xmlutil.serialization.XML
 
-public class HttpClientMavenPomProvider(
+public class HttpClientMavenArtifactDownloader(
     public val urlBuilder: MavenUrlBuilder,
     public val httpClient: HttpClient,
     public val xml: XML = PomResolver.defaultXml(),
-) : MavenPomProvider, Closeable by httpClient {
+) : MavenArtifactDownloader {
 
     public companion object {
         public fun defaultHttpClient(
@@ -39,14 +39,27 @@ public class HttpClientMavenPomProvider(
             }
     }
 
-    override suspend fun getPom(
+    override suspend fun getArtifact(
         groupId: String,
         artifactId: String,
         version: String,
-    ): ProjectObjectModel = httpClient.get(urlBuilder.buildPomUrl(groupId, artifactId, version)).bodyAsPom(xml)
+        classifier: String?,
+        extension: String,
+    ): ProjectObjectModel? = httpClient
+        .get(urlBuilder.buildArtifactUrl(groupId, artifactId, version, classifier, extension))
+        .takeIf { it.status.isSuccess() }
+        ?.bodyAsPom(xml)
+
+    override fun getArtifactSource(
+        groupId: String,
+        artifactId: String,
+        version: String,
+        classifier: String?,
+        extension: String
+    ): String = urlBuilder.buildArtifactUrl(groupId, artifactId, version, classifier, extension).toString()
 
     private suspend fun HttpResponse.bodyAsPom(xml: XML) =
         runCatching { body<ProjectObjectModel>() }.getOrNull()
-            ?: xml.decodeFromString(ProjectObjectModel.serializer(), bodyAsText(), QName(POM_XML_NAMESPACE))
+            ?: xml.decodeFromString(POM_XML_NAMESPACE, bodyAsText())
 
 }

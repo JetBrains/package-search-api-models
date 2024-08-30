@@ -17,7 +17,7 @@ public data class KotlinMetadata(
 public data class ProjectSettings(
     val isHmppEnabled: Boolean,
     val isCompatibilityMetadataVariantEnabled: Boolean,
-    val isKPMEnabled: Boolean
+    val isKPMEnabled: Boolean? = null
 )
 
 @Serializable

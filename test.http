@@ -1,0 +1,63 @@
+POST https://package-search.services.jetbrains.com/search-packages/scroll/start HTTP/2
+Content-Type: application/json
+
+{
+  "packagesType": [
+    {
+      "type": "gradle",
+      "variants": [
+        {
+          "attributes": {
+            "org.jetbrains.kotlin.platform.type": {
+              "type": "exactMatch",
+              "value": "jvm"
+            }
+          },
+          "mustBeWithFiles": false
+        }
+      ]
+    },
+    {
+      "type": "gradle",
+      "variants": [
+        {
+          "attributes": {
+            "org.jetbrains.kotlin.platform.type": {
+              "type": "exactMatch",
+              "value": "android"
+            }
+          },
+          "mustBeWithFiles": false
+        }
+      ]
+    },
+    {
+      "type": "gradle",
+      "variants": [
+        {
+          "attributes": {
+            "org.jetbrains.kotlin.platform.type": {
+              "type": "exactMatch",
+              "value": "js"
+            }
+          },
+          "mustBeWithFiles": false
+        }
+      ]
+    },
+    {
+      "type": "gradle",
+      "variants": [
+        {
+          "attributes": {
+            "org.jetbrains.kotlin.platform.type": {
+              "type": "exactMatch",
+              "value": "common"
+            }
+          },
+          "mustBeWithFiles": false
+        }
+      ]
+    }
+  ]
+}

@@ -1,5 +1,10 @@
 plugins {
     `build-config`
+    application
+}
+
+application {
+    mainClass = "org.jetbrains.packagesearch.api.v3.search.SearchParametersBuilderKt"
 }
 
 publishing {

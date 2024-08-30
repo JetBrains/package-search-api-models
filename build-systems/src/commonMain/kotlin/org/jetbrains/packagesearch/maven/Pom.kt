@@ -17,6 +17,7 @@ public data class ProjectObjectModel(
     @XmlElement public val name: String? = null,
     @XmlElement public val description: String? = null,
     @XmlElement public val url: String? = null,
+    public val inceptionYear: String? = null,
     public val organization: Organization? = null,
     public val parent: Parent? = null,
     @XmlElement public val packaging: String? = null,
@@ -52,7 +53,7 @@ public data class Contributor(
     @XmlElement public val organizationUrl: String? = null,
     public val rolesContainer: Roles? = null,
     @XmlElement val timezone: String? = null,
-    public val propertiesContainer: Properties? = null,
+    public val properties: Properties? = null,
 )
 
 @Serializable(with = MavenPomPropertiesXmlSerializer::class)

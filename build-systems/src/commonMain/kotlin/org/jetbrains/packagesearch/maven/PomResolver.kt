@@ -19,12 +19,12 @@ import nl.adaptivity.xmlutil.serialization.XML
  * @property xml The XML object used for encoding and decoding POMs. It has a default value if not provided.
  */
 public class PomResolver(
-    public val pomProviders: List<MavenPomProvider>,
+    public val artifactDownloaders: List<MavenArtifactDownloader>,
     public val xml: XML = defaultXml(),
 ) {
 
     init {
-        require(pomProviders.isNotEmpty()) { "At least one MavenPomProvider must be provided." }
+        require(artifactDownloaders.isNotEmpty()) { "At least one ${MavenArtifactDownloader::class.simpleName} must be provided." }
     }
 
     public companion object {
@@ -62,7 +62,7 @@ public class PomResolver(
         groupId: String,
         artifactId: String,
         version: String,
-    ): ProjectObjectModel? = pomProviders
+    ): ProjectObjectModel? = artifactDownloaders
         .asFlow()
         .mapNotNull { it.getPom(groupId, artifactId, version) }
         .firstOrNull()
@@ -91,7 +91,14 @@ public class PomResolver(
      * @return The resolved ProjectObjectModel.
      */
     public suspend fun resolve(groupId: String, artifactId: String, version: String): ProjectObjectModel =
-        resolve(getPom(groupId, artifactId, version) ?: error("POM not found"))
+        resolve(getPom(groupId, artifactId, version)
+            ?: error(buildString {
+                append("Failed to resolve POM for id `$groupId:$artifactId:$version` in any of the providers:")
+                artifactDownloaders.forEach {
+                    appendLine("  - ${it::class.simpleName}: ${it.getArtifactSource(groupId, artifactId, version, extension = "pom")}")
+                }
+            })
+        )
 
     /**
      * Resolves the provided Project Object Model (POM) by merging it with its parent POMs and resolving the property values.

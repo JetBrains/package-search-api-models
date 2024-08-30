@@ -9,10 +9,8 @@ import io.ktor.http.ContentType
 import io.ktor.serialization.kotlinx.serialization
 import kotlinx.coroutines.test.runTest
 import kotlinx.serialization.encodeToString
-import nl.adaptivity.xmlutil.XmlReader
 import nl.adaptivity.xmlutil.serialization.XML
-import nl.adaptivity.xmlutil.xmlStreaming
-import org.jetbrains.packagesearch.maven.HttpClientMavenPomProvider
+import org.jetbrains.packagesearch.maven.HttpClientMavenArtifactDownloader
 import org.jetbrains.packagesearch.maven.MavenCentralGoogleMirror
 import org.jetbrains.packagesearch.maven.POM_XML_NAMESPACE
 import org.jetbrains.packagesearch.maven.PomResolver
@@ -46,10 +44,13 @@ class Pom8Test : BuildSystemsTestBase() {
     @ParameterizedTest
     @ValueSource(
         strings = [
-            "maven/maven.xml",
-            "maven/spring-core.xml",
-            "maven/maven-core.xml",
             "maven/abbot.xml",
+            "maven/maven.xml",
+            "maven/maven-core.xml",
+            "maven/maven-core-output.xml",
+            "maven/maven-output.xml",
+            "maven/spring-core.xml",
+            "maven/spring-core-output.xml"
         ],
     )
     fun `parse pom from resources`(path: String) =
@@ -79,7 +80,7 @@ class Pom8Test : BuildSystemsTestBase() {
         runTest {
             val (groupId, artifactId, version) = coordinates.split(':')
             val pomProviders =
-                listOf(HttpClientMavenPomProvider(MavenCentralGoogleMirror, httpClient))
+                listOf(HttpClientMavenArtifactDownloader(MavenCentralGoogleMirror, httpClient))
             val pom = PomResolver(pomProviders).getPom(groupId, artifactId, version)
             println(xml.encodeToString(pom))
         }
