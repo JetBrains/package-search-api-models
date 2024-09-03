@@ -14,7 +14,7 @@ import org.jetbrains.packagesearch.maven.HttpClientMavenArtifactDownloader
 import org.jetbrains.packagesearch.maven.MavenCentralGoogleMirror
 import org.jetbrains.packagesearch.maven.POM_XML_NAMESPACE
 import org.jetbrains.packagesearch.maven.PomResolver
-import org.jetbrains.packagesearch.maven.ProjectObjectModel
+import org.jetbrains.packagesearch.maven.MavenProjectObjectModel
 import org.jetbrains.packagesearch.maven.decodeFromString
 import org.jetbrains.packagesearch.tests.BuildSystemsTestBase
 import org.junit.jupiter.params.ParameterizedTest
@@ -55,7 +55,7 @@ class Pom8Test : BuildSystemsTestBase() {
     )
     fun `parse pom from resources`(path: String) =
         runTest {
-            val pom = xml.decodeFromString<ProjectObjectModel>(POM_XML_NAMESPACE, readResourceAsText(path))
+            val pom = xml.decodeFromString<MavenProjectObjectModel>(POM_XML_NAMESPACE, readResourceAsText(path))
             println(xml.encodeToString(pom))
         }
 

@@ -1,7 +1,13 @@
 package org.jetbrains.packagesearch.maven
 
+import io.ktor.http.Headers
+import io.ktor.http.HttpHeaders
 import io.ktor.http.URLProtocol
 import io.ktor.http.Url
+import io.ktor.utils.io.ByteReadChannel
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
+import kotlinx.datetime.Instant
 import kotlinx.serialization.json.JsonObject
 import kotlinx.serialization.json.JsonPrimitive
 import nl.adaptivity.xmlutil.QName
@@ -9,21 +15,21 @@ import nl.adaptivity.xmlutil.XmlReader
 import nl.adaptivity.xmlutil.serialization.XML
 import nl.adaptivity.xmlutil.xmlStreaming
 
-public val ProjectObjectModel.properties: Map<String, String>
+public val MavenProjectObjectModel.properties: Map<String, String>
     get() = propertiesContainer?.properties ?: emptyMap()
-public val ProjectObjectModel.licenses: List<License>
+public val MavenProjectObjectModel.licenses: List<License>
     get() = licensesContainer?.licenses ?: emptyList()
-public val ProjectObjectModel.dependencyManagement: List<Dependency>
+public val MavenProjectObjectModel.dependencyManagement: List<Dependency>
     get() = dependencyManagementContainer?.dependencies?.dependencies ?: emptyList()
-public val ProjectObjectModel.dependencies: List<Dependency>
+public val MavenProjectObjectModel.dependencies: List<Dependency>
     get() = dependenciesContainer?.dependencies ?: emptyList()
-public val ProjectObjectModel.developers: List<Developer>
+public val MavenProjectObjectModel.developers: List<Developer>
     get() = developersContainer?.developers ?: emptyList()
 
 public val Contributor.properties: Map<String, String>
     get() = properties?.properties ?: emptyMap()
 
-public fun ProjectObjectModel.copy(
+public fun MavenProjectObjectModel.copy(
     groupId: String? = this.groupId,
     artifactId: String? = this.artifactId,
     parent: Parent? = this.parent,
@@ -33,7 +39,7 @@ public fun ProjectObjectModel.copy(
     name: String? = this.name,
     description: String? = this.description,
     scm: Scm? = this.scm,
-): ProjectObjectModel =
+): MavenProjectObjectModel =
     copy(
         groupId = groupId,
         artifactId = artifactId,
@@ -49,18 +55,8 @@ public fun ProjectObjectModel.copy(
 public const val POM_XML_NAMESPACE: String = "http://maven.apache.org/POM/4.0.0"
 
 public interface MavenUrlBuilder {
-    public fun buildArtifactUrl(
-        groupId: String,
-        artifactId: String,
-        version: String,
-        classifier: String? = null,
-        extension: String,
-    ): Url
-
-    public fun buildMetadataUrl(
-        groupId: String,
-        artifactId: String,
-    ): Url
+    public fun buildArtifactUrl(artifactIdentifier: MavenArtifactIdentifier): Url
+    public fun buildPackageMetadataUrl(groupId: String, artifactId: String): Url
 }
 
 public fun SimpleMavenUrlBuilder(baseUrl: String): SimpleMavenUrlBuilder =
@@ -70,32 +66,28 @@ public class SimpleMavenUrlBuilder(
     private val baseUrl: Url,
 ) : MavenUrlBuilder {
 
-    override fun buildArtifactUrl(
-        groupId: String,
-        artifactId: String,
-        version: String,
-        classifier: String?,
-        extension: String,
-    ): Url =
+    override fun buildArtifactUrl(artifactIdentifier: MavenArtifactIdentifier): Url =
         buildUrl {
             protocol = baseUrl.protocol
             host = baseUrl.host
             port = baseUrl.port
             val urlSegments = buildList {
                 addAll(baseUrl.pathSegments)
-                addAll(groupId.split("."))
-                add(artifactId)
-                add(version)
+                addAll(artifactIdentifier.groupId.split("."))
+                add(artifactIdentifier.artifactId)
+                add(artifactIdentifier.version)
                 add(buildString {
-                    append("$artifactId-$version")
-                    classifier?.let { append("-$it") }
-                    append(".${extension.removePrefix(".")}")
+                    append("${artifactIdentifier.artifactId}-${artifactIdentifier.version}")
+                    artifactIdentifier.classifier?.let { append("-$it") }
+                    artifactIdentifier.extension
+                        ?.removePrefix(".")
+                        ?.let { append(".$it") }
                 })
             }
             pathSegments = urlSegments
         }
 
-    override fun buildMetadataUrl(
+    override fun buildPackageMetadataUrl(
         groupId: String,
         artifactId: String,
     ): Url =
@@ -117,37 +109,37 @@ public fun MavenUrlBuilder.buildPomUrl(
     groupId: String,
     artifactId: String,
     version: String,
-): Url = buildArtifactUrl(groupId, artifactId, version, extension = ".pom")
+): Url = buildArtifactUrl(MavenArtifactIdentifier(groupId, artifactId, version, extension = "pom"))
 
 public fun MavenUrlBuilder.buildGradleMetadataUrl(
     groupId: String,
     artifactId: String,
     version: String,
-): Url = buildArtifactUrl(groupId, artifactId, version, extension = ".module")
+): Url = buildArtifactUrl(MavenArtifactIdentifier(groupId, artifactId, version, extension = "module"))
 
 public fun MavenUrlBuilder.buildKotlinMetadataUrl(
     groupId: String,
     artifactId: String,
     version: String,
-): Url = buildArtifactUrl(groupId, artifactId, version, "kotlin-tooling-metadata", ".json")
+): Url = buildArtifactUrl(MavenArtifactIdentifier(groupId, artifactId, version, extension = "kotlin-tooling-metadata"))
 
 public fun MavenUrlBuilder.buildJarUrl(
     groupId: String,
     artifactId: String,
     version: String,
-): Url = buildArtifactUrl(groupId, artifactId, version, extension = ".jar")
+): Url = buildArtifactUrl(MavenArtifactIdentifier(groupId, artifactId, version, extension = "jar"))
 
 public fun MavenUrlBuilder.buildSourcesJarUrl(
     groupId: String,
     artifactId: String,
     version: String,
-): Url = buildArtifactUrl(groupId, artifactId, version, "sources", "jar")
+): Url = buildArtifactUrl(MavenArtifactIdentifier(groupId, artifactId, version, classifier = "sources", extension = "jar"))
 
 public fun MavenUrlBuilder.buildJavadocJarUrl(
     groupId: String,
     artifactId: String,
     version: String,
-): Url = buildArtifactUrl(groupId, artifactId, version, "javadoc", "jar")
+): Url = buildArtifactUrl(MavenArtifactIdentifier(groupId, artifactId, version, classifier = "javadoc", extension = "jar"))
 
 public fun buildMavenUrl(
     groupId: String,
@@ -172,41 +164,6 @@ public fun buildMavenUrl(
                 add(".${extension.removePrefix(".")}")
             }
     }
-
-public object MavenCentralGoogleMirror : MavenUrlBuilder {
-    public override fun buildArtifactUrl(
-        groupId: String,
-        artifactId: String,
-        version: String,
-        classifier: String?,
-        extension: String,
-    ): Url =
-        buildMavenUrl(
-            groupId = groupId,
-            artifactId = artifactId,
-            version = version,
-            host = "maven-central.storage-download.googleapis.com",
-            classifier = classifier,
-            extension = extension,
-        )
-
-    override fun buildMetadataUrl(
-        groupId: String,
-        artifactId: String,
-    ): Url =
-        buildUrl {
-            protocol = URLProtocol.HTTPS
-            host = "maven-central.storage-download.googleapis.com"
-            port = protocol.defaultPort
-            pathSegments =
-                buildList {
-                    add("maven2")
-                    addAll(groupId.split("."))
-                    add(artifactId)
-                    add("maven-metadata.xml")
-                }
-        }
-}
 
 internal data class DependencyKey(val groupId: String, val artifactId: String)
 
@@ -238,9 +195,9 @@ internal fun evaluateProjectProperty(
         is JsonObject ->
             evaluateProjectProperty(
                 projectProperty =
-                    projectProperty.removePrefix("$property.")
-                        .takeIf { it.isNotEmpty() }
-                        ?: return null,
+                projectProperty.removePrefix("$property.")
+                    .takeIf { it.isNotEmpty() }
+                    ?: return null,
                 modelAccessor = accessor,
             )
 
@@ -263,4 +220,58 @@ public class ManualNamespaceXmlReader(
         get() = forcedUri
     override val name: QName
         get() = QName(forcedUri, localName, prefix)
+}
+
+public expect fun parseLastModifiedHeader(header: String): Instant?
+
+public val Headers.LastModified: Instant?
+    get() = get(HttpHeaders.LastModified)?.let { parseLastModifiedHeader(it) }
+
+public fun String.isValidSha512Hex(): Boolean {
+    // Check if the string is 128 characters long
+    if (this.length != 128) {
+        return false
+    }
+
+    // Check if all characters are valid hexadecimal digits
+    return all { it.isDigit() || it.lowercaseChar() in 'a'..'f' }
+}
+
+public fun String.isValidSha256Hex(): Boolean {
+    // Check if the string is 64 characters long
+    if (this.length != 64) {
+        return false
+    }
+
+    // Check if all characters are valid hexadecimal digits
+    return all { it.isDigit() || it.lowercaseChar() in 'a'..'f' }
+}
+
+public fun String.isValidSha1Hex(): Boolean {
+    // Check if the string is 40 characters long
+    if (this.length != 40) {
+        return false
+    }
+
+    // Check if all characters are valid hexadecimal digits
+    return all { it.isDigit() || it.lowercaseChar() in 'a'..'f' }
+}
+
+public fun String.isValidMd5Hex(): Boolean {
+    // Check if the string is 32 characters long
+    if (this.length != 32) {
+        return false
+    }
+
+    // Check if all characters are valid hexadecimal digits
+    return all { it.isDigit() || it.lowercaseChar() in 'a'..'f' }
+}
+
+internal fun ByteReadChannel.asFlow(): Flow<ByteArray> = flow {
+    val buffer = ByteArray(4096)
+    while (true) {
+        val bytesRead = readAvailable(buffer, 0, buffer.size)
+        if (bytesRead <= 0) break
+        emit(buffer.copyOf(bytesRead))
+    }
 }

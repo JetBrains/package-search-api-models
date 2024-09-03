@@ -9,7 +9,7 @@ import nl.adaptivity.xmlutil.serialization.XmlSerialName
     value = "project",
     namespace = POM_XML_NAMESPACE,
 )
-public data class ProjectObjectModel(
+public data class MavenProjectObjectModel(
     @XmlElement public val modelVersion: String? = null,
     @XmlElement public val groupId: String? = null,
     @XmlElement public val artifactId: String? = null,

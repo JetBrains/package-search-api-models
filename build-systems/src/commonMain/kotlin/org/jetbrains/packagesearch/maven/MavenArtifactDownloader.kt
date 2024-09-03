@@ -1,55 +1,65 @@
 package org.jetbrains.packagesearch.maven
 
-public interface MavenArtifactDownloader {
-    public suspend fun getArtifact(
-        groupId: String,
-        artifactId: String,
-        version: String,
-        classifier: String? = null,
-        extension: String,
-    ): ProjectObjectModel?
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.toList
 
-    public fun getArtifactSource(
-        groupId: String,
-        artifactId: String,
-        version: String,
-        classifier: String? = null,
-        extension: String,
-    ): String
+public interface MavenArtifactDownloader {
+
+    public suspend fun getArtifactContent(identifier: MavenArtifactIdentifier): Flow<ByteArray>?
+    public suspend fun getArtifact(identifier: MavenArtifactIdentifier): MavenArtifact?
+    public fun getArtifactSource(identifier: MavenArtifactIdentifier): String
 }
 
 public suspend fun MavenArtifactDownloader.getPom(
     groupId: String,
     artifactId: String,
     version: String,
-): ProjectObjectModel? = getArtifact(groupId, artifactId, version, extension = "pom")
+): MavenArtifact? = getArtifact(MavenArtifactIdentifier(groupId, artifactId, version, extension = "pom"))
+
+public suspend fun MavenArtifactDownloader.getPomContent(
+    groupId: String,
+    artifactId: String,
+    version: String,
+): String? = getArtifactContent(MavenArtifactIdentifier(groupId, artifactId, version, extension = "pom"))
+    ?.toList()
+    ?.joinToString("") { it.decodeToString() }
 
 public suspend fun MavenArtifactDownloader.getJar(
     groupId: String,
     artifactId: String,
     version: String,
-): ProjectObjectModel? = getArtifact(groupId, artifactId, version, extension = "jar")
+): MavenArtifact? = getArtifact(MavenArtifactIdentifier(groupId, artifactId, version, extension = "jar"))
 
 public suspend fun MavenArtifactDownloader.getSourcesJar(
     groupId: String,
     artifactId: String,
     version: String,
-): ProjectObjectModel? = getArtifact(groupId, artifactId, version, classifier = "sources", extension = "jar")
+): MavenArtifact? =
+    getArtifact(MavenArtifactIdentifier(groupId, artifactId, version, classifier = "sources", extension = "jar"))
 
 public suspend fun MavenArtifactDownloader.getJavadocJar(
     groupId: String,
     artifactId: String,
     version: String,
-): ProjectObjectModel? = getArtifact(groupId, artifactId, version, classifier = "javadoc", extension = "jar")
+): MavenArtifact? =
+    getArtifact(MavenArtifactIdentifier(groupId, artifactId, version, classifier = "javadoc", extension = "jar"))
 
-public fun MavenArtifactDownloader.getGradleMetadata(
+public suspend fun MavenArtifactDownloader.getGradleMetadata(
     groupId: String,
     artifactId: String,
     version: String,
-): String = getArtifactSource(groupId, artifactId, version, extension = "module")
+): MavenArtifact? = getArtifact(MavenArtifactIdentifier(groupId, artifactId, version, extension = "module"))
 
-public fun MavenArtifactDownloader.getKotlinMetadata(
+public suspend fun MavenArtifactDownloader.getKotlinMetadata(
     groupId: String,
     artifactId: String,
     version: String,
-): String = getArtifactSource(groupId, artifactId, version, classifier = "kotlin-tooling-metadata", extension = "json")
+): MavenArtifact? = getArtifact(
+    MavenArtifactIdentifier(
+        groupId = groupId,
+        artifactId = artifactId,
+        version = version,
+        classifier = "kotlin-tooling-metadata",
+        extension = "json"
+    )
+)

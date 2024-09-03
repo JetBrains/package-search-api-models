@@ -3,6 +3,7 @@ package org.jetbrains.packagesearch.maven
 import io.ktor.http.URLBuilder
 import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.mapNotNull
 import kotlinx.serialization.json.Json
 import kotlinx.serialization.json.JsonObject
@@ -62,9 +63,10 @@ public class PomResolver(
         groupId: String,
         artifactId: String,
         version: String,
-    ): ProjectObjectModel? = artifactDownloaders
+    ): MavenProjectObjectModel? = artifactDownloaders
         .asFlow()
-        .mapNotNull { it.getPom(groupId, artifactId, version) }
+        .mapNotNull { it.getPomContent(groupId, artifactId, version) }
+        .map { xml.decodeFromString<MavenProjectObjectModel>(POM_XML_NAMESPACE, it) }
         .firstOrNull()
 
     /**
@@ -81,8 +83,8 @@ public class PomResolver(
      * @param pomText The POM text to be resolved.
      * @return The resolved ProjectObjectModel.
      */
-    public suspend fun resolve(pomText: String): ProjectObjectModel =
-        resolve(xml.decodeFromString<ProjectObjectModel>(POM_XML_NAMESPACE, pomText))
+    public suspend fun resolve(pomText: String): MavenProjectObjectModel =
+        resolve(xml.decodeFromString<MavenProjectObjectModel>(POM_XML_NAMESPACE, pomText))
 
     /**
      * Resolves the Project Object Model (POM) using the provided POM text.
@@ -90,12 +92,13 @@ public class PomResolver(
      * @param pomText The POM text to be resolved.
      * @return The resolved ProjectObjectModel.
      */
-    public suspend fun resolve(groupId: String, artifactId: String, version: String): ProjectObjectModel =
+    public suspend fun resolve(groupId: String, artifactId: String, version: String): MavenProjectObjectModel =
         resolve(getPom(groupId, artifactId, version)
             ?: error(buildString {
                 append("Failed to resolve POM for id `$groupId:$artifactId:$version` in any of the providers:")
                 artifactDownloaders.forEach {
-                    appendLine("  - ${it::class.simpleName}: ${it.getArtifactSource(groupId, artifactId, version, extension = "pom")}")
+                    val identifier = MavenArtifactIdentifier(groupId, artifactId, version, extension = "pom")
+                    appendLine("  - ${it::class.simpleName}: ${it.getArtifactSource(identifier)}")
                 }
             })
         )
@@ -106,7 +109,7 @@ public class PomResolver(
      * @param model The Project Object Model to be resolved.
      * @return The resolved Project Object Model.
      */
-    public suspend fun resolve(model: ProjectObjectModel): ProjectObjectModel {
+    public suspend fun resolve(model: MavenProjectObjectModel): MavenProjectObjectModel {
         // Initialize the mergedPom with the given model.
         var mergedPom = model
 
