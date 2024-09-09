@@ -27,7 +27,8 @@ public sealed interface ApiPackage {
 
     public companion object {
         public fun hashPackageId(id: String): String =
-            SHA256.create()
+            SHA256
+                .create()
                 .update(id.encodeToByteArray())
                 .digest()
                 .hex

@@ -53,7 +53,7 @@ public data class SearchPackagesNextScrollRequest(
 
 @Serializable
 public data class SearchPackagesScrollResponse(
-    val scrollId: String?,
+    val scrollId: String,
     val data: List<ApiPackage>,
 )
 

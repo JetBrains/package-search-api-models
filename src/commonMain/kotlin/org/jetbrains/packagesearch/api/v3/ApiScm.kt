@@ -19,7 +19,8 @@ public sealed interface ApiScm {
 
     public companion object {
         public fun hashScmUrl(url: String): String =
-            SHA256.create()
+            SHA256
+                .create()
                 .update(url.encodeToByteArray())
                 .digest()
                 .hex

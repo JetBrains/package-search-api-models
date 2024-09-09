@@ -50,23 +50,22 @@ public class HttpClientMavenPomProvider(
         groupId: String,
         artifactId: String,
         version: String,
-    ): ProjectObjectModel {
-        return getPomFromMultipleRepositories(groupId, artifactId, version).first()
-    }
+    ): ProjectObjectModel =
+        getPomFromMultipleRepositories(groupId, artifactId, version).first()
+
 
     override suspend fun getPomFromMultipleRepositories(
         groupId: String,
         artifactId: String,
         version: String,
-    ): Flow<ProjectObjectModel> {
-        return mirrors.asFlow().map {
+    ): Flow<ProjectObjectModel> =
+        mirrors.asFlow().map {
             it.getPom(groupId, artifactId, version)
         }
-    }
 
-    override suspend fun getPomByUrl(url: Url): ProjectObjectModel {
-        return httpClient.get(url).bodyAsPom(xml)
-    }
+    override suspend fun getPomByUrl(url: Url): ProjectObjectModel =
+        httpClient.get(url).bodyAsPom(xml)
+
 
     private suspend fun MavenUrlBuilder.getPom(
         groupId: String,

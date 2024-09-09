@@ -10,11 +10,18 @@ kotlin {
                 api(packageSearchApiModelsVersions.datetime)
                 api(packageSearchApiModelsVersions.kotlinx.serialization.json)
                 api(packageSearchApiModelsVersions.krypto)
+                api(kotlinxDocumentStore.core)
             }
         }
         jsMain {
             dependencies {
                 api(npm(packageSearchApiModelsVersions.date.fns))
+                api(kotlinxDocumentStore.browser)
+            }
+        }
+        jvmMain{
+            dependencies{
+                api(kotlinxDocumentStore.mvstore)
             }
         }
         jvmTest {

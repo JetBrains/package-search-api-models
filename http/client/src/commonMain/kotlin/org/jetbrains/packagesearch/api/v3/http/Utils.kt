@@ -1,22 +1,14 @@
 package org.jetbrains.packagesearch.api.v3.http
 
-import io.ktor.client.plugins.HttpTimeout
-import io.ktor.client.request.HttpRequest
-import io.ktor.http.HttpMessageBuilder
-import io.ktor.http.HttpStatusCode
-import io.ktor.http.URLBuilder
-import io.ktor.http.Url
-import io.ktor.util.toMap
-import kotlin.time.Duration
-import kotlin.time.Duration.Companion.milliseconds
+import io.ktor.client.plugins.*
+import io.ktor.client.request.*
+import io.ktor.http.*
+import io.ktor.util.*
 import kotlinx.serialization.Serializable
 import org.jetbrains.packagesearch.api.v3.ApiPackage
-import org.jetbrains.packagesearch.api.v3.search.NextScrollParametersBuilder
-import org.jetbrains.packagesearch.api.v3.search.SearchParametersBuilder
-import org.jetbrains.packagesearch.api.v3.search.StartScrollParametersBuilder
-import org.jetbrains.packagesearch.api.v3.search.buildNextScrollParameters
-import org.jetbrains.packagesearch.api.v3.search.buildSearchParameters
-import org.jetbrains.packagesearch.api.v3.search.buildStartScrollParameters
+import org.jetbrains.packagesearch.api.v3.search.*
+import kotlin.time.Duration
+import kotlin.time.Duration.Companion.milliseconds
 
 public fun buildUrl(action: URLBuilder.() -> Unit): Url = URLBuilder().apply(action).build()
 
@@ -54,4 +46,5 @@ public data class SerializableHttpRequest(
     val headers: Map<String, List<String>>,
 )
 
-public fun HttpRequest.toSerializable(): SerializableHttpRequest = SerializableHttpRequest(url.toString(), method.value, headers.toMap())
+public fun HttpRequest.toSerializable(): SerializableHttpRequest =
+    SerializableHttpRequest(url.toString(), method.value, headers.toMap())

@@ -186,7 +186,10 @@ public object GoogleMavenCentralMirror : MavenUrlBuilder {
         )
 }
 
-internal data class DependencyKey(val groupId: String, val artifactId: String)
+internal data class DependencyKey(
+    val groupId: String,
+    val artifactId: String
+)
 
 /**
  * Evaluates the value of the provided project property within the given model accessor.

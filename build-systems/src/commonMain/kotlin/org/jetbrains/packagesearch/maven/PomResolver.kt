@@ -76,7 +76,8 @@ public class PomResolver(
         artifactId: String,
         version: String,
     ): ProjectObjectModel? =
-        pomProvider.getPomFromMultipleRepositories(groupId, artifactId, version)
+        pomProvider
+            .getPomFromMultipleRepositories(groupId, artifactId, version)
             .firstOrNull()
             ?.let { resolve(it) }
 
