@@ -47,6 +47,9 @@ tasks {
         outputDir = generated
         packageName = "org.jetbrains.packagesearch.api"
     }
+    jsSourcesJar{
+        dependsOn(generateApiClientObject)
+    }
     withType<SourceTask>{
         dependsOn(generateApiClientObject)
     }
