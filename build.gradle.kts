@@ -47,6 +47,9 @@ tasks {
         outputDir = generated
         packageName = "org.jetbrains.packagesearch.api"
     }
+    compileKotlinJs {
+        dependsOn(generateApiClientObject)
+    }
     jsSourcesJar{
         dependsOn(generateApiClientObject)
     }
