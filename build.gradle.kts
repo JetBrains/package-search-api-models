@@ -53,6 +53,9 @@ tasks {
     jsSourcesJar{
         dependsOn(generateApiClientObject)
     }
+    jvmSourcesJar{
+        dependsOn(generateApiClientObject)
+    }
     withType<SourceTask>{
         dependsOn(generateApiClientObject)
     }
