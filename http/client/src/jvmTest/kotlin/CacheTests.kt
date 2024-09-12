@@ -1,10 +1,14 @@
-import io.ktor.client.engine.mock.*
+import io.ktor.client.engine.mock.MockEngine
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Clock
 import org.jetbrains.packagesearch.api.v3.ApiPackage
 import org.jetbrains.packagesearch.api.v3.ApiRepository
-import org.jetbrains.packagesearch.api.v3.http.*
+import org.jetbrains.packagesearch.api.v3.http.PackageCacheEntry
+import org.jetbrains.packagesearch.api.v3.http.PackageSearchApiClient
+import org.jetbrains.packagesearch.api.v3.http.PackageSearchEndpoints
+import org.jetbrains.packagesearch.api.v3.http.RefreshPackagesInfoRequest
+import org.jetbrains.packagesearch.api.v3.http.SearchPackagesRequest
 import org.jetbrains.packagesearch.api.v3.search.PackagesType
 import org.junit.jupiter.api.Test
 import kotlin.test.assertEquals
