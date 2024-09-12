@@ -1,4 +1,5 @@
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompileCommon
 import org.jmailen.gradle.kotlinter.tasks.FormatTask
 import org.jmailen.gradle.kotlinter.tasks.LintTask
 
@@ -54,6 +55,9 @@ tasks {
         dependsOn(generateApiClientObject)
     }
     jvmSourcesJar{
+        dependsOn(generateApiClientObject)
+    }
+    withType<KotlinCompileCommon> {
         dependsOn(generateApiClientObject)
     }
     withType<SourceTask>{
