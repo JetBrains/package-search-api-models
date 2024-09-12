@@ -1,16 +1,22 @@
+import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
+import org.jmailen.gradle.kotlinter.tasks.FormatTask
+import org.jmailen.gradle.kotlinter.tasks.LintTask
+
 plugins {
     `build-config`
 }
 
+val generated = layout.buildDirectory.dir("generated/commonMain/kotlin")
+
 kotlin {
     sourceSets {
         commonMain {
+            kotlin.srcDirs(generated)
             dependencies {
                 api(projects.versionUtils)
                 api(packageSearchApiModelsVersions.datetime)
                 api(packageSearchApiModelsVersions.kotlinx.serialization.json)
                 api(packageSearchApiModelsVersions.krypto)
-                api(kotlinxDocumentStore.core)
             }
         }
         jsMain {
@@ -32,5 +38,22 @@ kotlin {
                 runtimeOnly(packageSearchApiModelsVersions.junit.jupiter.engine)
             }
         }
+    }
+}
+
+tasks {
+    val generateApiClientObject by registering(GenerateApiClientObject::class) {
+        group = "generate"
+        outputDir = generated
+        packageName = "org.jetbrains.packagesearch.api"
+    }
+    withType<KotlinCompile> {
+        dependsOn(generateApiClientObject)
+    }
+    withType<LintTask> {
+        dependsOn(generateApiClientObject)
+    }
+    withType<FormatTask>{
+        dependsOn(generateApiClientObject)
     }
 }

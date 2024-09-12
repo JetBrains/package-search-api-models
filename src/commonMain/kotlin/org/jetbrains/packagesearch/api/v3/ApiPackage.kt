@@ -152,7 +152,9 @@ public data class ApiMavenPackage(
 
                 @Serializable
                 @SerialName("comparableInteger")
-                public data class ComparableInteger internal constructor(public val value: Int) : Attribute {
+                public data class ComparableInteger internal constructor(
+                    public val value: Int,
+                ) : Attribute {
                     public override fun isCompatible(other: Attribute): Boolean =
                         when (other) {
                             is ComparableInteger -> value <= other.value
