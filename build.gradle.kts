@@ -47,6 +47,9 @@ tasks {
         outputDir = generated
         packageName = "org.jetbrains.packagesearch.api"
     }
+    withType<SourceTask>{
+        dependsOn(generateApiClientObject)
+    }
     withType<KotlinCompile> {
         dependsOn(generateApiClientObject)
     }
