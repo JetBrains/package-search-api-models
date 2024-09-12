@@ -7,4 +7,5 @@ dependencies {
     implementation(packageSearchApiModelsVersions.kotlin.serialization)
     implementation(packageSearchApiModelsVersions.kotlinter.gradle)
     implementation(packageSearchApiModelsVersions.detekt.gradle.plugin)
+    implementation(packageSearchApiModelsVersions.poet.kotlin)
 }

@@ -23,6 +23,7 @@ kotlin {
                 api(packageSearchApiModelsVersions.ktor.serialization.kotlinx.protobuf)
                 api(packageSearchApiModelsVersions.kotlinx.serialization.protobuf)
                 api(packageSearchApiModelsVersions.kotlinx.serialization.json)
+                api(kotlinxDocumentStore.core)
             }
         }
         commonTest {
@@ -30,7 +31,6 @@ kotlin {
                 api(packageSearchApiModelsVersions.kotlinx.coroutines.test)
                 api(packageSearchApiModelsVersions.ktor.client.mock)
                 api(packageSearchApiModelsVersions.ktor.client.logging)
-                api(packageSearchApiModelsVersions.mvstore)
             }
         }
         jvmMain {
@@ -41,9 +41,8 @@ kotlin {
         jvmTest {
             dependencies {
                 api(kotlin("test-junit5"))
-                api(kotlinxDocumentStore.mvstore)
                 api(packageSearchApiModelsVersions.junit.jupiter.engine)
-
+                api(kotlinxDocumentStore.mvstore)
             }
         }
     }
