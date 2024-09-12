@@ -29,13 +29,6 @@ kotlin {
     tvosArm64()
     tvosX64()
     tvosSimulatorArm64()
-    targets.all {
-        compilations.all {
-            kotlinOptions {
-                freeCompilerArgs += "-Xexpect-actual-classes"
-            }
-        }
-    }
     sourceSets {
         all {
             languageSettings {
@@ -99,9 +92,3 @@ tasks {
         useJUnitPlatform()
     }
 }
-
-fun KotlinDependencyHandler.npm(dependencyProvider: Provider<MinimalExternalModuleDependency>): Dependency =
-    npm(
-        name = dependencyProvider.get().name,
-        version = dependencyProvider.get().version ?: error("Version is required for ${dependencyProvider.get().name}")
-    )

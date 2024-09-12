@@ -1,13 +1,14 @@
 @file:Suppress("UnstableApiUsage")
 
 plugins {
-    id("org.gradle.toolchains.foojay-resolver-convention") version "0.5.0"
+    id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
     id("com.gradle.develocity") version "3.18"
 }
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
 
 rootProject.name = "packagesearch-api-models"
+
 dependencyResolutionManagement {
     repositories {
         mavenCentral()
@@ -28,7 +29,10 @@ include(
     ":sonatype-apis",
     ":version-utils",
     ":http:client",
-    ":build-systems",
+    ":build-system:build-system-kotlin-metadata",
+    ":build-system:build-system-maven",
+    ":build-system:build-system-maven:build-system-maven-resolver",
+    ":build-system:build-system-gradle",
     ":version-catalog",
 )
 

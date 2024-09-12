@@ -6,6 +6,9 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
+                api(projects.buildSystem.buildSystemMaven)
+                api(projects.buildSystem.buildSystemGradle)
+                api(projects.buildSystem.buildSystemKotlinMetadata)
                 api(projects.versionUtils)
                 api(packageSearchApiModelsVersions.datetime)
                 api(packageSearchApiModelsVersions.kotlinx.serialization.json)
