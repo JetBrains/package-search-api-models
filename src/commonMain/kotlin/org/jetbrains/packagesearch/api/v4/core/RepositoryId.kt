@@ -1,4 +1,4 @@
-package org.jetbrains.packagesearch.api.v4
+package org.jetbrains.packagesearch.api.v4.core
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
