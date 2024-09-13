@@ -57,6 +57,9 @@ tasks {
     jvmSourcesJar{
         dependsOn(generateApiClientObject)
     }
+    sourcesJar{
+        dependsOn(generateApiClientObject)
+    }
     withType<KotlinCompileCommon> {
         dependsOn(generateApiClientObject)
     }
