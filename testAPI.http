@@ -20,7 +20,7 @@ Content-Type: application/json
 
 {
   "packagesType": [ ],
-  "searchQuery": "ktor",
+  "searchQuery": "docker",
   "batchSize" : 10,
   "duration": "2m"
 }

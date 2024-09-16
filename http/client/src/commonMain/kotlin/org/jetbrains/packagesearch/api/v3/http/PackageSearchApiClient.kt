@@ -279,6 +279,24 @@ public class PackageSearchApiClient(
                 .associateBy { if (useHashes) it.idHash else it.id }
         }
 
+        //todo new api will be on Get
+//        // Fetch online results
+//
+//        unresolvedIdentifiers.map { idHash ->
+//            async {
+//                httpClient.request(endpoints.packageInfoByIdHashes) {
+//                    method = HttpMethod.Get
+//                    header(HttpHeaders.Accept, ContentType.Application.Json)
+//                    parameters {
+//                        append("idHash", idHash)
+//                    }
+//                    requestBuilder?.invoke(this)
+//                }.body<List<ApiRepository>>().associateBy { idHash }
+//            }
+//        }.awaitAll().let{
+//
+//        }
+
         val onlineResults = defaultRequest<_, List<ApiPackage>>(
             method = HttpMethod.Post,
             url = endpoints.packageInfoByIdHashes,
