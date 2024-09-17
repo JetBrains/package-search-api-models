@@ -48,3 +48,5 @@ public data class SerializableHttpRequest(
 
 public fun HttpRequest.toSerializable(): SerializableHttpRequest =
     SerializableHttpRequest(url.toString(), method.value, headers.toMap())
+
+public typealias EmptyBody = String

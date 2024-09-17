@@ -42,6 +42,7 @@ kotlin {
             dependencies {
                 api(kotlin("test-junit5"))
                 api(packageSearchApiModelsVersions.junit.jupiter.engine)
+                api(packageSearchApiModelsVersions.ktor.client.java)
                 api(kotlinxDocumentStore.mvstore)
             }
         }
