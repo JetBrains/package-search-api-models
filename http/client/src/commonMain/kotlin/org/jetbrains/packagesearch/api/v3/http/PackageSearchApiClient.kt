@@ -318,20 +318,20 @@ public class PackageSearchApiClient(
     }
 
     private suspend fun getOnlinePackages(
-        ids: Set<String>,
+        idHashes: Set<String>,
         hitCloudFront: Boolean,
         requestBuilder: (HttpRequestBuilder.() -> Unit)?,
     ): Map<String, ApiPackage> = coroutineScope {
         if (hitCloudFront) {
-            ids.map { idHash ->
+            idHashes.map { idHash ->
                 async {
                     defaultRequest<_, List<ApiPackage>>(
                         method = HttpMethod.Get,
                         url = endpoints.packageInfoByIdHashes,
                         body = EmptyBody(),
                         requestBuilder = {
-                            parameters {
-                                append("idHash", idHash)
+                            url {
+                                parameters.append("idHash", idHash)
                             }
                             requestBuilder?.invoke(this)
                         }
@@ -344,7 +344,7 @@ public class PackageSearchApiClient(
             defaultRequest<_, List<ApiPackage>>(
                 method = HttpMethod.Post,
                 url = endpoints.packageInfoByIdHashes,
-                body = GetPackageInfoRequest(ids),
+                body = GetPackageInfoRequest(idHashes),
                 requestBuilder = requestBuilder,
             ).associateBy { it.idHash }
         }
