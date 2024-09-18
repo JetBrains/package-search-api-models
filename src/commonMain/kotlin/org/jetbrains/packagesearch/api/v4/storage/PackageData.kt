@@ -16,7 +16,7 @@ public data class PackageData(
     val packageId: PackageId,
     val latestVersion: VersionInfo,
     val latestStableVersion: VersionInfo? = null,
-    val allVersions: Map<String, List<String>>,
+    val allVersions: Map<String, Set<String>>,
     val lastUpdated: Instant = Clock.System.now()
 ) {
     @Serializable
