@@ -26,7 +26,7 @@ public data class MavenPackageMetadata(
             }
         }
         public fun fromXml(string: String): MavenPackageMetadata = defaultXML.decodeFromString(string)
-
+        public fun fromXmlOrNull(string: String): MavenPackageMetadata? = runCatching { fromXml(string) }.getOrNull()
     }
 
     @Serializable

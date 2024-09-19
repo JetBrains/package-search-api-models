@@ -35,6 +35,9 @@ public sealed interface PackageId {
 
 }
 
-public val PackageId.Maven.WithVersion.baseId: PackageId.Maven
-    get() = PackageId.Maven.WithoutVersion(groupId, artifactId)
+public val PackageId.Maven.baseId: PackageId.Maven
+    get() = when (this){
+        is PackageId.Maven.WithoutVersion -> this
+        is PackageId.Maven.WithVersion -> PackageId.Maven(groupId, artifactId)
+    }
 
