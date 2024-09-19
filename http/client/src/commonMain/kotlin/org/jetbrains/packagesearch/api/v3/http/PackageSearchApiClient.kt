@@ -227,31 +227,17 @@ public class PackageSearchApiClient(
 
     public suspend fun getPackageInfoByIds(
         ids: Set<String>,
-        hitCloudFront: Boolean = false, //todo remove on release (for testing purposes)
         requestBuilder: (HttpRequestBuilder.() -> Unit)? = null,
     ): Map<String, ApiPackage> =
         getPackageInfoByIdHashes(
             idHashes = ids.map { ApiPackage.hashPackageId(it) }.toSet(),
-            hitCloudFront = hitCloudFront,
             useHashes = false,
             requestBuilder = requestBuilder
         )
 
     public suspend fun getPackageInfoByIdHashes(
         idHashes: Set<String>,
-        hitCloudFront: Boolean = true, //todo remove on release (for testing purposes)
-        requestBuilder: (HttpRequestBuilder.() -> Unit)? = null,
-    ): Map<String, ApiPackage> = getPackageInfoByIdHashes(
-        idHashes = idHashes,
-        useHashes = true,
-        hitCloudFront = hitCloudFront,
-        requestBuilder = requestBuilder
-    )
-
-    private suspend fun getPackageInfoByIdHashes(
-        idHashes: Set<String>,
-        useHashes: Boolean,
-        hitCloudFront: Boolean,
+        useHashes: Boolean = true,
         requestBuilder: (HttpRequestBuilder.() -> Unit)? = null,
     ): Map<String, ApiPackage> = coroutineScope {
 
@@ -287,8 +273,17 @@ public class PackageSearchApiClient(
                 .associateBy { if (useHashes) it.idHash else it.id }
         }
 
-
-        val onlineResults = getOnlinePackages(unresolvedIdentifiers, hitCloudFront, requestBuilder)
+        val onlineResults = idHashes.map { idHash ->
+            async {
+                httpClient.request(endpoints.packageInfoByIdHash) {
+                    this@request.method = HttpMethod.Get
+                    header(HttpHeaders.ContentType, ContentType.Application.Json)
+                    attributes.put(Attributes.Cache, true)
+                    url { parameters.append("idHash", idHash) }
+                    requestBuilder?.invoke(this)
+                }.takeIf { it.status != HttpStatusCode.NoContent }?.body<ApiPackage>()
+            }
+        }.awaitAll().filterNotNull().associateBy({ it.idHash }, { it })
 
 
         val notFoundPackages = idHashes - cachedResults.map { it.key }.toSet() - onlineResults.keys
@@ -315,33 +310,6 @@ public class PackageSearchApiClient(
 
         // Map Combine Results
         onlineResultsMappedKeys + cachedResultMap
-    }
-
-    private suspend fun getOnlinePackages(
-        idHashes: Set<String>,
-        hitCloudFront: Boolean,
-        requestBuilder: (HttpRequestBuilder.() -> Unit)?,
-    ): Map<String, ApiPackage> = coroutineScope {
-        if (hitCloudFront) {
-            idHashes.map { idHash ->
-                async {
-                    httpClient.request(endpoints.packageInfoByIdHash) {
-                        this@request.method = HttpMethod.Get
-                        header(HttpHeaders.ContentType, ContentType.Application.Json)
-                        attributes.put(Attributes.Cache, true)
-                        url { parameters.append("idHash", idHash) }
-                        requestBuilder?.invoke(this)
-                    }.takeIf { it.status != HttpStatusCode.NoContent }?.body<ApiPackage>()
-                }
-            }.awaitAll().filterNotNull().associateBy({ it.idHash }, { it })
-        } else {
-            defaultRequest<_, List<ApiPackage>>(
-                method = HttpMethod.Post,
-                url = endpoints.packageInfoByIdHashes,
-                body = GetPackageInfoRequest(idHashes),
-                requestBuilder = requestBuilder,
-            ).associateBy { it.idHash }
-        }
     }
 
     public suspend fun searchPackages(

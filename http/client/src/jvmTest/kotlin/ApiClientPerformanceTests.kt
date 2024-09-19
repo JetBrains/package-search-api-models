@@ -77,32 +77,9 @@ class ApiClientPerformanceTests {
 
 
     @Test
-    fun `search single package`() = runTest {
-
+    fun `search single package `() = runTest {
         val (apiPackages, duration) = measureTimedValue {
-            apiClient.getPackageInfoByIdHashes(idHashes = setOf(sampleIdHashes.first()), hitCloudFront = false)
-        }
-        assert(apiPackages.isNotEmpty())
-        timingMap["single package"] = duration.inWholeMilliseconds
-
-    }
-
-    @Test
-    fun `search multiple package`() = runTest {
-        val (apiPackages, duration) = measureTimedValue {
-            apiClient.getPackageInfoByIdHashes(idHashes = sampleIdHashes, hitCloudFront = false)
-        }
-        assert(apiPackages.keys.size == sampleIdHashes.size)
-        assert(apiPackages.entries.isNotEmpty())
-        println(duration.inWholeMilliseconds)
-        timingMap["multiple packages (${sampleIdHashes.size})"] = duration.inWholeMilliseconds
-    }
-
-
-    @Test
-    fun `search single package cloudFront`() = runTest {
-        val (apiPackages, duration) = measureTimedValue {
-            apiClient.getPackageInfoByIdHashes(idHashes = setOf(sampleIdHashes.first()), hitCloudFront = true)
+            apiClient.getPackageInfoByIdHashes(idHashes = setOf(sampleIdHashes.first()))
         }
         assert(apiPackages.isNotEmpty())
         timingMap["single package CF"] = duration.inWholeMilliseconds
@@ -113,7 +90,7 @@ class ApiClientPerformanceTests {
     fun `search multiple package cloudFront`() = runTest {
 
         val (apiPackages, duration) = measureTimedValue {
-            apiClient.getPackageInfoByIdHashes(idHashes = sampleIdHashes, hitCloudFront = true)
+            apiClient.getPackageInfoByIdHashes(idHashes = sampleIdHashes)
         }
         assert(apiPackages.keys.size == sampleIdHashes.size)
         assert(apiPackages.entries.isNotEmpty())
@@ -123,11 +100,10 @@ class ApiClientPerformanceTests {
     @Test
     fun `search single package on cloudFront that does not exist`() = runTest {
         val (apiPackages, duration) = measureTimedValue {
-            apiClient.getPackageInfoByIdHashes(idHashes = setOf("fewahfheowafhoiawehoifhioeuwafhiouew"), hitCloudFront = true)
+            apiClient.getPackageInfoByIdHashes(idHashes = setOf("invalid-hash"))
         }
         assert(apiPackages.isEmpty())
         timingMap["not found package CF"] = duration.inWholeMilliseconds
-
     }
 
 }
