@@ -105,7 +105,7 @@ class ApiClientPerformanceTests {
             apiClient.getPackageInfoByIdHashes(idHashes = setOf(sampleIdHashes.first()), hitCloudFront = true)
         }
         assert(apiPackages.isNotEmpty())
-        timingMap["single package"] = duration.inWholeMilliseconds
+        timingMap["single package CF"] = duration.inWholeMilliseconds
 
     }
 
@@ -117,7 +117,17 @@ class ApiClientPerformanceTests {
         }
         assert(apiPackages.keys.size == sampleIdHashes.size)
         assert(apiPackages.entries.isNotEmpty())
-        timingMap["multiple packages (${sampleIdHashes.size})"] = duration.inWholeMilliseconds
+        timingMap["multiple packages (${sampleIdHashes.size}) CF"] = duration.inWholeMilliseconds
+    }
+
+    @Test
+    fun `search single package on cloudFront that does not exist`() = runTest {
+        val (apiPackages, duration) = measureTimedValue {
+            apiClient.getPackageInfoByIdHashes(idHashes = setOf("fewahfheowafhoiawehoifhioeuwafhiouew"), hitCloudFront = true)
+        }
+        assert(apiPackages.isEmpty())
+        timingMap["not found package CF"] = duration.inWholeMilliseconds
+
     }
 
 }

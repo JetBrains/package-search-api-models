@@ -250,7 +250,7 @@ public class PackageSearchApiClient(
 
     private suspend fun getPackageInfoByIdHashes(
         idHashes: Set<String>,
-        useHashes: Boolean = true,
+        useHashes: Boolean,
         hitCloudFront: Boolean,
         requestBuilder: (HttpRequestBuilder.() -> Unit)? = null,
     ): Map<String, ApiPackage> = coroutineScope {
@@ -288,7 +288,7 @@ public class PackageSearchApiClient(
         }
 
 
-        val onlineResults = getOnlinePackages( unresolvedIdentifiers, hitCloudFront, requestBuilder)
+        val onlineResults = getOnlinePackages(unresolvedIdentifiers, hitCloudFront, requestBuilder)
 
 
         val notFoundPackages = idHashes - cachedResults.map { it.key }.toSet() - onlineResults.keys
@@ -325,21 +325,15 @@ public class PackageSearchApiClient(
         if (hitCloudFront) {
             idHashes.map { idHash ->
                 async {
-                    defaultRequest<_, List<ApiPackage>>(
-                        method = HttpMethod.Get,
-                        url = endpoints.packageInfoByIdHashes,
-                        body = EmptyBody(),
-                        requestBuilder = {
-                            url {
-                                parameters.append("idHash", idHash)
-                            }
-                            requestBuilder?.invoke(this)
-                        }
-                    ).associateBy { it.idHash }
+                    httpClient.request(endpoints.packageInfoByIdHash) {
+                        this@request.method = HttpMethod.Get
+                        header(HttpHeaders.ContentType, ContentType.Application.Json)
+                        attributes.put(Attributes.Cache, true)
+                        url { parameters.append("idHash", idHash) }
+                        requestBuilder?.invoke(this)
+                    }.takeIf { it.status != HttpStatusCode.NoContent }?.body<ApiPackage>()
                 }
-            }.awaitAll().let {
-                it.reduce { acc, map -> acc + map }
-            }
+            }.awaitAll().filterNotNull().associateBy({ it.idHash }, { it })
         } else {
             defaultRequest<_, List<ApiPackage>>(
                 method = HttpMethod.Post,

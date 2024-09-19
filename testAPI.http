@@ -10,6 +10,11 @@ Content-Type: application/json
 }
 
 ###
+GET https://api.prod.package-search.services.jetbrains.com/package-info-by-id-hash?idHash=b36fb23f3c7fe6dbf14507799eceeda9c1dec8be035b4928db1d6047d0b6613a
+Content-Type: application/json
+
+
+###
 GET https://api.prod.package-search.services.jetbrains.com/known-repositories
 Accept: application/json
 
