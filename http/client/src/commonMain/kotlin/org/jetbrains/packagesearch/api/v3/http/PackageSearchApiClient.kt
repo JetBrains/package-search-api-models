@@ -177,7 +177,7 @@ public class PackageSearchApiClient(
         cache: Boolean = true,
     ) = httpClient.request(url) {
         this@request.method = method
-        body?.let { setBody(it) }
+        setBody(body)
         header(HttpHeaders.ContentType, ContentType.Application.Json)
         attributes.put(Attributes.Cache, cache)
         requestBuilder?.invoke(this)
@@ -236,6 +236,11 @@ public class PackageSearchApiClient(
         )
 
     public suspend fun getPackageInfoByIdHashes(
+        idHashes: Set<String>,
+        requestBuilder: (HttpRequestBuilder.() -> Unit)? = null,
+    ): Map<String, ApiPackage> = getPackageInfoByIdHashes(idHashes, true, requestBuilder)
+
+    private suspend fun getPackageInfoByIdHashes(
         idHashes: Set<String>,
         useHashes: Boolean = true,
         requestBuilder: (HttpRequestBuilder.() -> Unit)? = null,
