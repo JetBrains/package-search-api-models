@@ -278,17 +278,8 @@ public class PackageSearchApiClient(
                 .associateBy { if (useHashes) it.idHash else it.id }
         }
 
-        val onlineResults = idHashes.map { idHash ->
-            async {
-                httpClient.request(endpoints.packageInfoByIdHash) {
-                    this@request.method = HttpMethod.Get
-                    header(HttpHeaders.ContentType, ContentType.Application.Json)
-                    attributes.put(Attributes.Cache, true)
-                    url { parameters.append("idHash", idHash) }
-                    requestBuilder?.invoke(this)
-                }.takeIf { it.status != HttpStatusCode.NoContent }?.body<ApiPackage>()
-            }
-        }.awaitAll().filterNotNull().associateBy({ it.idHash }, { it })
+        val onlineResults =
+            fetchOnlinePackageInfoByIdHashes(unresolvedIdentifiers, requestBuilder)
 
 
         val notFoundPackages = idHashes - cachedResults.map { it.key }.toSet() - onlineResults.keys
@@ -315,6 +306,23 @@ public class PackageSearchApiClient(
 
         // Map Combine Results
         onlineResultsMappedKeys + cachedResultMap
+    }
+
+    private suspend fun fetchOnlinePackageInfoByIdHashes(
+        unresolvedIdentifiers: Set<String>,
+        requestBuilder: (HttpRequestBuilder.() -> Unit)?
+    ) = coroutineScope {
+        unresolvedIdentifiers.map { idHash ->
+            async {
+                httpClient.request(endpoints.packageInfoByIdHash) {
+                    method = HttpMethod.Get
+                    header(HttpHeaders.ContentType, ContentType.Application.Json)
+                    attributes.put(Attributes.Cache, true)
+                    url { parameters.append("idHash", idHash) }
+                    requestBuilder?.invoke(this)
+                }.takeIf { it.status != HttpStatusCode.NoContent }?.body<ApiPackage>()
+            }
+        }.awaitAll().filterNotNull().associateBy({ it.idHash }, { it })
     }
 
     public suspend fun searchPackages(
@@ -460,7 +468,6 @@ public class PackageSearchApiClient(
         if (isOffline || notFoundPackages.isEmpty()) {
             return cachedResults.mapNotNull { it.value }
         }
-
 
         val onlineResults =
             defaultRequest<_, List<ApiPackage>>(

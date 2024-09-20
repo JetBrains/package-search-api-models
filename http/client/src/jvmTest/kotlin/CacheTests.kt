@@ -27,9 +27,9 @@ class CacheTests {
     fun `PackageByID test Cache Hit`() = runTest(timeout = 30.seconds) {
 
         val (apiClient, mockEngine, mockResponse) =
-            setupTestEnv<List<ApiPackage>>(resourceFilename = "package-info-by-ids-ktor.json")
+            setupTestEnv<ApiPackage>(resourceFilename = "package-info-by-ids-ktor.json")
 
-        val packageId = mockResponse.first().id
+        val packageId = mockResponse.id
         // First request (populates cache)
         val response1 = apiClient.getPackageInfoByIds(setOf(packageId))
         assert(response1.values.firstOrNull()!!.id == packageId)
@@ -39,8 +39,7 @@ class CacheTests {
         assert(response2.values.firstOrNull()!!.id == packageId)
 
         // Ensure the mock engine wasn't called a second time.
-        val endpointsCalls =
-            mockEngine.getRequestCount(PackageSearchEndpoints.DEV.packageInfoByIdHashes)
+        val endpointsCalls = mockEngine.requestCountForGetIdHash(mockResponse.idHash)
 
         mockEngine.close()
         assertEquals(1, endpointsCalls)
@@ -51,11 +50,11 @@ class CacheTests {
     fun `PackageByID test Cache Expired`() = runTest(timeout = 30.seconds) {
 
         val testEnv =
-            setupTestEnv<List<ApiPackage>>(resourceFilename = "package-info-by-ids-ktor.json")
+            setupTestEnv<ApiPackage>(resourceFilename = "package-info-by-ids-ktor.json")
 
         suspend fun getDBEntries() = testEnv.apiClient.packagesCacheCollection.await().iterateAll().toList()
 
-        val apiPackage = testEnv.mockResponse.first()
+        val apiPackage = testEnv.mockResponse
 
         val expiredDBEntry = PackageCacheEntry(apiPackage.idHash, apiPackage, Clock.System.now().minus(7.days))
 
@@ -76,7 +75,7 @@ class CacheTests {
         assert(elementInsideDB.size == 1)
 
         // Ensure data has been retrieved from BE.
-        assertEquals(1, testEnv.mockEngine.getRequestCount(PackageSearchEndpoints.DEV.packageInfoByIdHashes))
+        assertEquals(1, testEnv.mockEngine.requestCountForGetIdHash(apiPackage.idHash))
 
 
         // Second request (should hit cache)
@@ -86,16 +85,16 @@ class CacheTests {
         assert(elementInsideDB.size == 1)
 
         testEnv.mockEngine.close()
-        assertEquals(1, testEnv.mockEngine.getRequestCount(PackageSearchEndpoints.DEV.packageInfoByIdHashes))
+        assertEquals(1, testEnv.mockEngine.requestCountForGetIdHash(apiPackage.idHash))
 
     }
 
     @Test
     fun `PackageByHash test Cache Hit`() = runTest(timeout = 30.seconds) {
         val (apiClient, mockEngine, mockResponse) =
-            setupTestEnv<List<ApiPackage>>(resourceFilename = "package-info-by-ids-ktor.json")
+            setupTestEnv<ApiPackage>(resourceFilename = "package-info-by-ids-ktor.json")
 
-        val packageIdHash = mockResponse.first().idHash
+        val packageIdHash = mockResponse.idHash
         // First request (populates cache)
         val response1 = apiClient.getPackageInfoByIdHashes(setOf(packageIdHash))
         assert(response1.values.firstOrNull()!!.idHash == packageIdHash)
@@ -106,7 +105,7 @@ class CacheTests {
 
         // Ensure the mock engine wasn't called a second time.
         val endpointsCalls =
-            mockEngine.getRequestCount(PackageSearchEndpoints.DEV.packageInfoByIdHashes)
+            mockEngine.requestCountForGetIdHash(idHash = packageIdHash)
 
         mockEngine.close()
         assertEquals(1, endpointsCalls)
@@ -115,14 +114,14 @@ class CacheTests {
     @Test
     fun `PackageById test cache not exhaustive`() = runTest(timeout = 30.seconds) {
         val (apiClient, mockEngine, mockResponse) =
-            setupTestEnv<List<ApiPackage>>(resourceFilename = "package-info-by-ids-ktor.json")
+            setupTestEnv<ApiPackage>(resourceFilename = "package-info-by-ids-ktor.json")
         //create cache entry
-        apiClient.getPackageInfoByIds(mockResponse.map { it.id }.toSet())
+        apiClient.getPackageInfoByIds(setOf(mockResponse.id))
 
-        apiClient.getPackageInfoByIds(mockResponse.map { it.id }.toSet() + "androidx.compose.runtime:runtime")
+        apiClient.getPackageInfoByIds(setOf(mockResponse.id) + "androidx.compose.runtime:runtime")
 
         val endpointsCalls =
-            mockEngine.geRequestsFor(PackageSearchEndpoints.DEV.packageInfoByIdHashes)
+            mockEngine.geRequestsFor(PackageSearchEndpoints.DEV.packageInfoByIdHash)
 
         mockEngine.close()
         assertEquals(2, endpointsCalls.size)
@@ -151,7 +150,7 @@ class CacheTests {
 
     @Test
     fun `searchPackages test Cache Hit`() = runTest(timeout = 30.seconds) {
-        val (apiClient, mockEngine) = setupTestEnv<List<ApiPackage>>("package-info-by-ids-ktor.json")
+        val (apiClient, mockEngine) = setupTestEnv<List<ApiPackage>>("list-package-info-by-ids-ktor.json")
         val queryString = "whatever"
         repeat(3) {
             apiClient.searchPackages(
@@ -171,7 +170,7 @@ class CacheTests {
 
     @Test
     fun `searchPackages non exhaustive cache`() = runTest(timeout = 30.seconds) {
-        val (apiClient, mockEngine) = setupTestEnv<List<ApiPackage>>("package-info-by-ids-ktor.json")
+        val (apiClient, mockEngine) = setupTestEnv<List<ApiPackage>>("list-package-info-by-ids-ktor.json")
         val queryString = "whatever"
         apiClient.searchPackages(
             SearchPackagesRequest(
@@ -196,14 +195,11 @@ class CacheTests {
 
     @Test
     fun `refreshPackagesInfo smart cache`() = runTest(timeout = 30.seconds) {
-        val (apiClient, mockEngine, mockResponse) = setupTestEnv<List<ApiPackage>>("package-info-by-ids-ktor.json")
+        val (apiClient, mockEngine, mockResponse) =
+            setupTestEnv<List<ApiPackage>>("list-package-info-by-ids-ktor.json")
 
         val refreshRequest = RefreshPackagesInfoRequest(
-            listOf(
-                RefreshPackagesInfoRequest.CacheRequest(
-                    mockResponse.first().idHash
-                )
-            )
+            packages = listOf(RefreshPackagesInfoRequest.CacheRequest(mockResponse.first().idHash))
         )
 
         //ask to refresh package info for ktor hashID -> a new cache entry should be created or updated
@@ -216,7 +212,7 @@ class CacheTests {
         apiClient.getPackageInfoByIds(setOf(mockResponse.first().id))
 
         val endpointsCalls =
-            mockEngine.getRequestCount(PackageSearchEndpoints.DEV.packageInfoByIdHashes)
+            mockEngine.getRequestCount(PackageSearchEndpoints.DEV.packageInfoByIdHash)
 
         mockEngine.close()
         assertEquals(0, endpointsCalls)
