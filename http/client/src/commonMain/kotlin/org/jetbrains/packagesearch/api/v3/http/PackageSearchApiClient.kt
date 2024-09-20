@@ -13,6 +13,7 @@ import io.ktor.client.request.get
 import io.ktor.client.request.request
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.*
+import io.ktor.client.utils.EmptyContent
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.serialization.kotlinx.protobuf.*
@@ -172,7 +173,7 @@ public class PackageSearchApiClient(
     private suspend inline fun <reified T> defaultRawRequest(
         method: HttpMethod,
         url: Url,
-        body: T?,
+        body: T,
         noinline requestBuilder: (HttpRequestBuilder.() -> Unit)? = null,
         cache: Boolean = true,
     ) = httpClient.request(url) {
@@ -314,13 +315,15 @@ public class PackageSearchApiClient(
     ) = coroutineScope {
         unresolvedIdentifiers.map { idHash ->
             async {
-                httpClient.request(endpoints.packageInfoByIdHash) {
-                    method = HttpMethod.Get
-                    header(HttpHeaders.ContentType, ContentType.Application.Json)
-                    attributes.put(Attributes.Cache, true)
-                    url { parameters.append("idHash", idHash) }
-                    requestBuilder?.invoke(this)
-                }.takeIf { it.status != HttpStatusCode.NoContent }?.body<ApiPackage>()
+                defaultRawRequest(
+                    method = HttpMethod.Get,
+                    url = endpoints.packageInfoByIdHash,
+                    body = EmptyContent,
+                    requestBuilder = {
+                        url { parameters.append("idHash", idHash) }
+                        requestBuilder?.invoke(this)
+                    }
+                ).takeIf { it.status != HttpStatusCode.NoContent }?.body<ApiPackage>()
             }
         }.awaitAll().filterNotNull().associateBy({ it.idHash }, { it })
     }
