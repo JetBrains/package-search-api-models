@@ -24,6 +24,8 @@ public class PackageSearchDefaultEndpoints(
         get() = buildUrl(PackageSearchEndpointPaths.packageInfoByIds)
     override val packageInfoByIdHashes: Url
         get() = buildUrl(PackageSearchEndpointPaths.packageInfoByIdHashes)
+    override val packageInfoByIdHash: Url
+        get() = buildUrl(PackageSearchEndpointPaths.packageInfoByIdHash)
     override val searchPackages: Url
         get() = buildUrl(PackageSearchEndpointPaths.searchPackages)
     override val startScroll: Url

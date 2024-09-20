@@ -13,6 +13,7 @@ import io.ktor.client.request.get
 import io.ktor.client.request.request
 import io.ktor.client.request.setBody
 import io.ktor.client.statement.*
+import io.ktor.client.utils.EmptyContent
 import io.ktor.http.*
 import io.ktor.serialization.kotlinx.json.*
 import io.ktor.serialization.kotlinx.protobuf.*
@@ -30,7 +31,6 @@ import org.jetbrains.packagesearch.api.v3.ApiPackage
 import org.jetbrains.packagesearch.api.v3.ApiProject
 import org.jetbrains.packagesearch.api.v3.ApiRepository
 import org.jetbrains.packagesearch.packageversionutils.normalization.NormalizedVersion
-import kotlin.collections.map
 import kotlin.time.Duration
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
@@ -279,12 +279,9 @@ public class PackageSearchApiClient(
                 .associateBy { if (useHashes) it.idHash else it.id }
         }
 
-        val onlineResults = defaultRequest<_, List<ApiPackage>>(
-            method = HttpMethod.Post,
-            url = endpoints.packageInfoByIdHashes,
-            body = GetPackageInfoRequest(unresolvedIdentifiers),
-            requestBuilder = requestBuilder,
-        ).associateBy { it.idHash }
+        val onlineResults =
+            fetchOnlinePackageInfoByIdHashes(unresolvedIdentifiers, requestBuilder)
+
 
         val notFoundPackages = idHashes - cachedResults.map { it.key }.toSet() - onlineResults.keys
 
@@ -312,11 +309,29 @@ public class PackageSearchApiClient(
         onlineResultsMappedKeys + cachedResultMap
     }
 
+    private suspend fun fetchOnlinePackageInfoByIdHashes(
+        unresolvedIdentifiers: Set<String>,
+        requestBuilder: (HttpRequestBuilder.() -> Unit)?
+    ) = coroutineScope {
+        unresolvedIdentifiers.map { idHash ->
+            async {
+                defaultRawRequest(
+                    method = HttpMethod.Get,
+                    url = endpoints.packageInfoByIdHash,
+                    body = EmptyContent,
+                    requestBuilder = {
+                        url { parameters.append("idHash", idHash) }
+                        requestBuilder?.invoke(this)
+                    }
+                ).takeIf { it.status != HttpStatusCode.NoContent }?.body<ApiPackage>()
+            }
+        }.awaitAll().filterNotNull().associateBy({ it.idHash }, { it })
+    }
+
     public suspend fun searchPackages(
         request: SearchPackagesRequest,
         requestBuilder: (HttpRequestBuilder.() -> Unit)? = null,
     ): List<ApiPackage> {
-
 
         val searchCache = searchCacheCollection.await()
 
@@ -456,7 +471,6 @@ public class PackageSearchApiClient(
         if (isOffline || notFoundPackages.isEmpty()) {
             return cachedResults.mapNotNull { it.value }
         }
-
 
         val onlineResults =
             defaultRequest<_, List<ApiPackage>>(

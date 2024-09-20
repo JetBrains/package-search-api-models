@@ -1,15 +1,16 @@
 import CacheTests.TestEnv
 import io.ktor.client.HttpClient
 import io.ktor.client.engine.mock.MockEngine
-import io.ktor.client.engine.mock.MockEngine.Companion.invoke
 import io.ktor.client.engine.mock.respond
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.DEFAULT
 import io.ktor.client.plugins.logging.LogLevel
 import io.ktor.client.plugins.logging.Logger
 import io.ktor.client.plugins.logging.Logging
+import io.ktor.client.request.HttpRequestData
 import io.ktor.http.HttpHeaders
 import io.ktor.http.HttpStatusCode
+import io.ktor.http.URLBuilder
 import io.ktor.http.Url
 import io.ktor.http.headers
 import io.ktor.serialization.kotlinx.json.json
@@ -19,14 +20,62 @@ import kotlinx.serialization.json.Json
 import org.h2.mvstore.MVStore
 import org.jetbrains.packagesearch.api.v3.http.PackageSearchApiClient
 import org.jetbrains.packagesearch.api.v3.http.PackageSearchEndpoints
-import kotlin.collections.filter
+
+private fun buildGetRequestUrl(endpoint: Url, queryParameters: Map<String, String>): Url =
+    URLBuilder(url = endpoint).apply {
+        queryParameters.forEach {
+            parameters.append(it.key, it.value)
+        }
+    }.build()
 
 
-fun MockEngine.geRequestsFor(url: Url) =
-    requestHistory.filter { it.url == url }
+internal fun MockEngine.geRequestsFor(
+    url: Url,
+    queryParameters: Map<String, String>
+): List<HttpRequestData> {
+    val encodedUrl = if (queryParameters.isEmpty()) url else buildGetRequestUrl(url, queryParameters)
+    return requestHistory.filter { it.url == encodedUrl }
+}
 
-fun MockEngine.getRequestCount(filterUrl: Url) =
+
+/**
+ * Filters the request history to retrieve requests with the specified URL.
+ * This comparison will exclude query parameters.
+ *
+ * @param url The URL to filter the request history by.
+ * @return A list of requests that match the specified URL.
+ */
+internal fun MockEngine.geRequestsFor(url: Url) =
+    requestHistory.filter { it.url.encodedPath == url.encodedPath }
+
+/**
+ * Returns the count of requests made to the mocked engine for the specified URL.
+ * This comparison will exclude query parameters.
+ *
+ * @param filterUrl The URL to filter the request history by.
+ * @return The count of requests made to the mocked engine for the specified URL.
+ */
+internal fun MockEngine.getRequestCount(filterUrl: Url) =
     geRequestsFor(filterUrl).size
+
+/**
+ * Returns the count of requests made to the MockEngine that match the given filter URL and query parameters.
+ *
+ * @param idHash The id hash value used to further filter the requests.
+ * @return The count of requests that match the filter URL and query parameters.
+ */
+internal fun MockEngine.requestCountForGetIdHash(idHash: String) =
+    getRequestCount(PackageSearchEndpoints.DEV.packageInfoByIdHash, mapOf("idHash" to idHash))
+
+/**
+ * Returns the count of requests made to the MockEngine that match the given filter URL and query parameters.
+ *
+ * @param filterUrl The URL used to filter the requests.
+ * @param queryParameters The query parameters used to further filter the requests (default is an empty map).
+ * @return The count of requests that match the filter URL and query parameters.
+ */
+internal fun MockEngine.getRequestCount(filterUrl: Url, queryParameters: Map<String, String> = emptyMap()) =
+    geRequestsFor(filterUrl, queryParameters).size
 
 
 internal inline fun <reified T> TestScope.setupTestEnv(
@@ -67,6 +116,5 @@ private fun buildMockEngine(jsonResponse: String): MockEngine = MockEngine {
         headers = headers {
             append(HttpHeaders.ContentType, "application/json")
         }
-
     )
 }

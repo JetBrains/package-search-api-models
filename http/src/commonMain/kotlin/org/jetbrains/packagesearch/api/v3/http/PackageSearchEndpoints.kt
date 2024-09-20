@@ -6,6 +6,7 @@ public interface PackageSearchEndpoints {
     public val knownRepositories: Url
     public val packageInfoByIds: Url
     public val packageInfoByIdHashes: Url
+    public val packageInfoByIdHash: Url
     public val searchPackages: Url
     public val refreshPackagesInfo: Url
     public val startScroll: Url

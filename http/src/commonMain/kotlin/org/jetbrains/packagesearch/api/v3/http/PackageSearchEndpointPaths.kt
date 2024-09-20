@@ -4,6 +4,7 @@ public data object PackageSearchEndpointPaths {
     public const val knownRepositories: String = "known-repositories"
     public const val packageInfoByIds: String = "package-info-by-ids"
     public const val packageInfoByIdHashes: String = "package-info-by-id-hashes"
+    public const val packageInfoByIdHash: String = "package-info-by-id-hash"
     public const val searchPackages: String = "search-packages"
     public const val startScroll: String = "search-packages"
     public const val nextScroll: String = "search-packages"
