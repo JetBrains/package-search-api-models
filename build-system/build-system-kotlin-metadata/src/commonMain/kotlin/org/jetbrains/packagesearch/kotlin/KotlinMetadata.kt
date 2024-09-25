@@ -49,6 +49,6 @@ public data class JsExtras(
 
 @Serializable
 public data class JvmExtras(
-    val jvmTarget: String,
+    val jvmTarget: String? = null,
     val withJavaEnabled: Boolean
 )
