@@ -11,6 +11,20 @@ public sealed interface PackageId {
             Maven.WithoutVersion(groupId, artifactId)
         public fun Maven(groupId: String, artifactId: String, version: String): Maven.WithVersion =
             Maven.WithVersion(groupId, artifactId, version)
+
+
+        public fun parse(string: String): PackageId? {
+            val pieces = string.split(":")
+            return when {
+                pieces.size < 2 -> null
+                pieces[0] == "maven" -> when (pieces.size) {
+                    3 -> Maven(pieces[1], pieces[2])
+                    4 -> Maven(pieces[1], pieces[2], pieces[3])
+                    else -> null
+                }
+                else -> null
+            }
+        }
     }
 
     @Serializable
