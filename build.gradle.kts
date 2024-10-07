@@ -6,7 +6,6 @@ kotlin {
     sourceSets {
         commonMain {
             dependencies {
-                api(projects.core)
                 api(projects.buildSystem.buildSystemMaven)
                 api(projects.buildSystem.buildSystemGradle)
                 api(projects.buildSystem.buildSystemKotlinMetadata)

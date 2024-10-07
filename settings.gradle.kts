@@ -26,6 +26,7 @@ dependencyResolutionManagement {
 
 include(
     ":core",
+    ":storage",
     ":http",
     ":sonatype-apis",
     ":version-utils",
