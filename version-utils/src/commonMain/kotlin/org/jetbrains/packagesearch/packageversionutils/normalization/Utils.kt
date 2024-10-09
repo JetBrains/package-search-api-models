@@ -130,10 +130,10 @@ internal fun String.normalizedVersion(
             versionName = this,
             isStable = isStable,
             releasedAt =
-                VeryLenientDateTimeExtractor
-                    .extractTimestampLookingPrefixOrNull(timestampPrefix)
-                    ?.toInstant()
-                    ?: releasedAt,
+            VeryLenientDateTimeExtractor
+                .extractTimestampLookingPrefixOrNull(timestampPrefix)
+                ?.let { Instant.parse(it) }
+                ?: releasedAt,
             timestampPrefix = timestampPrefix,
             stabilityMarker = stabilitySuffixComponentOrNull(this, timestampPrefix),
             nonSemanticSuffix = nonSemanticSuffix(this, timestampPrefix),
@@ -146,10 +146,10 @@ internal fun String.normalizedVersion(
             versionName = this,
             isStable = isStable,
             releasedAt =
-                VeryLenientDateTimeExtractor
-                    .extractTimestampLookingPrefixOrNull(semanticPart)
-                    ?.toInstant()
-                    ?: releasedAt,
+            VeryLenientDateTimeExtractor
+                .extractTimestampLookingPrefixOrNull(semanticPart)
+                ?.let { Instant.parse(it) }
+                ?: releasedAt,
             semanticPart = semanticPart,
             stabilityMarker = stabilitySuffixComponentOrNull(this, semanticPart),
             nonSemanticSuffix = nonSemanticSuffix(this, semanticPart),

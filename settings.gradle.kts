@@ -2,7 +2,7 @@
 
 plugins {
     id("org.gradle.toolchains.foojay-resolver-convention") version "0.8.0"
-    id("com.gradle.develocity") version "3.17"
+    `gradle-enterprise`
 }
 
 enableFeaturePreview("TYPESAFE_PROJECT_ACCESSORS")
@@ -41,11 +41,11 @@ include(
 val isCi
     get() = System.getenv("CI") == "true"
 
-develocity {
+gradleEnterprise {
     server = "https://ge.labs.jb.gg/"
     accessKey = System.getenv("GRADLE_ENTERPRISE_ACCESS_KEY")
         ?: extra.properties["gradleEnterpriseAccessKey"]?.toString()
     buildScan {
-        publishing.onlyIf { isCi }
+        publishAlwaysIf(System.getenv("CI") == "true")
     }
 }

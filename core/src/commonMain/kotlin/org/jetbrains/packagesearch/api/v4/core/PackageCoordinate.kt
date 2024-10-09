@@ -17,6 +17,7 @@ public sealed interface PackageCoordinate {
         override val packageId: PackageId.Maven,
         override val version: String
     ) : PackageCoordinate
+
 }
 
 @Serializable
@@ -32,4 +33,5 @@ public sealed interface CompletedDownloadPackageCoordinate {
         override val packageId: PackageId.Maven,
         override val version: NormalizedVersion
     ) : CompletedDownloadPackageCoordinate
+
 }

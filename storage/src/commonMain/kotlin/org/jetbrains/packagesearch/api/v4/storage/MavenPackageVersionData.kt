@@ -14,7 +14,7 @@ import org.jetbrains.packagesearch.maven.MavenProjectObjectModel
 @Serializable
 @SerialName("maven")
 public data class MavenPackageVersionData(
-    override val repositoryId: RepositoryId.Maven,
+    override val repositoryId: RepositoryId.MavenOld,
     override val packageId: PackageId.Maven,
     override val versionString: String,
     override val scmId: ScmId?,
