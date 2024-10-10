@@ -6,14 +6,14 @@ import org.jetbrains.packagesearch.packageversionutils.normalization.NormalizedV
 
 @Serializable
 public sealed interface PackageCoordinate {
-    public val repositoryId: RepositoryId
+    public val packageRepository: PackageRepository
     public val packageId: PackageId
     public val version: String
 
     @Serializable
     @SerialName("maven")
     public data class Maven(
-        override val repositoryId: RepositoryId.Maven,
+        override val packageRepository: PackageRepository.Maven,
         override val packageId: PackageId.Maven,
         override val version: String
     ) : PackageCoordinate
@@ -22,14 +22,14 @@ public sealed interface PackageCoordinate {
 
 @Serializable
 public sealed interface CompletedDownloadPackageCoordinate {
-    public val repositoryId: RepositoryId
+    public val packageRepository: PackageRepository
     public val packageId: PackageId
     public val version: NormalizedVersion
 
     @Serializable
     @SerialName("maven")
     public data class Maven(
-        override val repositoryId: RepositoryId.Maven,
+        override val packageRepository: PackageRepository.Maven,
         override val packageId: PackageId.Maven,
         override val version: NormalizedVersion
     ) : CompletedDownloadPackageCoordinate

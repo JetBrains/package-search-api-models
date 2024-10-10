@@ -4,7 +4,7 @@ import kotlinx.datetime.Instant
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 import org.jetbrains.packagesearch.api.v4.core.PackageId
-import org.jetbrains.packagesearch.api.v4.core.RepositoryId
+import org.jetbrains.packagesearch.api.v4.core.PackageRepository
 import org.jetbrains.packagesearch.api.v4.core.ScmId
 import org.jetbrains.packagesearch.gradle.GradleMetadata
 import org.jetbrains.packagesearch.kotlin.KotlinMetadata
@@ -14,7 +14,7 @@ import org.jetbrains.packagesearch.maven.MavenProjectObjectModel
 @Serializable
 @SerialName("maven")
 public data class MavenPackageVersionData(
-    override val repositoryId: RepositoryId.MavenOld,
+    override val packageRepository: PackageRepository.Maven,
     override val packageId: PackageId.Maven,
     override val versionString: String,
     override val scmId: ScmId?,

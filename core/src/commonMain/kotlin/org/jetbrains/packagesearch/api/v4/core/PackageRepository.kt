@@ -4,18 +4,21 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-public sealed interface RepositoryId {
+public sealed interface PackageRepository {
 
     public val name: String
 
     @Serializable
+    @SerialName("maven")
     public data class Maven(
         override val name: String,
         val url: String,
         val downloadUrl: String = url,
         val htmlUiUrl: String? = url,
-        val credentials: Credentials? = null,
-    ) : RepositoryId {
+    ) : PackageRepository {
+
+        override fun toString(): String =
+            "$name: $url"
 
         public companion object {
             public val Central: Maven = Maven(
@@ -34,12 +37,6 @@ public sealed interface RepositoryId {
                 url = "https://repo.clojars.org/",
             )
         }
-
-        @Serializable
-        public data class Credentials(
-            val username: String,
-            val password: String,
-        )
     }
 
 }

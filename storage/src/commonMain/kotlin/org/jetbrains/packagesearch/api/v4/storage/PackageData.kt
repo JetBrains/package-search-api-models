@@ -4,7 +4,7 @@ import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.serialization.Serializable
 import org.jetbrains.packagesearch.api.v4.core.PackageId
-import org.jetbrains.packagesearch.api.v4.core.RepositoryId
+import org.jetbrains.packagesearch.api.v4.core.PackageRepository
 
 /**
  * Data class representing a package.
@@ -23,6 +23,6 @@ public data class PackageData(
     public data class VersionInfo(
         val version: String,
         val publishedAt: Instant? = null,
-        val repositoryId: RepositoryId
+        val packageRepository: PackageRepository
     )
 }

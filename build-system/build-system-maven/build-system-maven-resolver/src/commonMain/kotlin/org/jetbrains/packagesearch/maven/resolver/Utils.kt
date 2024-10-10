@@ -5,6 +5,7 @@ import io.ktor.http.HttpHeaders
 import io.ktor.http.URLProtocol
 import io.ktor.http.Url
 import io.ktor.utils.io.ByteReadChannel
+import io.ktor.utils.io.readAvailable
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.datetime.Instant
@@ -81,7 +82,7 @@ public class SimpleMavenUrlBuilder(
             host = baseUrl.host
             port = baseUrl.port
             val urlSegments = buildList {
-                addAll(baseUrl.pathSegments)
+                addAll(baseUrl.rawSegments)
                 addAll(artifactIdentifier.groupId.split("."))
                 add(artifactIdentifier.artifactId)
                 add(artifactIdentifier.version)
@@ -106,7 +107,7 @@ public class SimpleMavenUrlBuilder(
             port = protocol.defaultPort
             pathSegments =
                 buildList {
-                    addAll(baseUrl.pathSegments)
+                    addAll(baseUrl.rawSegments)
                     addAll(groupId.split("."))
                     add(artifactId)
                     add("maven-metadata.xml")

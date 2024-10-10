@@ -9,10 +9,10 @@ public sealed interface ScmId {
     public companion object {
         public fun fromUrl(url: String): ScmId? = when {
             "github" in url -> {
-                url.substringAfter("github.com/")
+                url.substringAfter("github.com")
                     .removeSuffix(".git")
                     .removeSuffix("/")
-                    .split("/")
+                    .split("/", ":")
                     .filterNot { it.isEmpty() }
                     .take(2)
                     .takeIf { it.size == 2 }
@@ -28,5 +28,7 @@ public sealed interface ScmId {
     public data class GitHub(
         val owner: String,
         val name: String
-    ) : ScmId
+    ) : ScmId {
+        override fun toString(): String = "github:$owner/$name"
+    }
 }
