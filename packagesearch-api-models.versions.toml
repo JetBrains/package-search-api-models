@@ -2,16 +2,16 @@
 assertk = "0.28.1"
 coroutines = "1.8.0"
 date-fns = "3.6.0"
-detekt-gradle-plugin = "1.23.6"
-junit = "5.10.2"
-kotlin = "2.0.0"
-kotlinter-gradle = "4.0.0"
-kotlinx-datetime = "0.6.0"
-kotlinx-serialization = "1.6.3"
+detekt-gradle-plugin = "1.23.7"
+junit = "5.11.2"
+kotlin = "2.0.20"
+kotlinter-gradle = "4.4.1"
+kotlinx-datetime = "0.6.1"
+kotlinx-serialization = "1.7.3"
 krypto = "4.0.10"
-ktor = "3.0.0-rc-2"
-logback = "1.5.6"
-xmlutil = "0.90.0" # DO NOT UPDATE TO 0.83.3, it breaks org.jetbrains.packagesearch.maven.XML#decodeFromString
+ktor = "3.0.0"
+logback = "1.5.9"
+xmlutil = "0.90.1"
 
 [libraries]
 assertk = { module = "com.willowtreeapps.assertk:assertk", version.ref = "assertk" }
