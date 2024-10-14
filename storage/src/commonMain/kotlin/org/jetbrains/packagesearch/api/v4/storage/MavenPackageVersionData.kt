@@ -24,7 +24,7 @@ public data class MavenPackageVersionData(
     val javaInfo: JavaInfo? = null,
     val scalaCompilerVersion: String? = null,
     val artifacts: Set<MavenArtifactInfo> = emptySet(),
-    override val publishedAt: Instant? = null,
+    override val publishedAt: Instant,
 ) : PackageVersionData.Resolved {
 
     @Serializable

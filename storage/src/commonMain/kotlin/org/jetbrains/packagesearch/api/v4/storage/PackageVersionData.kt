@@ -16,7 +16,7 @@ public sealed interface PackageVersionData {
 
     @Serializable
     public sealed interface Resolved : PackageVersionData {
-        public val publishedAt: Instant?
+        public val publishedAt: Instant
         public val scmId: ScmId?
     }
 
