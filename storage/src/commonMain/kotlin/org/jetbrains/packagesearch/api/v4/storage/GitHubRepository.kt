@@ -12,7 +12,7 @@ public data class GitHubRepository(
     override val lastUpdated: Instant,
     override val url: String,
     val createdAt: Instant,
-    val topics: List<String> = emptyList(),
+    val topics: Set<String> = emptySet(),
     val homepageUrl: String? = null,
     val stargazerCount: Int,
     val forkCount: Int,

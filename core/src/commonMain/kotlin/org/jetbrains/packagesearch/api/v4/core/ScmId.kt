@@ -21,6 +21,19 @@ public sealed interface ScmId {
 
             else -> null
         }
+
+        public fun fromString(scmId: String): ScmId? = when {
+            "github" in scmId -> {
+                scmId.substringAfter("github:")
+                    .split("/", ":")
+                    .filterNot { it.isEmpty() }
+                    .take(2)
+                    .takeIf { it.size == 2 }
+                    ?.let { (owner, name) -> GitHub(owner, name) }
+            }
+
+            else -> null
+        }
     }
 
     @Serializable
