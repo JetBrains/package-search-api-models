@@ -23,6 +23,7 @@ public data class MavenPackageVersionData(
     val kotlinMetadata: KotlinMetadata? = null,
     val javaInfo: JavaInfo? = null,
     val scalaCompilerVersion: String? = null,
+    val kotlinPlatforms: Set<String>,
     val artifacts: Set<MavenArtifactInfo> = emptySet(),
     override val publishedAt: Instant,
 ) : PackageVersionData.Resolved {
