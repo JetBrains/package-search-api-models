@@ -38,7 +38,6 @@ public data class GitHubRepository(
         val name: String? = null,
         val tagName: String,
         val createdAt: Instant,
-        val description: String? = null
     )
 
     @Serializable
