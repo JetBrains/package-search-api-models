@@ -19,7 +19,7 @@ internal fun HttpMessageBuilder.header(
     headers.append(key, values.joinToString())
 }
 
-internal var HttpTimeout.HttpTimeoutCapabilityConfiguration.requestTimeout: Duration?
+internal var HttpTimeoutConfig.requestTimeout: Duration?
     get() = requestTimeoutMillis?.milliseconds
     set(value) {
         requestTimeoutMillis = value?.inWholeMilliseconds
