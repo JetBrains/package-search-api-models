@@ -10,7 +10,7 @@ kotlinter-gradle = "4.4.0"
 kotlinx-datetime = "0.5.0"
 kotlinx-serialization = "1.6.3"
 krypto = "4.0.10"
-ktor = "2.3.10"
+ktor = "3.0.3"
 logback = "1.5.6"
 xmlutil = "0.86.2" # DO NOT UPDATE TO 0.83.3, it breaks org.jetbrains.packagesearch.maven.XML#decodeFromString
 
